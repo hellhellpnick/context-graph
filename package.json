@@ -1,5 +1,5 @@
 {
-	"name": "context-graph",
+	"name": "@hellpnick/context-graph",
 	"version": "0.1.0",
 	"description": "Auto-generate AI context graphs for any codebase. One command, zero config.",
 	"bin": {

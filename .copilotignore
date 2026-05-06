@@ -1,0 +1,15 @@
+# Managed by context-graph — paths excluded from Copilot context
+node_modules/
+dist/
+build/
+coverage/
+.nyc_output/
+__pycache__/
+.venv/
+venv/
+.git/
+*.lock
+package-lock.json
+*.min.js
+*.min.css
+*.map

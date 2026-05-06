@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "context-graph"
+version = "0.1.0"
+description = "Auto-generate AI context graphs for any codebase (Python wrapper for the Node.js CLI)"
+requires-python = ">=3.9"
+dependencies = []
+readme = "README.md"
+license = { text = "MIT" }
+keywords = ["context-graph", "copilot", "ai", "llm", "code-analysis"]
+
+[project.scripts]
+context-graph = "context_graph.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["context_graph*"]

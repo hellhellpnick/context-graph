@@ -1,0 +1,201 @@
+{
+  "generated": "2026-05-05",
+  "files": {
+    ".copilotignore": {
+      "priority": "P2",
+      "lines": 15,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-05"
+    },
+    ".env.example": {
+      "priority": "P2",
+      "lines": 35,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-05"
+    },
+    "package.json": {
+      "priority": "P2",
+      "lines": 54,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-05"
+    },
+    "python/pyproject.toml": {
+      "priority": "P2",
+      "lines": 21,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-05"
+    },
+    "src/index.ts": {
+      "priority": "P2",
+      "lines": 35,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-05"
+    },
+    "src/providers/index.ts": {
+      "priority": "P1",
+      "lines": 19,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-05"
+    },
+    ".context-graph.json": {
+      "priority": "P2",
+      "lines": 9,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-05"
+    },
+    ".gitignore": {
+      "priority": "P2",
+      "lines": 9,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-05"
+    },
+    "graph-create-agent.md": {
+      "priority": "P2",
+      "lines": 1207,
+      "complexity": "high",
+      "danger_zone": false,
+      "last_updated": "2026-05-05"
+    },
+    "python/context_graph/__init__.py": {
+      "priority": "P2",
+      "lines": 2,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-05"
+    },
+    "python/context_graph/cli.py": {
+      "priority": "P2",
+      "lines": 64,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-05"
+    },
+    "python/README.md": {
+      "priority": "P2",
+      "lines": 35,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-05"
+    },
+    "python/README.md.instructions.md": {
+      "priority": "P2",
+      "lines": 31,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-05"
+    },
+    "README.md": {
+      "priority": "P2",
+      "lines": 573,
+      "complexity": "high",
+      "danger_zone": false,
+      "last_updated": "2026-05-05"
+    },
+    "src/agents-catalog.ts": {
+      "priority": "P2",
+      "lines": 350,
+      "complexity": "high",
+      "danger_zone": false,
+      "last_updated": "2026-05-05"
+    },
+    "src/agents.ts": {
+      "priority": "P2",
+      "lines": 298,
+      "complexity": "medium",
+      "danger_zone": false,
+      "last_updated": "2026-05-05"
+    },
+    "src/cli.ts": {
+      "priority": "P2",
+      "lines": 660,
+      "complexity": "high",
+      "danger_zone": true,
+      "last_updated": "2026-05-05"
+    },
+    "src/config.ts": {
+      "priority": "P2",
+      "lines": 288,
+      "complexity": "medium",
+      "danger_zone": false,
+      "last_updated": "2026-05-05"
+    },
+    "src/graph-builder.ts": {
+      "priority": "P2",
+      "lines": 2610,
+      "complexity": "high",
+      "danger_zone": true,
+      "last_updated": "2026-05-05"
+    },
+    "src/hooks.ts": {
+      "priority": "P2",
+      "lines": 98,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-05"
+    },
+    "src/providers/anthropic.ts": {
+      "priority": "P1",
+      "lines": 38,
+      "complexity": "low",
+      "danger_zone": true,
+      "last_updated": "2026-05-05"
+    },
+    "src/providers/openai.ts": {
+      "priority": "P1",
+      "lines": 48,
+      "complexity": "low",
+      "danger_zone": true,
+      "last_updated": "2026-05-05"
+    },
+    "src/providers/openai.ts.instructions.md": {
+      "priority": "P2",
+      "lines": 30,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-05"
+    },
+    "src/providers/types.ts": {
+      "priority": "P1",
+      "lines": 27,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-05"
+    },
+    "src/scanner.ts": {
+      "priority": "P2",
+      "lines": 291,
+      "complexity": "medium",
+      "danger_zone": false,
+      "last_updated": "2026-05-05"
+    },
+    "src/writer.ts": {
+      "priority": "P2",
+      "lines": 191,
+      "complexity": "medium",
+      "danger_zone": true,
+      "last_updated": "2026-05-05"
+    },
+    "tsconfig.json": {
+      "priority": "P2",
+      "lines": 20,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-05"
+    }
+  },
+  "hotspots": [
+    "src/graph-builder.ts",
+    "src/cli.ts",
+    "src/agents-catalog.ts",
+    "src/agents.ts",
+    "src/scanner.ts"
+  ]
+}

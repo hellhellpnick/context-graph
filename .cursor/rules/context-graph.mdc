@@ -1,0 +1,24 @@
+---
+description: "context-graph routing rules"
+globs: "**/*"
+alwaysApply: true
+---
+
+# context-graph — AI routing entrypoint
+
+This repo maintains a generated instruction graph under `.github/instructions/`.
+
+Response style (ALWAYS):
+- Ultra-compact (caveman). No greetings. No filler.
+- Prefer bullets. Each bullet <= 18 words.
+- If unsure, say "unknown" instead of guessing.
+
+Always read first:
+- `.github/instructions/copilot-instructions.md`
+
+Then route by file path:
+- For a given edited file, open the `.instructions.md` whose frontmatter `applyTo` matches.
+- If multiple match, prefer higher `priority` (P0>P1>P2).
+- If none match, open `.github/instructions/index.md` and pick the closest subsystem by area/source files.
+
+All instruction files are authoritative over guesses. Prefer facts from instructions over assumptions.

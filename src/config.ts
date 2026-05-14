@@ -9,6 +9,12 @@ export type ContextDepth = 'full' | 'slim';
 export type BuildStrategy = 'llm' | 'hybrid' | 'deterministic';
 export type OutputStyle = 'normal' | 'compact';
 
+/** How gap-filled / deterministic subsystems group source files (see repairBuildPlan). */
+export type SubsystemGrouping = 'default' | 'by-folder';
+
+/** Where instruction files live under `.github/instructions/`: mirror repo paths vs legacy core/infra. */
+export type SubsystemLayout = 'mirror' | 'canonical';
+
 export interface Config {
   provider: ProviderConfig;
   maxFiles: number;
@@ -21,6 +27,18 @@ export interface Config {
   hybridNotesMode: 'subsystem' | 'exports';
   /** LLM output style: "compact" reduces verbosity (caveman-like). */
   outputStyle: OutputStyle;
+  /**
+   * When `by-folder`, each directory maps to one subsystem (large dirs split by maxFilesPerFolderSubsystem).
+   * Affects repairBuildPlan gap-fill and full-deterministic builds.
+   */
+  subsystemGrouping: SubsystemGrouping;
+  /** With subsystemGrouping `by-folder`, max source files per instruction file before splitting. */
+  maxFilesPerFolderSubsystem: number;
+  /**
+   * `mirror`: instruction paths mirror source tree (e.g. `src/foo.instructions.md`).
+   * `canonical`: legacy `core/` / `infra/` layout from heuristics.
+   */
+  subsystemLayout: SubsystemLayout;
 }
 
 interface ConfigFile {
@@ -36,6 +54,9 @@ interface ConfigFile {
   hybridMaxSubsystems?: number;
   hybridNotesMode?: string;
   outputStyle?: string;
+  subsystemGrouping?: string;
+  maxFilesPerFolderSubsystem?: number;
+  subsystemLayout?: string;
 }
 
 // Hard limits per model — prevents 400 errors from exceeding model caps
@@ -181,6 +202,29 @@ export function loadConfig(projectRoot: string): Config {
     return v === 'normal' ? 'normal' : 'compact';
   })();
 
+  const subsystemGrouping = ((): SubsystemGrouping => {
+    const envVal = process.env.CONTEXT_GRAPH_SUBSYSTEM_GROUPING?.toLowerCase();
+    const fileVal = fileConfig.subsystemGrouping?.toLowerCase();
+    const v = envVal ?? fileVal ?? 'default';
+    return v === 'by-folder' || v === 'folder' ? 'by-folder' : 'default';
+  })();
+
+  const maxFilesPerFolderSubsystem = (() => {
+    const raw = parseInt(process.env.CONTEXT_GRAPH_MAX_FILES_PER_FOLDER_SUBSYSTEM ?? '', 10);
+    const envVal = Number.isFinite(raw) && raw >= 4 ? raw : undefined;
+    const fileVal =
+      typeof fileConfig.maxFilesPerFolderSubsystem === 'number' ? fileConfig.maxFilesPerFolderSubsystem : undefined;
+    const n = envVal ?? fileVal ?? 48;
+    return Math.max(4, Math.min(200, n));
+  })();
+
+  const subsystemLayout = ((): SubsystemLayout => {
+    const envVal = process.env.CONTEXT_GRAPH_SUBSYSTEM_LAYOUT?.toLowerCase();
+    const fileVal = fileConfig.subsystemLayout?.toLowerCase();
+    const v = envVal ?? fileVal ?? 'mirror';
+    return v === 'canonical' ? 'canonical' : 'mirror';
+  })();
+
   return {
     provider: {
       provider: providerName,
@@ -201,6 +245,9 @@ export function loadConfig(projectRoot: string): Config {
     hybridMaxSubsystems: hybridMax,
     hybridNotesMode: notesMode,
     outputStyle,
+    subsystemGrouping,
+    maxFilesPerFolderSubsystem,
+    subsystemLayout,
   };
 }
 

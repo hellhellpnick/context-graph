@@ -3,6 +3,9 @@ import path from 'path';
 import { glob } from 'glob';
 import ignore from 'ignore';
 
+/** Root files with gitignore-style rules, scanned after `.gitignore` / `.copilotignore`. */
+export const GRAPH_CONTEXT_IGNORE_FILENAMES = ['.graph-context-ignore', '.context-graph-ignore'] as const;
+
 export interface ScannedFile {
   path: string;
   tier: 0 | 1 | 2 | 3;
@@ -64,6 +67,8 @@ const TIER0_RE = [
   /^fly\.toml$/,
   /^render\.ya?ml$/,
   /^\.copilotignore$/,
+  /^\.graph-context-ignore$/,
+  /^\.context-graph-ignore$/,
 ];
 
 // ── Tier 1: entry points & root configs ───────────────────────────────────
@@ -132,6 +137,12 @@ export async function scanProject(
   const copilotIgnorePath = path.join(projectRoot, '.copilotignore');
   if (fs.existsSync(copilotIgnorePath)) {
     ig.add(fs.readFileSync(copilotIgnorePath, 'utf8'));
+  }
+  for (const name of GRAPH_CONTEXT_IGNORE_FILENAMES) {
+    const p = path.join(projectRoot, name);
+    if (fs.existsSync(p)) {
+      ig.add(fs.readFileSync(p, 'utf8'));
+    }
   }
 
   const allFiles = await glob('**/*', {

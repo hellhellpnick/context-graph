@@ -1,15 +1,15 @@
 ---
-description: "Hooks — src/hooks.ts"
+description: "Mirror — `src/hooks.ts`"
 applyTo: "src/hooks.ts"
 priority: "P2"
-last_updated: "2026-05-05"
+last_updated: "2026-05-13"
 ---
 
 ## When to Read
 - editing or refactoring `hooks.ts`
 
 ## Overview
-- `src/hooks.ts` (98 lines · 4 exports) — Hooks — src/hooks.ts
+- `src/hooks.ts` (103 lines · 4 exports) — Mirror — `src/hooks.ts`
 
 ## Graph
 ```mermaid
@@ -19,16 +19,6 @@ graph LR
 ```
 
 ## Signatures
-
-### Notes (LLM)
-
-```
-- **installPrePushHook**: Installs a pre-push git hook to manage context graph. Skips if already managed or hooks directory does not exist.
-- **saveLastBuildRef**: Saves the commit hash of the last successful build or the current timestamp to a file.
-- **getChangedFilesSinceLastBuild**: Retrieves files changed since the last build, using either a commit hash or a date.
-- **filterSignificantFiles**: Filters an array of file paths to include only those categorized as Tier 0, Tier 1, or Tier 2 files.
-```
-
 
 ```typescript
 // ── src/hooks.ts ──

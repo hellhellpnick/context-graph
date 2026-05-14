@@ -18,6 +18,7 @@
 		"prepublishOnly": "npm run build",
 		"context-graph": "node dist/cli.js",
 		"graph:build": "node dist/cli.js build",
+		"graph:build:no-llm": "node dist/cli.js build --no-llm",
 		"graph:actualize": "node dist/cli.js actualize",
 		"graph:validate": "node dist/cli.js validate",
 		"graph:agents": "node dist/cli.js agents"

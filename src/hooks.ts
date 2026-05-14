@@ -7,6 +7,11 @@ const HOOK_MARKER = '# managed-by: context-graph';
 
 const HOOK_SCRIPT = `#!/bin/sh
 ${HOOK_MARKER}
+# Run from Git repo root so hook-check matches \`context-graph build\` output paths.
+if ROOT=$(git rev-parse --show-toplevel 2>/dev/null); then
+  cd "$ROOT" || exit 0
+fi
+
 GRAPH_DIR=".github/instructions"
 
 if [ ! -d "$GRAPH_DIR" ]; then

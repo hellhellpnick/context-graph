@@ -2,7 +2,7 @@ import crypto from 'crypto';
 import fs from 'fs';
 import path from 'path';
 import ts from 'typescript';
-import type { Config } from './config';
+import type { Config, SubsystemGrouping, SubsystemLayout } from './config';
 import { createProvider } from './providers';
 import type { LLMUsage } from './providers/types';
 import type { ScanResult } from './scanner';
@@ -34,6 +34,14 @@ export interface MultiPassResult {
   plan: BuildPlan;
 }
 
+/** Options for `repairBuildPlan` gap-fill / deterministic subsystem layout. */
+export interface RepairBuildPlanOptions {
+  subsystemGrouping?: SubsystemGrouping;
+  maxFilesPerFolderSubsystem?: number;
+  /** `mirror` (default): paths under `.github/instructions/` mirror the repo. `canonical`: legacy core/infra. */
+  subsystemLayout?: SubsystemLayout;
+}
+
 export interface DeterministicBuildOptions {
   /**
    * Whether to generate smaller root files (mirrors `contextDepth: slim` behavior),
@@ -41,6 +49,8 @@ export interface DeterministicBuildOptions {
    * the shape of root outputs when callers want to mimic slim output.
    */
   slimRoot?: boolean;
+  /** Merged into repairBuildPlan (e.g. subsystemGrouping for fewer instruction files). */
+  repair?: RepairBuildPlanOptions;
 }
 
 export interface BuildPlanItem {
@@ -148,6 +158,24 @@ function loadExistingGraph(graphDir: string): string {
 
 // ── Export extractor (anti-hallucination) ─────────────────────────────────
 
+/** JSDoc attached to a declaration (leading trivia via TS API). */
+function formatAttachedJSDocBlocks(sf: ts.SourceFile, node: ts.Node): string[] {
+  const out: string[] = [];
+  for (const t of ts.getJSDocCommentsAndTags(node)) {
+    if (!ts.isJSDoc(t)) continue;
+    const raw = t.getFullText(sf).trim();
+    if (!raw) continue;
+    const lines = raw.split('\n');
+    if (lines.length > 14 || raw.length > 900) {
+      const sliced = lines.slice(0, 14).join('\n');
+      out.push(raw.length > 900 ? sliced.slice(0, 897) + '…\n */' : sliced + (lines.length > 14 ? '\n */' : ''));
+    } else {
+      out.push(raw);
+    }
+  }
+  return out;
+}
+
 /**
  * Extract actual `export` lines from source files.
  * Passed verbatim into subsystem prompts so LLM documents real symbols only.
@@ -178,6 +206,9 @@ function extractExports(scan: ScanResult, sourceFiles: string[]): string {
     };
 
     const pushDecl = (node: ts.Node) => {
+      for (const block of formatAttachedJSDocBlocks(sf, node)) {
+        exported.push(block);
+      }
       const line = serialize(node);
       if (line) exported.push(line);
     };
@@ -185,12 +216,18 @@ function extractExports(scan: ScanResult, sourceFiles: string[]): string {
     for (const st of sf.statements) {
       // export default ...
       if (ts.isExportAssignment(st)) {
+        for (const block of formatAttachedJSDocBlocks(sf, st)) {
+          exported.push(block);
+        }
         exported.push(`export default ${st.expression.getText(sf)}`.slice(0, 240));
         continue;
       }
 
       // export { a, b } from 'x'  /  export * from 'x'
       if (ts.isExportDeclaration(st)) {
+        for (const block of formatAttachedJSDocBlocks(sf, st)) {
+          exported.push(block);
+        }
         const line = serialize(st)
           .replace(/\s*;\s*$/, '')
           .replace(/^export\s+/, 'export ');
@@ -673,6 +710,8 @@ export function parseBuildPlan(raw: string): BuildPlan | null {
 const SPLIT_DIRS = new Set(['src', 'lib', 'app', 'cmd', 'internal']);
 const MAX_SOURCE_FILES_PER_AUTO_SUBSYSTEM_DEFAULT = 4;
 const MAX_SOURCE_FILES_PER_AUTO_SUBSYSTEM_SPLIT = 1;
+/** Default cap for `by-folder` grouping when config does not override. */
+const MAX_FILES_PER_FOLDER_SUBSYSTEM_DEFAULT = 48;
 
 /**
  * Files that should NOT get their own instruction subsystem.
@@ -693,6 +732,7 @@ const INSTRUCTION_EXCLUDE_RE = [
   /^\.eslintrc/,
   /^eslint\.config\./,
   /^\.copilotignore$/,
+  /^\.graph-context-ignore$/,
   /^\.env\.example$/,
   /^\.env\.schema$/,
   /^tsconfig(\..+)?\.json$/,
@@ -745,7 +785,10 @@ const CANONICAL_GROUPS: Array<{ dir: string; area: string; file: string; priorit
  * After LLM plan + gap-fill, merge subsystems whose source files all live
  * under the same canonical directory into a single instruction file.
  */
-function applyCanonicalGroupings(plan: BuildPlan): BuildPlan {
+function applyCanonicalGroupings(plan: BuildPlan, repairOpts?: RepairBuildPlanOptions): BuildPlan {
+  if ((repairOpts?.subsystemLayout ?? 'mirror') === 'mirror') {
+    return plan;
+  }
   const subsystems = [...plan.subsystems];
   for (const group of CANONICAL_GROUPS) {
     const prefix = group.dir.endsWith('/') ? group.dir : `${group.dir}/`;
@@ -896,11 +939,95 @@ function dedupeSubsystemSourceFiles(plan: BuildPlan): BuildPlan {
   return { ...plan, subsystems };
 }
 
+const MAX_MIRROR_INSTRUCTION_REL_LEN = 200;
+
+function mirrorInstructionSafeSegment(name: string): string {
+  return name.replace(/[^a-zA-Z0-9._-]+/g, '_').replace(/^\.+/, '') || 'x';
+}
+
+/** Instruction `.md` path under `.github/instructions/` mirroring source layout. */
+function mirrorInstructionRelPath(
+  dir: string,
+  chunk: string[],
+  partIndex: number,
+  totalParts: number,
+  usedInstructionRelPaths: Set<string>
+): string {
+  const alloc = (relRel: string): string => {
+    let rel = relRel.replace(/\\/g, '/');
+    if (rel.split('/').some(p => p === '..')) {
+      rel = `mirror/_bad_${shortHash(relRel)}.instructions.md`;
+    }
+    if (rel.length > MAX_MIRROR_INSTRUCTION_REL_LEN) {
+      rel = `mirror/h${shortHash(dir + ':' + chunk.join(',') + ':' + partIndex)}.instructions.md`;
+    }
+    let unique = rel;
+    let n = 0;
+    while (usedInstructionRelPaths.has(unique)) {
+      n++;
+      unique = rel.replace(/\.instructions\.md$/, `._${n}.instructions.md`);
+    }
+    usedInstructionRelPaths.add(unique);
+    return unique;
+  };
+
+  if (chunk.length === 1) {
+    const f = chunk[0];
+    const ext = path.posix.extname(f);
+    const base = mirrorInstructionSafeSegment(path.posix.basename(f, ext));
+    const d = path.posix.dirname(f);
+    const rel = d === '.' ? `${base}.instructions.md` : `${d}/${base}.instructions.md`;
+    return alloc(rel);
+  }
+
+  const safeDir = dir === '.' ? 'root' : dir;
+  const bundleName =
+    totalParts <= 1
+      ? '_bundle.instructions.md'
+      : partIndex === 1
+        ? '_bundle.instructions.md'
+        : `_bundle_p${partIndex}.instructions.md`;
+  const rel = safeDir === 'root' ? `root/${bundleName}` : `${safeDir}/${bundleName}`;
+  return alloc(rel);
+}
+
+/** Stable instruction path for by-folder grouping (avoids collisions across dirs). */
+function folderInstructionRelPath(
+  dir: string,
+  partIndex: number,
+  totalParts: number,
+  chunk: string[],
+  usedInstructionRelPaths: Set<string>
+): string {
+  const first = dir === '.' ? 'root' : dir.split('/')[0];
+  const mapped = DIR_TO_INSTRUCTION_PREFIX[first] ?? first.replace(/[^a-zA-Z0-9]+/g, '_');
+  const slug = (dir === '.' ? 'root' : dir)
+    .replace(/\//g, '__')
+    .replace(/[^a-zA-Z0-9_]+/g, '_')
+    .replace(/_+/g, '_')
+    .replace(/^_|_$/g, '')
+    .slice(0, 72) || 'dir';
+  const part = totalParts > 1 ? `_p${partIndex}` : '';
+  let rel = `${mapped}/${slug}${part}.instructions.md`;
+  while (usedInstructionRelPaths.has(rel)) {
+    rel = `auto/${shortHash(rel + chunk.join(','))}.instructions.md`;
+  }
+  usedInstructionRelPaths.add(rel);
+  return rel;
+}
+
 function groupPathsIntoAutoSubsystems(
   paths: string[],
-  usedInstructionRelPaths: Set<string>
+  usedInstructionRelPaths: Set<string>,
+  repairOpts?: RepairBuildPlanOptions
 ): BuildPlanItem[] {
   if (paths.length === 0) return [];
+
+  const byFolder = repairOpts?.subsystemGrouping === 'by-folder';
+  const folderMax = Math.max(
+    4,
+    Math.min(200, repairOpts?.maxFilesPerFolderSubsystem ?? MAX_FILES_PER_FOLDER_SUBSYSTEM_DEFAULT)
+  );
 
   const byDir = new Map<string, string[]>();
   for (const p of paths) {
@@ -915,15 +1042,37 @@ function groupPathsIntoAutoSubsystems(
   for (const dir of sortedDirs) {
     const list = (byDir.get(dir) ?? []).sort();
     const topDir = dir.split('/')[0];
-    const maxPerSub = SPLIT_DIRS.has(topDir) ? MAX_SOURCE_FILES_PER_AUTO_SUBSYSTEM_SPLIT : MAX_SOURCE_FILES_PER_AUTO_SUBSYSTEM_DEFAULT;
+    const maxPerSub = byFolder
+      ? folderMax
+      : SPLIT_DIRS.has(topDir)
+        ? MAX_SOURCE_FILES_PER_AUTO_SUBSYSTEM_SPLIT
+        : MAX_SOURCE_FILES_PER_AUTO_SUBSYSTEM_DEFAULT;
+
+    const totalParts = Math.ceil(list.length / maxPerSub) || 1;
+
     for (let i = 0; i < list.length; i += maxPerSub) {
       const chunk = list.slice(i, i + maxPerSub);
       const partIndex = Math.floor(i / maxPerSub) + 1;
-      let rel = `${autoInstructionStem(dir, chunk, partIndex)}.instructions.md`;
-      while (usedInstructionRelPaths.has(rel)) {
-        rel = `auto/${shortHash(rel + chunk.join(','))}.instructions.md`;
+
+      const layout = repairOpts?.subsystemLayout ?? 'mirror';
+
+      let rel: string;
+      if (layout === 'mirror') {
+        rel = mirrorInstructionRelPath(dir, chunk, partIndex, totalParts, usedInstructionRelPaths);
+      } else if (byFolder) {
+        rel = folderInstructionRelPath(dir, partIndex, totalParts, chunk, usedInstructionRelPaths);
+      } else {
+        rel = `${autoInstructionStem(dir, chunk, partIndex)}.instructions.md`;
+        while (usedInstructionRelPaths.has(rel)) {
+          rel = `auto/${shortHash(rel + chunk.join(','))}.instructions.md`;
+        }
+        usedInstructionRelPaths.add(rel);
       }
-      usedInstructionRelPaths.add(rel);
+
+      const mirrorDesc =
+        chunk.length === 1
+          ? `Mirror — \`${chunk[0]}\``
+          : `Mirror — \`${dir}/\` (${chunk.length} files${totalParts > 1 ? `, part ${partIndex}/${totalParts}` : ''})`;
 
       const applyTo =
         chunk.length === 1
@@ -936,6 +1085,11 @@ function groupPathsIntoAutoSubsystems(
         ? humanAreaName(path.posix.basename(chunk[0]))
         : dir === '.' ? 'Root files' : humanAreaName(dir.split('/').pop()!);
 
+      const folderDesc =
+        totalParts > 1
+          ? `${area} — all source in \`${dir}/\` (part ${partIndex}/${totalParts}, ${chunk.length} files)`
+          : `${area} — all source in \`${dir}/\` (${chunk.length} files)`;
+
       items.push({
         file: rel,
         area,
@@ -944,9 +1098,13 @@ function groupPathsIntoAutoSubsystems(
         applyTo,
         useCases: padUseCases(chunk.map(f => `editing or refactoring \`${path.posix.basename(f)}\``)),
         description:
-          chunk.length === 1
-            ? `${area} — ${chunk[0]}`
-            : `${area} — bundle under ${dir} (${chunk.length} files)`,
+          layout === 'mirror'
+            ? mirrorDesc
+            : byFolder
+              ? folderDesc
+              : chunk.length === 1
+                ? `${area} — ${chunk[0]}`
+                : `${area} — bundle under ${dir} (${chunk.length} files)`,
       });
     }
   }
@@ -954,11 +1112,24 @@ function groupPathsIntoAutoSubsystems(
   return items;
 }
 
+/** Maps `Config` subsystem layout fields into `repairBuildPlan` options. */
+export function repairOptionsFromConfig(config: Config): RepairBuildPlanOptions {
+  return {
+    subsystemGrouping: config.subsystemGrouping,
+    maxFilesPerFolderSubsystem: config.maxFilesPerFolderSubsystem,
+    subsystemLayout: config.subsystemLayout,
+  };
+}
+
 /**
  * Ensures every scanned source path appears in exactly one subsystem.
  * Fills gaps from the LLM plan and replaces empty/invalid plans with a deterministic layout.
  */
-export function repairBuildPlan(scan: ScanResult, rawPlan: BuildPlan | null): BuildPlan {
+export function repairBuildPlan(
+  scan: ScanResult,
+  rawPlan: BuildPlan | null,
+  repairOpts?: RepairBuildPlanOptions
+): BuildPlan {
   const allPaths = collectScannedSourcePaths(scan);
   const defaults = inferDefaultsFromScan(scan);
 
@@ -1001,11 +1172,11 @@ export function repairBuildPlan(scan: ScanResult, rawPlan: BuildPlan | null): Bu
 
   const missing = allPaths.filter(p => !covered.has(p));
   if (missing.length > 0) {
-    const additions = groupPathsIntoAutoSubsystems(missing, usedFiles);
+    const additions = groupPathsIntoAutoSubsystems(missing, usedFiles, repairOpts);
     plan = { ...plan, subsystems: [...plan.subsystems, ...additions] };
   }
 
-  plan = applyCanonicalGroupings(plan);
+  plan = applyCanonicalGroupings(plan, repairOpts);
   return dedupeSubsystemSourceFiles(plan);
 }
 
@@ -1061,7 +1232,13 @@ function buildDeterministicCopilotInstructions(
   ];
 
   // ── Danger Zones: only real source files, not docs/prompts ─────────────
-  const DANGER_EXCLUDE = new Set(['.copilotignore', '.env.example', '.env.schema']);
+  const DANGER_EXCLUDE = new Set([
+    '.copilotignore',
+    '.graph-context-ignore',
+    '.context-graph-ignore',
+    '.env.example',
+    '.env.schema',
+  ]);
   const dangerLines: string[] = [];
   const tier0Files = scan.files.filter(f =>
     f.tier === 0 && f.content && !DANGER_EXCLUDE.has(path.posix.basename(f.path))
@@ -1106,6 +1283,9 @@ function buildDeterministicCopilotInstructions(
     `- **Main config**: \`.context-graph.json\` (created by \`context-graph build\` if missing).`,
     `- **Overrides**: CLI flags \`--provider/--model\` (highest precedence for build).`,
     `- **Env overrides**: \`CONTEXT_GRAPH_PROVIDER\`, \`CONTEXT_GRAPH_MODEL\` (read from \`.env\` / env).`,
+    `- **Project root**: implicit \`[dir]\` uses Git repo root when the shell cwd is a subfolder (so outputs land in the real repo). Set \`CONTEXT_GRAPH_ROOT\` to an absolute workspace path to override (e.g. VS Code/Cursor terminal profile).`,
+    `- **Scan exclusions**: optional \`.graph-context-ignore\` or \`.context-graph-ignore\` at repo root — same syntax as \`.gitignore\`; applied only to context-graph scanning (after \`.gitignore\` / \`.copilotignore\`).`,
+    `- **Instruction paths**: \`subsystemLayout\` in \`.context-graph.json\`: \`mirror\` (default, paths mirror repo tree) or \`canonical\` (legacy \`core/\` / \`infra/\`). Env: \`CONTEXT_GRAPH_SUBSYSTEM_LAYOUT\`.`,
     `- **API key**: env var from config (\`provider.apiKeyEnv\`); Ollama allows missing key.`,
   ];
 
@@ -1114,6 +1294,7 @@ function buildDeterministicCopilotInstructions(
     ``,
     `- **Graph missing**: run \`context-graph build --no-llm\` (creates \`.github/instructions/\`).`,
     `- **Validate fails**: run \`context-graph actualize --all\` then commit instruction changes.`,
+    `- **Wrong output folder**: you ran the CLI from a nested folder; use repo root cwd, or set \`CONTEXT_GRAPH_ROOT\`, or pass an explicit \`context-graph build path/to/package\` for a sub-root graph.`,
     `- **Actualize returns no files**: try \`--all\`; LLM mode needs configured provider/model/key.`,
     `- **Output parse issues**: model must emit only \`<<<FILE: ...>>>\` blocks (no prose).`,
   ];
@@ -1278,6 +1459,7 @@ function injectDeterministicRootFiles(
     `Start here:`,
     `- \`.github/instructions/copilot-instructions.md\` (root graph)`,
     `- \`.github/instructions/index.md\` (navigation)`,
+    `- \`.github/instructions/context-graph-path-index.md\` (all \`applyTo\` routes)`,
     ``,
     `If your tool supports VS Code-style instruction frontmatter, read all:`,
     `- \`.github/instructions/**/*.instructions.md\``,
@@ -1300,11 +1482,12 @@ function injectDeterministicRootFiles(
     ``,
     `Always read first:`,
     `- \`.github/instructions/copilot-instructions.md\``,
+    `- \`.github/instructions/context-graph-path-index.md\` (flat map: instruction → \`applyTo\`)`,
     ``,
     `Then route by file path:`,
     `- For a given edited file, open the \`.instructions.md\` whose frontmatter \`applyTo\` matches.`,
     `- If multiple match, prefer higher \`priority\` (P0>P1>P2).`,
-    `- If none match, open \`.github/instructions/index.md\` and pick the closest subsystem by area/source files.`,
+    `- If none match, open \`.github/instructions/index.md\` or \`context-graph-path-index.md\`, then pick the subsystem.`,
     ``,
     `All instruction files are authoritative over guesses. Prefer facts from instructions over assumptions.`,
     ``,
@@ -1332,6 +1515,11 @@ function injectDeterministicRootFiles(
     { path: '.github/copilot-instructions.md', content: copilotFinal, suffix: 'copilot-instructions.md' },
     { path: '.github/instructions/graph-changelog.md', content: buildDeterministicChangelog(today, plan), suffix: 'graph-changelog.md' },
     { path: '.github/instructions/index.md', content: buildIndexMd(today, plan), suffix: 'index.md' },
+    {
+      path: '.github/instructions/context-graph-path-index.md',
+      content: buildContextGraphPathIndexMd(today, plan),
+      suffix: 'context-graph-path-index.md',
+    },
     { path: '.github/instructions/metadata.json', content: buildMetadataJson(today, scan, plan), suffix: 'metadata.json' },
     { path: '.copilotignore', content: buildDeterministicCopilotIgnore(scan), suffix: '.copilotignore' },
     // Common “agent” entrypoints across ecosystems.
@@ -1413,15 +1601,39 @@ function buildMetadataJson(today: string, scan: ScanResult, plan?: BuildPlan): s
   return JSON.stringify({ generated: today, files: filesObj, hotspots }, null, 2);
 }
 
+/** Flat table: every instruction path ↔ applyTo ↔ sources (for LLMs and search). */
+function buildContextGraphPathIndexMd(today: string, plan: BuildPlan): string {
+  const rows = [...plan.subsystems]
+    .sort((a, b) => a.file.localeCompare(b.file))
+    .map(s => {
+      const applyEsc = s.applyTo.replace(/\|/g, '\\|');
+      const src = s.sourceFiles.map(f => `\`${f}\``).join(', ');
+      return `| \`${s.file}\` | \`${applyEsc}\` | ${s.priority} | ${s.area} | ${src} |`;
+    });
+  return [
+    `# context-graph — path index`,
+    ``,
+    `_Generated: ${today}. One row per \`.instructions.md\`; use \`applyTo\` for editor routing._`,
+    ``,
+    `| Instruction (relative to \`.github/instructions/\`) | applyTo | P | Area | Source files |`,
+    `|---|---|---|---|---|`,
+    ...rows,
+    ``,
+    `Companion: [index.md](index.md) (grouped). Root graph: [copilot-instructions.md](copilot-instructions.md).`,
+  ].join('\n');
+}
+
 /** Build index.md content from plan subsystems — no LLM guessing */
 function buildIndexMd(today: string, plan?: BuildPlan): string {
   if (!plan) return '';
 
-  // Group by directory prefix
+  const sorted = [...plan.subsystems].sort((a, b) => a.file.localeCompare(b.file));
+
+  // Group by first path segment of instruction file (works for mirror + canonical)
   const groups: Record<string, typeof plan.subsystems> = {};
-  for (const s of plan.subsystems) {
-    const dir = s.file.includes('/') ? s.file.split('/')[0] : 'root';
-    const key = dir.charAt(0).toUpperCase() + dir.slice(1);
+  for (const s of sorted) {
+    const seg = s.file.includes('/') ? s.file.split('/')[0] : 'root';
+    const key = seg.charAt(0).toUpperCase() + seg.slice(1);
     if (!groups[key]) groups[key] = [];
     groups[key].push(s);
   }
@@ -1430,6 +1642,8 @@ function buildIndexMd(today: string, plan?: BuildPlan): string {
     `# Context Graph — Instruction Index`,
     ``,
     `_Generated: ${today}_`,
+    ``,
+    `**Full path ↔ applyTo list:** [context-graph-path-index.md](context-graph-path-index.md)`,
     ``,
   ];
 
@@ -1789,7 +2003,7 @@ function llmContentMatchesRealExports(
 
 /** Second-chance prompt when local models skip <<<EOF>>> or add prose. */
 function buildSubsystemRepairMessage(today: string, instructionPath: string, planItem?: BuildPlanItem): string {
-  const NON_SRC_PAT = /^(tsconfig|\.env|\.copilotignore|\.eslint|\.prettier|jest\.config|vitest\.config|webpack|rollup|babel|\.editorconfig|\.gitignore)/i;
+  const NON_SRC_PAT = /^(tsconfig|\.env|\.copilotignore|\.graph-context-ignore|\.context-graph-ignore|\.eslint|\.prettier|jest\.config|vitest\.config|webpack|rollup|babel|\.editorconfig|\.gitignore)/i;
   const rawApply = planItem?.applyTo ?? 'src/**';
   const applyTo = rawApply.split(',').map(s => s.trim()).filter(s => !NON_SRC_PAT.test(path.posix.basename(s))).join(',') || rawApply;
   const desc = (planItem?.description ?? 'subsystem').replace(/"/g, '\\"');
@@ -1833,7 +2047,7 @@ function buildDeterministicSubsystemFile(
   const desc = esc(planItem?.description ?? `Documentation for ${sourceFiles.map(f => path.posix.basename(f)).join(', ')}`);
 
   // ── applyTo: only real source files the instruction targets, no configs ──
-  const NON_SOURCE_PATTERNS = /^(tsconfig|\.env|\.copilotignore|\.eslint|\.prettier|jest\.config|vitest\.config|webpack|rollup|babel|\.editorconfig|\.gitignore)/i;
+  const NON_SOURCE_PATTERNS = /^(tsconfig|\.env|\.copilotignore|\.graph-context-ignore|\.context-graph-ignore|\.eslint|\.prettier|jest\.config|vitest\.config|webpack|rollup|babel|\.editorconfig|\.gitignore)/i;
   const rawApplyTo = planItem?.applyTo ?? (sourceFiles.length === 1 ? sourceFiles[0] : 'src/**');
   const cleanedApplyTo = rawApplyTo
     .split(',')
@@ -2237,7 +2451,7 @@ export function buildGraphDeterministic(
   const today = new Date().toISOString().slice(0, 10);
 
   // Deterministic plan: use coverage repair to create a complete mapping.
-  const plan = repairBuildPlan(scan, null);
+  const plan = repairBuildPlan(scan, null, opts.repair);
 
   // Root files are deterministic; optionally allow a "slim root" caller preference
   // (we still emit index.md and metadata.json deterministically because they cost 0 tokens).
@@ -2255,7 +2469,6 @@ export function buildGraphDeterministic(
   // Passes=1 to indicate "one deterministic run"; usage/cost are zero.
   const usage: LLMUsage = { inputTokens: 0, outputTokens: 0 };
   const passes = 1;
-  void opts; // reserved for future root shaping
   return { files, usage, costUSD: 0, passes, plan };
 }
 
@@ -2354,7 +2567,7 @@ export async function buildGraphHybrid(
   const scanPrompt = config.contextDepth === 'slim' ? scanForPromptDepth(scanFull, 'slim') : scanFull;
 
   // Deterministic plan (no LLM planning pass)
-  const plan = repairBuildPlan(scanFull, null);
+  const plan = repairBuildPlan(scanFull, null, repairOptionsFromConfig(config));
   onPlanReady?.(plan);
 
   const totalExpected = 1 + 1 + plan.subsystems.length; // "plan" (synthetic) + root + subsystems
@@ -2374,6 +2587,7 @@ export async function buildGraphHybrid(
   onPassComplete?.(passes, totalExpected, 'root files · deterministic', allFiles.filter(f =>
     f.path === '.github/instructions/copilot-instructions.md' ||
     f.path === '.github/instructions/index.md' ||
+    f.path === '.github/instructions/context-graph-path-index.md' ||
     f.path === '.github/instructions/metadata.json' ||
     f.path === '.github/instructions/graph-changelog.md' ||
     f.path === '.copilotignore' ||
@@ -2479,7 +2693,7 @@ export async function buildGraphMultiPass(
   const costPlan = estimateCost(config.provider.model, planResp.usage);
   if (costPlan !== null) totalCost += costPlan;
 
-  const plan = repairBuildPlan(scanFull, parseBuildPlan(planResp.content));
+  const plan = repairBuildPlan(scanFull, parseBuildPlan(planResp.content), repairOptionsFromConfig(config));
   onPlanReady?.(plan);
 
   // Total expected passes: plan(0) + root(1) + one per subsystem (after coverage repair)

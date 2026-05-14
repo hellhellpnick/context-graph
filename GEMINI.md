@@ -10,6 +10,7 @@ Response style (ALWAYS):
 Start here:
 - `.github/instructions/copilot-instructions.md` (root graph)
 - `.github/instructions/index.md` (navigation)
+- `.github/instructions/context-graph-path-index.md` (all `applyTo` routes)
 
 If your tool supports VS Code-style instruction frontmatter, read all:
 - `.github/instructions/**/*.instructions.md`

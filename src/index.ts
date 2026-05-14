@@ -7,13 +7,34 @@ export {
   MODEL_MAX_OUTPUT_TOKENS,
   providerAllowsMissingApiKey,
 } from './config';
-export type { Config, ContextDepth } from './config';
+export type { Config, ContextDepth, SubsystemGrouping, SubsystemLayout } from './config';
 
-export { scanProject, formatForLLM, classifyFile, scanForPromptDepth } from './scanner';
+export { scanProject, formatForLLM, classifyFile, scanForPromptDepth, GRAPH_CONTEXT_IGNORE_FILENAMES } from './scanner';
 export type { ScannedFile, ScanResult } from './scanner';
 
-export { buildGraph, buildGraphMultiPass, estimateCost, parseBuildPlan, repairBuildPlan } from './graph-builder';
-export type { BuildMode, BuildOptions, GraphResult, MultiPassResult, BuildPlan, BuildPlanItem, BuildCallbacks } from './graph-builder';
+export { resolveProjectRoot, tryGitRepositoryRoot } from './project-root';
+
+export {
+  buildGraph,
+  buildGraphMultiPass,
+  buildGraphDeterministic,
+  estimateCost,
+  parseBuildPlan,
+  repairBuildPlan,
+  repairOptionsFromConfig,
+} from './graph-builder';
+export type {
+  BuildMode,
+  BuildOptions,
+  GraphResult,
+  MultiPassResult,
+  BuildPlan,
+  BuildPlanItem,
+  BuildCallbacks,
+  RepairBuildPlanOptions,
+  DeterministicBuildOptions,
+  HybridBuildOptions,
+} from './graph-builder';
 
 export { parseOutputFiles, writeOutputFiles } from './writer';
 export type { OutputFile, WriteResult } from './writer';

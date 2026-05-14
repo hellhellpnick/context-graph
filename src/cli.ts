@@ -3,9 +3,17 @@ import path from 'path';
 import chalk from 'chalk';
 import ora from 'ora';
 import { Command } from 'commander';
-import { loadConfig, initConfig, initConfigInteractive, providerAllowsMissingApiKey } from './config';
+import { loadConfig, initConfig, initConfigInteractive, providerAllowsMissingApiKey, type Config, type SubsystemLayout } from './config';
 import { scanProject } from './scanner';
-import { buildGraph, buildGraphMultiPass, buildGraphDeterministic, buildGraphHybrid, type BuildPlan } from './graph-builder';
+import {
+  buildGraph,
+  buildGraphMultiPass,
+  buildGraphDeterministic,
+  buildGraphHybrid,
+  type BuildPlan,
+  repairOptionsFromConfig,
+} from './graph-builder';
+import { resolveProjectRoot } from './project-root';
 import { writeOutputFiles } from './writer';
 import {
   installPrePushHook,
@@ -27,6 +35,19 @@ program
 
 // ── Shared output helpers ─────────────────────────────────────────────────
 
+function logResolvedProjectRoot(
+  log: (...args: unknown[]) => void,
+  projectRoot: string,
+  opts: { quiet?: boolean; json?: boolean }
+) {
+  if (opts.quiet || opts.json) return;
+  const cw = path.resolve(process.cwd());
+  const pr = path.resolve(projectRoot);
+  if (pr !== cw) {
+    log(chalk.dim(`Project root: ${pr} (terminal cwd: ${cw})`));
+  }
+}
+
 function formatCost(costUSD: number | null, inputTokens: number, outputTokens: number): string {
   const tokenStr = `${Math.round(inputTokens / 1000)}k in / ${Math.round(outputTokens / 1000)}k out`;
   if (costUSD === null) return chalk.dim(` · ${tokenStr}`);
@@ -47,11 +68,34 @@ program
   .option('--dry-run', 'Preview files that would be written without writing them')
   .option('--quiet', 'Suppress all output except errors')
   .option('--json', 'Output result as JSON to stdout')
-  .action(async (dir: string | undefined, opts: { hook: boolean; provider?: string; model?: string; llm?: boolean; hybrid?: boolean; hybridMax?: string; dryRun?: boolean; quiet?: boolean; json?: boolean }) => {
+  .option(
+    '--subsystem-grouping <mode>',
+    'Subsystem layout for gap-fill / no-LLM: default | by-folder (one instruction file per directory)'
+  )
+  .option(
+    '--max-files-per-folder <n>',
+    'With by-folder: max source files per instruction before splitting (default from config, 4–200)'
+  )
+  .option('--subsystem-layout <mode>', 'mirror (default) | canonical — where *.instructions.md live under .github/instructions/')
+  .action(async (dir: string | undefined, opts: {
+    hook: boolean;
+    provider?: string;
+    model?: string;
+    llm?: boolean;
+    hybrid?: boolean;
+    hybridMax?: string;
+    dryRun?: boolean;
+    quiet?: boolean;
+    json?: boolean;
+    subsystemGrouping?: string;
+    maxFilesPerFolder?: string;
+    subsystemLayout?: string;
+  }) => {
     const quiet = opts.quiet ?? false;
     const jsonOutput = opts.json ?? false;
     const log = (...args: unknown[]) => { if (!quiet && !jsonOutput) console.log(...args); };
-    const projectRoot = path.resolve(dir ?? '.');
+    const projectRoot = resolveProjectRoot(dir);
+    logResolvedProjectRoot(log, projectRoot, { quiet, json: jsonOutput });
 
     const useLlm = opts.llm !== false;
     const useHybridOverride = !!opts.hybrid;
@@ -75,10 +119,21 @@ program
       }
     }
 
-    let config = useLlm ? loadConfig(projectRoot) : null;
-    if (useLlm && config) {
+    let config: Config = loadConfig(projectRoot);
+    if (useLlm) {
       if (opts.provider) config.provider.provider = opts.provider as never;
       if (opts.model) config.provider.model = opts.model;
+    }
+
+    if (opts.subsystemGrouping === 'by-folder' || opts.subsystemGrouping === 'default') {
+      config.subsystemGrouping = opts.subsystemGrouping;
+    }
+    const maxFolderRaw = opts.maxFilesPerFolder ? parseInt(opts.maxFilesPerFolder, 10) : NaN;
+    if (Number.isFinite(maxFolderRaw) && maxFolderRaw >= 4) {
+      config.maxFilesPerFolderSubsystem = Math.min(200, maxFolderRaw);
+    }
+    if (opts.subsystemLayout === 'mirror' || opts.subsystemLayout === 'canonical') {
+      config.subsystemLayout = opts.subsystemLayout as SubsystemLayout;
     }
 
     // Show config source
@@ -94,7 +149,7 @@ program
           ? '.context-graph.json'
           : 'defaults';
 
-    const strategyFromConfig = config?.buildStrategy ?? 'llm';
+    const strategyFromConfig = config.buildStrategy;
     const requestedStrategy =
       opts.llm === false
         ? 'deterministic'
@@ -104,18 +159,20 @@ program
     const effectiveHybridMax =
       typeof hybridMaxOverride === 'number' && Number.isFinite(hybridMaxOverride) && hybridMaxOverride >= 0
         ? hybridMaxOverride
-        : (config?.hybridMaxSubsystems ?? 2);
+        : config.hybridMaxSubsystems;
+
+    const needsLlm = requestedStrategy === 'llm' || requestedStrategy === 'hybrid';
 
     if (requestedStrategy === 'deterministic') {
       log(chalk.dim(`Using deterministic build (from ${configSource})`));
     } else if (requestedStrategy === 'hybrid') {
       log(chalk.dim(`Using hybrid build (from ${configSource})`));
-    } else if (config) {
+    } else if (needsLlm) {
       log(chalk.dim(`Using ${config.provider.provider}/${config.provider.model} (from ${configSource})`));
     }
     if (opts.dryRun) log(chalk.yellow('[dry-run] No files will be written.'));
 
-    if (useLlm && config) {
+    if (needsLlm) {
       // Validate API key early (Ollama uses a placeholder if unset)
       const apiKeyEnvName = config.provider.apiKeyEnv;
       const apiKey = apiKeyEnvName ? process.env[apiKeyEnvName] : undefined;
@@ -156,7 +213,7 @@ program
     let resolvedPlan: BuildPlan | null = null;
 
     try {
-      const result = (requestedStrategy !== 'deterministic' && config)
+      const result = needsLlm
         ? (requestedStrategy === 'hybrid'
           ? await buildGraphHybrid(scan, config, {
               onPlanReady: (plan) => { resolvedPlan = plan; },
@@ -198,7 +255,7 @@ program
             },
           })
         )
-        : buildGraphDeterministic(scan);
+        : buildGraphDeterministic(scan, { repair: repairOptionsFromConfig(config) });
 
       spinner2?.stop();
       allFiles = result.files;
@@ -310,7 +367,8 @@ program
     const quiet = opts.quiet ?? false;
     const jsonOutput = opts.json ?? false;
     const log = (...args: unknown[]) => { if (!quiet && !jsonOutput) console.log(...args); };
-    const projectRoot = path.resolve(dir ?? '.');
+    const projectRoot = resolveProjectRoot(dir);
+    logResolvedProjectRoot(log, projectRoot, { quiet, json: jsonOutput });
 
     const graphDir = path.join(projectRoot, '.github', 'instructions');
     if (!require('fs').existsSync(graphDir)) {
@@ -337,7 +395,7 @@ program
     const spinner = quiet || jsonOutput ? null : ora('Scanning project...').start();
     let scan;
     try {
-      scan = await scanProject(projectRoot, config.maxFiles, config.maxInputTokens);
+      scan = await scanProject(projectRoot, config.maxFiles, config.maxInputTokens, { unlimited: true });
       spinner?.succeed(`Scanned ${scan.fileCount} files`);
     } catch (e) {
       spinner?.fail('Scan failed');
@@ -397,13 +455,14 @@ program
   .command('review [dir]')
   .description('Review graph accuracy — report only, no file changes')
   .action(async (dir: string | undefined) => {
-    const projectRoot = path.resolve(dir ?? '.');
+    const projectRoot = resolveProjectRoot(dir);
+    logResolvedProjectRoot((...a: unknown[]) => console.log(...a), projectRoot, {});
     const config = loadConfig(projectRoot);
 
     const spinner = ora('Scanning project...').start();
     let scan;
     try {
-      scan = await scanProject(projectRoot, config.maxFiles, config.maxInputTokens);
+      scan = await scanProject(projectRoot, config.maxFiles, config.maxInputTokens, { unlimited: true });
       spinner.succeed(`Scanned ${scan.fileCount} files`);
     } catch (e) {
       spinner.fail('Scan failed');
@@ -439,13 +498,14 @@ program
   .command('impact <file> [dir]')
   .description('Analyze blast radius of changing a specific file')
   .action(async (file: string, dir: string | undefined) => {
-    const projectRoot = path.resolve(dir ?? '.');
+    const projectRoot = resolveProjectRoot(dir);
+    logResolvedProjectRoot((...a: unknown[]) => console.log(...a), projectRoot, {});
     const config = loadConfig(projectRoot);
 
     const spinner = ora('Scanning project...').start();
     let scan;
     try {
-      scan = await scanProject(projectRoot, config.maxFiles, config.maxInputTokens);
+      scan = await scanProject(projectRoot, config.maxFiles, config.maxInputTokens, { unlimited: true });
       spinner.succeed(`Scanned ${scan.fileCount} files`);
     } catch (e) {
       spinner.fail('Scan failed');
@@ -473,7 +533,8 @@ program
   .description('Exit 1 if context graph is outdated — for use in CI pipelines')
   .option('--json', 'Output result as JSON to stdout')
   .action((dir: string | undefined, opts: { json?: boolean }) => {
-    const projectRoot = path.resolve(dir ?? '.');
+    const projectRoot = resolveProjectRoot(dir);
+    logResolvedProjectRoot((...a: unknown[]) => console.log(...a), projectRoot, { json: opts.json });
 
     const graphDir = path.join(projectRoot, '.github', 'instructions');
     if (!require('fs').existsSync(graphDir)) {
@@ -513,7 +574,8 @@ program
   .command('hook-check [dir]')
   .description('Internal: called by git pre-push hook')
   .action(async (dir: string | undefined) => {
-    const projectRoot = path.resolve(dir ?? '.');
+    const projectRoot = resolveProjectRoot(dir);
+    logResolvedProjectRoot((...a: unknown[]) => console.log(...a), projectRoot, {});
 
     const changedFiles = getChangedFilesSinceLastBuild(projectRoot);
     const significant = filterSignificantFiles(changedFiles);
@@ -559,7 +621,7 @@ program
     console.log('');
     const config = loadConfig(projectRoot);
     const spinner = ora('Scanning project...').start();
-    const scan = await scanProject(projectRoot, config.maxFiles, config.maxInputTokens);
+    const scan = await scanProject(projectRoot, config.maxFiles, config.maxInputTokens, { unlimited: true });
     spinner.succeed(`Scanned ${scan.fileCount} files`);
 
     const spinner2 = ora(`Actualizing with ${config.provider.model}...`).start();
@@ -596,7 +658,8 @@ program
   .action(async (dir: string | undefined, opts: { max?: string; dryRun?: boolean; json?: boolean }) => {
     const jsonOutput = opts.json ?? false;
     const log = (...args: unknown[]) => { if (!jsonOutput) console.log(...args); };
-    const projectRoot = path.resolve(dir ?? '.');
+    const projectRoot = resolveProjectRoot(dir);
+    logResolvedProjectRoot((...a: unknown[]) => { if (!jsonOutput) console.log(...a); }, projectRoot, { json: jsonOutput });
     const parsedMax = parseInt(opts.max ?? '10', 10);
     const maxAgents = Number.isNaN(parsedMax) || parsedMax <= 0 ? 10 : parsedMax;
 

@@ -142,12 +142,12 @@ program
     const configSource = !useLlm
       ? 'deterministic'
       : opts.provider
-      ? 'CLI flags'
-      : hasEnvProvider || hasEnvModel
-        ? '.env'
-        : configExists
-          ? '.context-graph.json'
-          : 'defaults';
+        ? 'CLI flags'
+        : hasEnvProvider || hasEnvModel
+          ? '.env'
+          : configExists
+            ? '.context-graph.json'
+            : 'defaults';
 
     const strategyFromConfig = config.buildStrategy;
     const requestedStrategy =
@@ -206,26 +206,26 @@ program
     let spinner2 = quiet || jsonOutput
       ? null
       : ora(
-          requestedStrategy === 'hybrid'
-            ? `Hybrid build — deterministic scaffold + LLM enrich...`
-            : (requestedStrategy === 'llm' ? 'Planning — analyzing project structure...' : 'Building deterministically (no LLM)...')
-        ).start();
+        requestedStrategy === 'hybrid'
+          ? `Hybrid build — deterministic scaffold + LLM enrich...`
+          : (requestedStrategy === 'llm' ? 'Planning — analyzing project structure...' : 'Building deterministically (no LLM)...')
+      ).start();
     let resolvedPlan: BuildPlan | null = null;
 
     try {
       const result = needsLlm
         ? (requestedStrategy === 'hybrid'
           ? await buildGraphHybrid(scan, config, {
-              onPlanReady: (plan) => { resolvedPlan = plan; },
-              onPassComplete: (pass, total, label, passFiles, passCost) => {
-                totalPasses = pass;
-                if (quiet || jsonOutput) return;
-                const costStr = passCost !== null ? ` · ~$${passCost.toFixed(3)}` : '';
-                const fileStr = passFiles.length > 0 ? `${passFiles.length} file(s)` : 'no files parsed';
-                spinner2?.succeed(`Pass ${pass}/${total} — ${label} · ${fileStr}${costStr}`);
-                if (pass < total) spinner2 = ora(`Pass ${pass + 1}/${total} — continuing...`).start();
-              },
-            }, { maxSubsystems: effectiveHybridMax, notesMode: config.hybridNotesMode })
+            onPlanReady: (plan) => { resolvedPlan = plan; },
+            onPassComplete: (pass, total, label, passFiles, passCost) => {
+              totalPasses = pass;
+              if (quiet || jsonOutput) return;
+              const costStr = passCost !== null ? ` · ~$${passCost.toFixed(3)}` : '';
+              const fileStr = passFiles.length > 0 ? `${passFiles.length} file(s)` : 'no files parsed';
+              spinner2?.succeed(`Pass ${pass}/${total} — ${label} · ${fileStr}${costStr}`);
+              if (pass < total) spinner2 = ora(`Pass ${pass + 1}/${total} — continuing...`).start();
+            },
+          }, { maxSubsystems: effectiveHybridMax, notesMode: config.hybridNotesMode })
           : await buildGraphMultiPass(scan, config, {
             onPlanReady: (plan) => {
               resolvedPlan = plan;
@@ -607,8 +607,6 @@ program
         initial: false,
       });
       shouldActualize = answer.actualize;
-      // Give enquirer time to clean up readline before exit
-      await new Promise(resolve => setImmediate(resolve));
     } catch {
       // Non-interactive / no TTY — soft reminder already printed; never block push
       console.log(chalk.dim('  (non-interactive: push continues; run graph:actualize when convenient)\n'));
@@ -616,7 +614,9 @@ program
     }
 
     if (!shouldActualize) {
-      process.exit(0);
+      // Defer exit to let enquirer clean up readline without throwing
+      setImmediate(() => process.exit(0));
+      return;
     }
 
     // Run actualize inline

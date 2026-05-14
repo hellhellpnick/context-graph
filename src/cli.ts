@@ -607,6 +607,8 @@ program
         initial: false,
       });
       shouldActualize = answer.actualize;
+      // Give enquirer time to clean up readline before exit
+      await new Promise(resolve => setImmediate(resolve));
     } catch {
       // Non-interactive / no TTY — soft reminder already printed; never block push
       console.log(chalk.dim('  (non-interactive: push continues; run graph:actualize when convenient)\n'));

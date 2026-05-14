@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import path from 'path';
+import readline from 'readline';
 import chalk from 'chalk';
 import ora from 'ora';
 import { Command } from 'commander';
@@ -24,6 +25,32 @@ import {
 import { matchAgents, fetchAgents, writeAgents } from './agents';
 
 const program = new Command();
+
+/** Pre-push hook only: avoid enquirer (Node 20+ can throw ERR_USE_AFTER_CLOSE on confirm). */
+async function promptHookRunActualize(): Promise<boolean> {
+  if (!process.stdin.isTTY || !process.stdout.isTTY) return false;
+  return new Promise<boolean>(resolve => {
+    const rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout,
+      terminal: true,
+    });
+    const finish = (yes: boolean) => {
+      try {
+        rl.close();
+      } catch {
+        /* ignore */
+      }
+      setImmediate(() => resolve(yes));
+    };
+    rl.question(
+      chalk.yellow('Run actualize now (optional — uses your configured LLM)? [y/N] '),
+      answer => {
+        finish(/^y(es)?$/i.test(String(answer ?? '').trim()));
+      }
+    );
+  });
+}
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const PKG_VERSION: string = (require('../package.json') as { version: string }).version;
@@ -597,26 +624,14 @@ program
 
     let shouldActualize = false;
     try {
-      // Dynamically require enquirer to avoid crashing in non-interactive terminals
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const { prompt } = require('enquirer') as { prompt: (q: unknown) => Promise<{ actualize: boolean }> };
-      const answer = await prompt({
-        type: 'confirm',
-        name: 'actualize',
-        message: 'Run actualize now (optional — uses your configured LLM)?',
-        initial: false,
-      });
-      shouldActualize = answer.actualize;
+      shouldActualize = await promptHookRunActualize();
     } catch {
-      // Non-interactive / no TTY — soft reminder already printed; never block push
       console.log(chalk.dim('  (non-interactive: push continues; run graph:actualize when convenient)\n'));
       process.exit(0);
     }
 
     if (!shouldActualize) {
-      // Defer exit to let enquirer clean up readline without throwing
-      setImmediate(() => process.exit(0));
-      return;
+      process.exit(0);
     }
 
     // Run actualize inline

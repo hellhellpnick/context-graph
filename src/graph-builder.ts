@@ -7,6 +7,11 @@ import { createProvider } from './providers';
 import type { LLMUsage } from './providers/types';
 import type { ScanResult } from './scanner';
 import { formatForLLM, scanForPromptDepth } from './scanner';
+import {
+  extractPhpSymbolLines,
+  extractPhpUseStatements,
+  scriptOrSelfForAnalysis,
+} from './source-extract';
 import type { OutputFile } from './writer';
 import { parseOutputFiles } from './writer';
 
@@ -94,6 +99,13 @@ export interface HybridBuildOptions {
 interface SubsystemMapping {
   instructionPath: string;
   sourceFiles: string[];
+}
+
+/** Node / Python / Rust / PHP env access heuristics for Danger Zone + mermaid. */
+function fileReadsEnvironment(content: string): boolean {
+  return /process\.env|os\.environ|std::env|getenv\s*\(|(?:^|[^\w$.])env\s*\(\s*['"][^'"]+['"]|(?:^|[^\w$])\$_ENV(?:\[|\b)|(?:^|[^\w$])\$_SERVER\s*\[/i.test(
+    content
+  );
 }
 
 const OUTPUT_FORMAT_INSTRUCTION = `
@@ -261,18 +273,23 @@ function extractExports(scan: ScanResult, sourceFiles: string[]): string {
   for (const f of scan.files) {
     if (!sourcePaths.has(f.path) || !f.content) continue;
     const fileExports: string[] = [];
+    const { body, virtualPath } = scriptOrSelfForAnalysis(f.path, f.content);
 
-    // Prefer AST for TS/JS-like files (more accurate than regex).
-    if (isTsJsLike(f.path)) {
+    // Prefer AST for TS/JS-like files (more accurate than regex). Vue → extracted `<script>` as virtual `.ts`.
+    if (isTsJsLike(virtualPath)) {
       try {
-        fileExports.push(...extractExportsFromTsAst(f.path, f.content));
+        fileExports.push(...extractExportsFromTsAst(virtualPath, body));
       } catch {
         // Fall back to regex below.
       }
     }
 
+    if (fileExports.length === 0 && /\.php$/i.test(f.path)) {
+      fileExports.push(...extractPhpSymbolLines(body));
+    }
+
     if (fileExports.length === 0) {
-      const codeLines = f.content.split('\n');
+      const codeLines = body.split('\n');
 
       for (let i = 0; i < codeLines.length; i++) {
         const trimmed = codeLines[i].trim();
@@ -362,17 +379,22 @@ function extractImports(scan: ScanResult, sourceFiles: string[]): string[] {
 
   for (const f of scan.files) {
     if (!sourcePaths.has(f.path) || !f.content) continue;
+    const { body, virtualPath } = scriptOrSelfForAnalysis(f.path, f.content);
 
-    if (isTsJsLike(f.path)) {
+    if (isTsJsLike(virtualPath)) {
       try {
-        for (const d of extractImportsFromTsAst(f.path, f.content)) addDep(d, f.path);
-        continue;
+        const ast = extractImportsFromTsAst(virtualPath, body);
+        for (const d of ast) addDep(d, f.path);
+        if (ast.length > 0 && !/\.vue$/i.test(f.path)) continue;
       } catch {
         // fall back to regex below
       }
+    } else if (/\.php$/i.test(f.path)) {
+      for (const u of extractPhpUseStatements(body)) deps.add(u);
+      continue;
     }
 
-    const lines = f.content.split('\n');
+    const lines = body.split('\n');
     for (const line of lines) {
       // Match: import X from 'module', import { X } from 'module', require('module')
       const m = line.match(/(?:from|require\s*\()\s*['"]([^'"]+)['"]/);
@@ -397,14 +419,14 @@ function isBarrelFile(content: string): boolean {
 
 // ── Deterministic dependency graph (file-level) ────────────────────────────
 
-const TS_JS_EXTS = ['.ts', '.tsx', '.js', '.jsx', '.mjs', '.cjs'];
+const TS_JS_EXTS = ['.ts', '.tsx', '.js', '.jsx', '.mjs', '.cjs', '.vue'];
 
 function isTsJsLikePath(p: string): boolean {
-  return /\.(ts|tsx|js|jsx|mjs|cjs)$/i.test(p);
+  return /\.(ts|tsx|js|jsx|mjs|cjs|vue)$/i.test(p);
 }
 
 function stripKnownExt(p: string): string {
-  return p.replace(/\.(ts|tsx|js|jsx|mjs|cjs)$/i, '');
+  return p.replace(/\.(ts|tsx|js|jsx|mjs|cjs|vue)$/i, '');
 }
 
 function extractImportSpecifiersFromTsAst(filePath: string, content: string): string[] {
@@ -473,12 +495,12 @@ function buildDeterministicDependencyGraph(scan: ScanResult): string {
   const existing = new Set(files.map(f => f.path.replace(/\\/g, '/')));
 
   // Danger heuristic: known sources that read env are highlighted
-  const SOURCE_EXT_RE = /\.(ts|tsx|js|jsx|mjs|cjs|py|go|rs|java|kt|cs|rb|php)$/i;
+  const SOURCE_EXT_RE = /\.(ts|tsx|js|jsx|mjs|cjs|vue|py|go|rs|java|kt|cs|rb|php)$/i;
   const dangerPaths = new Set([
     'src/cli.ts', 'src/config.ts', 'src/graph-builder.ts', 'src/writer.ts',
     'src/providers/openai.ts', 'src/providers/anthropic.ts',
   ]);
-  const readsEnv = (content: string) => /process\.env|os\.environ|std::env/i.test(content);
+  const readsEnv = fileReadsEnvironment;
 
   // Cap nodes for very large repos to keep root file reasonable in deterministic mode.
   const MAX_NODES = 140;
@@ -498,11 +520,13 @@ function buildDeterministicDependencyGraph(scan: ScanResult): string {
     const from = f.path.replace(/\\/g, '/');
     if (!f.content) continue;
 
+    const { body, virtualPath } = scriptOrSelfForAnalysis(from, f.content);
+
     let specs: string[] = [];
     let kind: 'import' | 'require' | 'unknown' = 'unknown';
-    if (isTsJsLikePath(from)) {
+    if (isTsJsLikePath(virtualPath) && /\.(ts|tsx|js|jsx|mjs|cjs)$/i.test(virtualPath)) {
       try {
-        specs = extractImportSpecifiersFromTsAst(from, f.content);
+        specs = extractImportSpecifiersFromTsAst(virtualPath, body);
         kind = 'import';
       } catch {
         specs = [];
@@ -511,7 +535,7 @@ function buildDeterministicDependencyGraph(scan: ScanResult): string {
 
     if (specs.length === 0) {
       // Fallback regex for any language
-      for (const line of f.content.split('\n')) {
+      for (const line of body.split('\n')) {
         const mFrom = line.match(/\bfrom\s*['"]([^'"]+)['"]/);
         if (mFrom) {
           specs.push(mFrom[1]);
@@ -594,26 +618,27 @@ function extractCliCommands(content: string): string[] {
   return [...new Set(commands)];
 }
 
-/** One-line purpose summary extracted from JSDoc or first comment of a file. */
+/** One-line purpose summary: JSDoc / `//` / `#` (PHP) / first block comment. */
 function extractFilePurpose(content: string): string | null {
   const lines = content.split('\n');
-  for (let i = 0; i < Math.min(lines.length, 15); i++) {
+  for (let i = 0; i < Math.min(lines.length, 40); i++) {
     const t = lines[i].trim();
-    // JSDoc: /** Some description */  or  /** \n * Some description
+    // JSDoc / PHPDoc
     if (t.startsWith('/**')) {
-      // Single-line JSDoc
       const single = t.match(/^\/\*\*\s*(.+?)\s*\*\/$/);
       if (single) return single[1];
-      // Multi-line: next line with *
-      for (let j = i + 1; j < Math.min(lines.length, i + 5); j++) {
+      for (let j = i + 1; j < Math.min(lines.length, i + 8); j++) {
         const desc = lines[j].trim().replace(/^\*\s?/, '');
         if (desc && !desc.startsWith('@') && !desc.startsWith('/')) return desc;
       }
     }
-    // Single-line comment at top of file
-    if (t.startsWith('//') && i < 3) {
+    if (t.startsWith('//') && i < 6) {
       const desc = t.replace(/^\/\/\s*/, '');
       if (desc.length > 10) return desc;
+    }
+    if (t.startsWith('#') && i < 8 && !t.startsWith('#!')) {
+      const desc = t.replace(/^#\s*/, '');
+      if (desc.length > 8) return desc;
     }
   }
   return null;
@@ -830,7 +855,15 @@ function buildPlanningContextLight(scan: ScanResult): string {
     '',
     '## Config excerpts (infer build/test commands when JSON plan fields are empty)',
   ];
-  const configHints = ['package.json', 'pyproject.toml', 'go.mod', 'Cargo.toml', 'pom.xml', 'build.gradle.kts'];
+  const configHints = [
+    'package.json',
+    'composer.json',
+    'pyproject.toml',
+    'go.mod',
+    'Cargo.toml',
+    'pom.xml',
+    'build.gradle.kts',
+  ];
   for (const name of configHints) {
     const f = scan.files.find(x => x.path === name && x.content);
     if (!f) continue;
@@ -849,15 +882,58 @@ function readPackageJson(scan: ScanResult): Record<string, unknown> | null {
   }
 }
 
+function readComposerJson(scan: ScanResult): Record<string, unknown> | null {
+  const f = scan.files.find(x => x.path === 'composer.json' && x.content);
+  if (!f) return null;
+  try {
+    return JSON.parse(f.content) as Record<string, unknown>;
+  } catch {
+    return null;
+  }
+}
+
 function inferDefaultsFromScan(scan: ScanResult): Pick<BuildPlan, 'projectName' | 'projectDescription' | 'techStack' | 'buildCommand' | 'testCommand'> {
   const pkg = readPackageJson(scan);
-  const name = typeof pkg?.name === 'string' ? pkg.name : 'Project';
-  const desc = typeof pkg?.description === 'string' ? pkg.description : 'Codebase (auto-inferred)';
+  const composer = readComposerJson(scan);
+
+  let name = typeof pkg?.name === 'string' ? pkg.name : 'Project';
+  let desc =
+    typeof pkg?.description === 'string' ? pkg.description : 'Codebase (auto-inferred)';
+
+  if ((!pkg || name === 'Project') && composer) {
+    const cName = composer.name;
+    if (typeof cName === 'string' && cName.includes('/')) {
+      name = cName.split('/').pop() ?? name;
+    } else if (typeof cName === 'string' && cName.length > 0) {
+      name = cName;
+    }
+    const cDesc = composer.description;
+    if (typeof cDesc === 'string' && cDesc.trim().length > 0) desc = cDesc.trim();
+  }
+
   const scripts = pkg?.scripts && typeof pkg.scripts === 'object' ? (pkg.scripts as Record<string, string>) : {};
-  const buildCommand = scripts.build ? 'npm run build' : scripts.compile ? 'npm run compile' : undefined;
-  const testCommand = scripts.test ? 'npm test' : undefined;
+  const composerScripts =
+    composer?.scripts && typeof composer.scripts === 'object'
+      ? (composer.scripts as Record<string, string>)
+      : {};
+
+  let buildCommand: string | undefined =
+    scripts.build ? 'npm run build' : scripts.compile ? 'npm run compile' : undefined;
+  if (!buildCommand && composerScripts.build) buildCommand = 'composer build';
+  if (!buildCommand && composerScripts['install-deps']) buildCommand = 'composer install-deps';
+
+  let testCommand: string | undefined = scripts.test ? 'npm test' : undefined;
+  if (!testCommand && composerScripts.test) testCommand = 'composer test';
+  if (!testCommand && composerScripts.phpunit) testCommand = 'composer phpunit';
+  if (!testCommand && composerScripts['test:unit']) testCommand = 'composer test:unit';
+
   const techStack: string[] = [];
   if (pkg) techStack.push('Node.js');
+  if (composer) techStack.push('PHP', 'Composer');
+  if (scan.files.some(f => f.path.endsWith('.php'))) {
+    if (!techStack.includes('PHP')) techStack.push('PHP');
+  }
+  if (scan.files.some(f => f.path.endsWith('.vue'))) techStack.push('Vue');
   if (scan.files.some(f => f.path.endsWith('.ts') || f.path.endsWith('.tsx'))) techStack.push('TypeScript');
   if (scan.files.some(f => f.path.endsWith('.py'))) techStack.push('Python');
   if (scan.files.some(f => f.path.endsWith('.go'))) techStack.push('Go');
@@ -1183,7 +1259,7 @@ export function repairBuildPlan(
 // ── Deterministic root file builders ──────────────────────────────────────
 
 /** Source-code extensions for env-read detection (skip docs/prompts). */
-const SOURCE_EXT_RE = /\.(ts|tsx|js|jsx|mjs|cjs|py|go|rs|java|kt|cs|rb|php)$/i;
+const SOURCE_EXT_RE = /\.(ts|tsx|js|jsx|mjs|cjs|vue|py|go|rs|java|kt|cs|rb|php)$/i;
 
 function buildDeterministicCopilotInstructions(
   today: string,
@@ -1249,7 +1325,7 @@ function buildDeterministicCopilotInstructions(
   const envSourceFiles = scan.files.filter(f =>
     f.content &&
     SOURCE_EXT_RE.test(f.path) &&
-    /process\.env|os\.environ|std::env/i.test(f.content)
+    fileReadsEnvironment(f.content)
   );
   for (const f of envSourceFiles) {
     if (!dangerLines.some(l => l.includes(f.path))) {
@@ -1673,13 +1749,15 @@ function buildSnippetForFiles(scan: ScanResult, sourceFiles: string[], maxChars:
   const parts: string[] = [];
   let budget = maxChars;
 
-  const isTsJsLike = (p: string) => /\.(ts|tsx|js|jsx|mjs|cjs)$/i.test(p);
-
   const pickLinesFallback = (content: string): string[] => {
     const lines = content.split('\n');
     const head = lines.slice(0, 140);
     const interesting = lines
-      .filter(l => /process\.env|throw\s+new|fetch\(|axios|fs\.|readFile|writeFile|execSync|child_process/i.test(l))
+      .filter(l =>
+        /process\.env|getenv\s*\(|(?:^|[^\w$.])env\s*\(|throw\s+new|(?:\$_(?:ENV|SERVER))\b|fetch\(|axios|fs\.|readFile|writeFile|execSync|child_process/i.test(
+          l
+        )
+      )
       .slice(0, 60);
     return [...head, '', ...interesting].slice(0, 260);
   };
@@ -1733,16 +1811,20 @@ function buildSnippetForFiles(scan: ScanResult, sourceFiles: string[], maxChars:
   for (const sf of sourceFiles) {
     const f = scan.files.find(x => x.path === sf && x.content);
     if (!f?.content) continue;
-    const picked = isTsJsLike(sf)
+    const { body, virtualPath } = scriptOrSelfForAnalysis(sf, f.content);
+
+    const picked = /\.(ts|tsx|js|jsx|mjs|cjs)$/i.test(virtualPath)
       ? (() => {
           try {
-            const astPick = pickExportBodiesTs(sf, f.content);
-            return astPick || pickLinesFallback(f.content).join('\n');
+            const astPick = pickExportBodiesTs(virtualPath, body);
+            return astPick || pickLinesFallback(body).join('\n');
           } catch {
-            return pickLinesFallback(f.content).join('\n');
+            return pickLinesFallback(body).join('\n');
           }
         })()
-      : pickLinesFallback(f.content).join('\n');
+      : /\.php$/i.test(sf)
+        ? extractPhpSymbolLines(body).join('\n\n') || pickLinesFallback(f.content).join('\n')
+        : pickLinesFallback(f.content).join('\n');
 
     const chunk = `\n// ── ${sf} ──\n` + picked;
     if (chunk.length > budget) break;
@@ -1991,9 +2073,18 @@ function llmContentMatchesRealExports(
   for (const sf of sourceFiles) {
     const scanned = scan.files.find(f => f.path === sf);
     if (!scanned?.content) continue;
-    for (const line of scanned.content.split('\n')) {
+    const { body } = scriptOrSelfForAnalysis(sf, scanned.content);
+    for (const line of body.split('\n')) {
       const m = line.match(/^export\s+(?:async\s+)?(?:function|class|const|type|interface|enum)\s+(\w+)/);
       if (m) realNames.push(m[1]);
+    }
+    if (/\.php$/i.test(sf)) {
+      for (const line of extractPhpSymbolLines(scanned.content)) {
+        const c = line.match(/(?:^|\s)(?:class|interface|trait|enum)\s+(\w+)/i);
+        if (c) realNames.push(c[1]);
+        const fn = line.match(/function\s+(\w+)\s*\(/i);
+        if (fn) realNames.push(fn[1]);
+      }
     }
   }
   if (realNames.length === 0) return true; // no exports → can't validate
@@ -2085,8 +2176,14 @@ function buildDeterministicSubsystemFile(
     if (!scanned?.content) continue;
     const purpose = extractFilePurpose(scanned.content) ?? planItem?.description;
     const lineCount = scanned.lines;
-    const exportCount = scanned.content.split('\n').filter(l => /^export\s/.test(l.trim())).length;
-    const suffix = exportCount > 0 ? ` · ${exportCount} exports` : '';
+    const exportCount = (() => {
+      if (/\.php$/i.test(sf)) return extractPhpSymbolLines(scanned.content).length;
+      const { body } = scriptOrSelfForAnalysis(sf, scanned.content);
+      const exp = body.split('\n').filter(l => /^export\s/.test(l.trim())).length;
+      if (exp > 0) return exp;
+      return body.split('\n').filter(l => /^(?:export\s+)?(?:async\s+)?function\s+\w+/.test(l.trim())).length;
+    })();
+    const suffix = exportCount > 0 ? ` · ${exportCount} top-level symbols` : '';
     fileSummaries.push(
       purpose
         ? `- \`${sf}\` (${lineCount} lines${suffix}) — ${purpose}`
@@ -2115,25 +2212,32 @@ function buildDeterministicSubsystemFile(
   const internalDeps = deps.filter(d => !d.includes('/node_modules/') && !d.startsWith('@') && d.includes('/'));
   const externalDeps = deps.filter(d => !internalDeps.includes(d));
 
-  // Env vars read
+  // Env vars read (Node + PHP / Laravel)
   const envVars: string[] = [];
   for (const sf of sourceFiles) {
     const scanned = scan.files.find(f => f.path === sf);
     if (!scanned?.content) continue;
-    const matches = scanned.content.matchAll(/process\.env\.([A-Z_][A-Z0-9_]*)/g);
-    for (const m of matches) envVars.push(m[1]);
-    const bracketMatches = scanned.content.matchAll(/process\.env\[['"]([A-Z_][A-Z0-9_]*)['"]\]/g);
-    for (const m of bracketMatches) envVars.push(m[1]);
+    const text = scanned.content;
+    for (const m of text.matchAll(/process\.env\.([A-Z_][A-Z0-9_]*)/g)) envVars.push(`process.env.${m[1]}`);
+    for (const m of text.matchAll(/process\.env\[['"]([A-Z_][A-Z0-9_]*)['"]\]/g)) envVars.push(`process.env.${m[1]}`);
+    for (const m of text.matchAll(/getenv\s*\(\s*['"]([^'"]+)['"]\s*\)/g)) envVars.push(`getenv('${m[1]}')`);
+    for (const m of text.matchAll(/(?:^|[^\w$.])env\s*\(\s*['"]([^'"]+)['"]\s*\)/gm)) envVars.push(`env('${m[1]}')`);
+    for (const m of text.matchAll(/\$_ENV\s*\[\s*['"]([^'"]+)['"]\s*\]/g)) envVars.push(`$_ENV['${m[1]}']`);
   }
   const uniqueEnvVars = [...new Set(envVars)];
 
-  // Error patterns
+  // Error patterns (JS + PHP)
   const throwPatterns: string[] = [];
   for (const sf of sourceFiles) {
     const scanned = scan.files.find(f => f.path === sf);
     if (!scanned?.content) continue;
-    const throwMatches = scanned.content.matchAll(/throw\s+new\s+(\w+)\s*\(\s*['"`](.{10,80})['"`]/g);
+    const text = scanned.content;
+    const throwMatches = text.matchAll(/throw\s+new\s+(\w+)\s*\(\s*['"`](.{10,80})['"`]/g);
     for (const m of throwMatches) {
+      throwPatterns.push(`- \`${m[1]}\`: "${m[2]}" (\`${path.posix.basename(sf)}\`)`);
+    }
+    const phpThrows = text.matchAll(/throw\s+new\s+((?:\\[\w]+|[\w\\])+)\s*\(\s*['"]([^'"]{10,120})['"]\s*\)/g);
+    for (const m of phpThrows) {
       throwPatterns.push(`- \`${m[1]}\`: "${m[2]}" (\`${path.posix.basename(sf)}\`)`);
     }
   }
@@ -2151,12 +2255,15 @@ function buildDeterministicSubsystemFile(
     }
     for (const d of externalDeps.slice(0, 5)) {
       const safeName = d.replace(/[^a-zA-Z0-9]/g, '_');
-      mermaidNodes.push(`  ${fileLabel} --> ${safeName}["${d} · npm"]`);
+      mermaidNodes.push(`  ${fileLabel} --> ${safeName}["${d}"]`);
     }
     if (uniqueEnvVars.length > 0) {
       mermaidNodes.push(`  ${fileLabel} --> ENV{{"env vars"}}`);
     }
   }
+
+  const hasPhp = sourceFiles.some(p => /\.php$/i.test(p));
+  const sigFence = hasPhp && sourceFiles.every(p => /\.php$/i.test(p)) ? 'php' : 'typescript';
 
   const content = [
     '---',
@@ -2180,13 +2287,13 @@ function buildDeterministicSubsystemFile(
     '',
     '## Signatures',
     '',
-    '```typescript',
+    `\`\`\`${sigFence}`,
     exportBlock,
     '```',
     '',
     '## Dependencies',
     ...(internalDeps.length > 0 ? ['**Internal:**', ...internalDeps.map(d => `- \`${d}\``), ''] : []),
-    ...(externalDeps.length > 0 ? ['**External (npm):**', ...externalDeps.map(d => `- \`${d}\``), ''] : []),
+    ...(externalDeps.length > 0 ? ['**External:**', ...externalDeps.map(d => `- \`${d}\``), ''] : []),
     ...(internalDeps.length === 0 && externalDeps.length === 0 ? ['- No dependencies detected', ''] : []),
     ...(isBarrel
       ? []
@@ -2197,7 +2304,7 @@ function buildDeterministicSubsystemFile(
         ]),
     '## Danger Zone 🔴',
     ...(uniqueEnvVars.length > 0
-      ? uniqueEnvVars.map(v => `- Reads \`process.env.${v}\``)
+      ? uniqueEnvVars.map(v => `- Reads \`${v}\``)
       : ['- No env vars or side effects detected']),
   ].join('\n');
   return { path: instructionPath, content };
@@ -2487,9 +2594,11 @@ function extractExportNamesForNotes(scan: ScanResult, sourceFiles: string[]): st
     const f = scan.files.find(x => x.path === sfPath && x.content);
     if (!f?.content) continue;
 
-    if (isTsJsLike(sfPath)) {
+    const { body, virtualPath } = scriptOrSelfForAnalysis(sfPath, f.content);
+
+    if (isTsJsLike(virtualPath)) {
       try {
-        const sf = ts.createSourceFile(sfPath, f.content, ts.ScriptTarget.Latest, true);
+        const sf = ts.createSourceFile(virtualPath, body, ts.ScriptTarget.Latest, true);
         const hasExport = (node: ts.Node): boolean => {
           const mods = (node as { modifiers?: ts.NodeArray<ts.ModifierLike> }).modifiers;
           return !!mods?.some(m => m.kind === ts.SyntaxKind.ExportKeyword);
@@ -2504,13 +2613,23 @@ function extractExportNamesForNotes(scan: ScanResult, sourceFiles: string[]): st
             }
           }
         }
-        continue;
+        if (!/\.vue$/i.test(sfPath)) continue;
       } catch {
         // fall through to regex
       }
     }
 
-    for (const line of f.content.split('\n')) {
+    if (/\.php$/i.test(sfPath)) {
+      for (const line of extractPhpSymbolLines(f.content)) {
+        const c = line.match(/(?:^|\s)(?:class|interface|trait|enum)\s+(\w+)/i);
+        if (c) out.add(c[1]);
+        const fn = line.match(/function\s+(\w+)\s*\(/i);
+        if (fn) out.add(fn[1]);
+      }
+      continue;
+    }
+
+    for (const line of body.split('\n')) {
       const m = line.match(/^export\s+(?:async\s+)?(?:function|class|const)\s+(\w+)/);
       if (m) out.add(m[1]);
     }

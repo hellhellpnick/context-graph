@@ -1,0 +1,15 @@
+src/
+node_modules/
+*.ts
+!*.d.ts
+tsconfig.json
+.git/
+.github/
+.env
+.env.*
+.context-graph-last-build
+.context-graph-debug.txt
+.codex/
+.cursor/
+*.md.instructions.md
+python/

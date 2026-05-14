@@ -1,6 +1,6 @@
 {
 	"name": "@hellpnick/context-graph",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "Auto-generate AI context graphs for any codebase. One command, zero config.",
 	"bin": {
 		"context-graph": "dist/cli.js"

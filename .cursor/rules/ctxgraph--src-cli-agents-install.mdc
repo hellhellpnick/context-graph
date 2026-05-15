@@ -1,0 +1,43 @@
+---
+description: "Agents Install — src/cli/agents-install.ts"
+globs: src/cli/agents-install.ts
+alwaysApply: false
+---
+
+## When to Read
+- editing or refactoring `agents-install.ts`
+
+## Overview
+- `src/cli/agents-install.ts` (40 lines · 1 top-level symbols) — Mirror — `src/cli/agents-install.ts`
+
+## Graph
+```mermaid
+graph LR
+  agents_install[agents-install]
+  agents_install --> agents[agents]
+  agents_install --> graph_builder[graph-builder]
+  agents_install --> scanner[scanner]
+  agents_install --> chalk["chalk"]
+  agents_install --> ora["ora"]
+```
+
+## Signatures
+
+```typescript
+// ── src/cli/agents-install.ts ──
+export async function installRecommendedAgents( scan: ScanResult, plan: BuildPlan | null | undefined, projectRoot: string, opts: { /* ~33 lines */ }
+
+```
+
+## Dependencies
+**Internal:**
+- `src/agents`
+- `src/graph-builder`
+- `src/scanner`
+
+**External:**
+- `chalk`
+- `ora`
+
+<!-- context-graph: generated from `.github/instructions/src/cli/agents-install.instructions.md` -->
+_Regenerate: `context-graph build --no-llm` · Do not hand-edit this rule._

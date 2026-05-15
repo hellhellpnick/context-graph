@@ -1,15 +1,15 @@
 ---
 description: "Mirror — `src/providers/types.ts`"
 applyTo: "src/providers/types.ts"
-priority: "P2"
-last_updated: "2026-05-13"
+priority: "P1"
+last_updated: "2026-05-15"
 ---
 
 ## When to Read
 - editing or refactoring `types.ts`
 
 ## Overview
-- `src/providers/types.ts` (27 lines · 5 exports) — Mirror — `src/providers/types.ts`
+- `src/providers/types.ts` (27 lines · 5 top-level symbols) — Mirror — `src/providers/types.ts`
 
 ## Graph
 ```mermaid
@@ -31,9 +31,3 @@ export interface ProviderConfig { provider: 'openai' | 'anthropic' | 'openai-com
 
 ## Dependencies
 - No dependencies detected
-
-## Error Handling
-- No explicit throws detected
-
-## Danger Zone 🔴
-- No env vars or side effects detected

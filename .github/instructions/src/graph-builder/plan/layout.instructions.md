@@ -1,0 +1,47 @@
+---
+description: "Mirror — `src/graph-builder/plan/layout.ts`"
+applyTo: "src/graph-builder/plan/layout.ts"
+priority: "P1"
+last_updated: "2026-05-15"
+---
+
+## When to Read
+- editing or refactoring `layout.ts`
+
+## Overview
+- `src/graph-builder/plan/layout.ts` (159 lines · 8 top-level symbols) — Copilot prompts expect several concrete use cases; pad short auto-generated lists.
+
+## Graph
+```mermaid
+graph LR
+  layout[layout]
+  layout --> framework_extract[framework-extract]
+  layout --> constants[constants]
+  layout --> types[types]
+  layout --> scanner[scanner]
+```
+
+## Signatures
+
+```typescript
+// ── src/graph-builder/plan/layout.ts ──
+export function humanAreaName(segment: string): string { let name = segment .replace(/\.[^.]+$/, '') // strip extension .replace(/^__(.+)__$/, '$1') // __init__ → init .replace(/[-_]+/g, ' ') // delimiters → spaces .trim(); if (!name || …
+export function shortHash(s: string): string { return crypto.createHash('sha1').update(s, 'utf8').digest('hex').slice(0, 10); }
+/** Copilot prompts expect several concrete use cases; pad short auto-generated lists. */
+export function padUseCases(cases: string[]): string[] { const out = [...cases]; const pad = 'navigating this subsystem from the instruction index'; while (out.length < 4) out.push(pad); return out.slice(0, 6); }
+export function autoInstructionStem(dir: string, files: string[], partIndex: number): string { /* ~12 lines */ }
+export function mirrorInstructionSafeSegment(name: string): string { return name.replace(/[^a-zA-Z0-9._-]+/g, '_').replace(/^\.+/, '') || 'x'; }
+/** Instruction `.md` path under `.github/instructions/` mirroring source layout. */
+export function mirrorInstructionRelPath( dir: string, chunk: string[], partIndex: number, totalParts: number, usedInstructionRelPaths: Set<string> ): string { /* prompt template (~44 lines) */ }
+/** Stable instruction path for by-folder grouping (avoids collisions across dirs). */
+export function folderInstructionRelPath( dir: string, partIndex: number, totalParts: number, chunk: string[], usedInstructionRelPaths: Set<string> ): string { /* ~23 lines */ }
+export function partitionInstructionChunks( list: string[], scan: ScanResult, maxBundle: number ): string[][] { /* ~31 lines */ }
+
+```
+
+## Dependencies
+**Internal:**
+- `src/framework-extract`
+- `src/graph-builder/constants`
+- `src/graph-builder/types`
+- `src/scanner`

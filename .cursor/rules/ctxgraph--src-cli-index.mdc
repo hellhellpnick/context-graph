@@ -1,0 +1,42 @@
+---
+description: "Index — src/cli/index.ts"
+globs: src/cli/index.ts
+alwaysApply: false
+---
+
+## When to Read
+- editing or refactoring `index.ts`
+
+## Overview
+- `src/cli/index.ts` (4 lines) — Mirror — `src/cli/index.ts`
+
+## Graph
+```mermaid
+graph LR
+  index[index]
+  index --> program[program]
+```
+
+## Signatures
+
+```typescript
+(no exports — see ## Source for full script)
+```
+
+## Source
+
+### `src/cli/index.ts`
+
+```typescript
+import { program } from './program';
+
+program.parse();
+
+```
+
+## Dependencies
+**Internal:**
+- `src/cli/program`
+
+<!-- context-graph: generated from `.github/instructions/src/cli/index.instructions.md` -->
+_Regenerate: `context-graph build --no-llm` · Do not hand-edit this rule._

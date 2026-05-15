@@ -1,0 +1,49 @@
+---
+description: "Split Graph Builder — scripts/split-graph-builder.mjs"
+globs: scripts/split-graph-builder.mjs
+alwaysApply: false
+---
+
+## When to Read
+- editing or refactoring `split-graph-builder.mjs`
+
+## Overview
+- `scripts/split-graph-builder.mjs` (373 lines · 8 top-level symbols) — Split src/graph-builder.ts → src/graph-builder/** (line-accurate).
+
+## Graph
+```mermaid
+graph LR
+  split_graph_builder[split-graph-builder]
+```
+
+## Signatures
+
+```typescript
+// ── scripts/split-graph-builder.mjs ──
+// ── skeleton ──
+const ROOT = path.resolve(import.meta.dirname, '..')
+const lines = fs.readFileSync(path.join(ROOT, 'src/graph-builder.ts'), 'utf8').split('\n')
+function L(a, b) {
+  return lines.slice(a - 1, b).join('\n');
+}
+function exportFunctions(code) {
+  return code .replace(/^function /gm, 'export function ') .replace(/^const ([A-Z_][A-Z0-9_]*) = /gm, 'expor…;
+}
+function write(rel, header, body, opts = {}) {
+  if (exportFns) { ... }
+  fs.mkdirSync(path.dirname(p), { recursive: true });
+  fs.writeFileSync(p, [header, code, extra].filter(Boolean).join('\n\n') + '\n');
+  console.log('wrote', rel, body.split('\n').length, 'lines');
+}
+const index = `/** * Graph builder — modular layout (split from monolithic graph-builder.ts). */ export * from './types'; export { repairBuildPlan, repairOptionsFromConfig } from './plan/repair'; exp…
+
+```
+
+## Dependencies
+- No dependencies detected
+
+## Danger Zone 🔴
+- **[fs]** filesystem I/O
+
+<!-- context-graph: generated from `.github/instructions/scripts/split-graph-builder.instructions.md` -->
+_Regenerate: `context-graph build --no-llm` · Do not hand-edit this rule._

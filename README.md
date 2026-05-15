@@ -40,6 +40,63 @@ npx context-graph build --no-llm
 
 **Не коммитить:** `.env`, секреты, `.context-graph-last-build` (по желанию).
 
+## Init-файлы (якоря для агентов)
+
+При `build` / `build --no-llm` CLI дополнительно пишет короткие **роутеры** — они указывают на `.github/instructions/`, а не дублируют весь граф:
+
+| Путь | Инструмент |
+|------|------------|
+| `CLAUDE.md` | Claude Code |
+| `AGENTS.md` | Cursor / Codex / общие агенты |
+| `GEMINI.md` | Gemini |
+| `.github/copilot-instructions.md` | GitHub Copilot (корень) |
+| `.codex/context-graph.md` | Codex |
+| `.windsurf/rules/context-graph.md` | Windsurf |
+| `.clinerules/context-graph.md` | Cline |
+
+Содержимое: «читай `copilot-instructions.md` → `index.md` → подсистему по `applyTo`».
+
+## Приоритет P0 / P1 / P2
+
+Метка **срочности контекста** (не «важность бизнеса»):
+
+| Уровень | Смысл | Примеры эвристик (`--no-llm`) |
+|---------|--------|-------------------------------|
+| **P0** | Всегда нужен при правках зоны | `pages/*`, composables, `src/index.ts`, entry CLI |
+| **P1** | Часто нужен | `package.json`, `src/graph-builder/**`, stores, крупные Vue |
+| **P2** | Редко / листья | тесты, prompt-модули, мелкие компоненты |
+
+Где живёт:
+
+- frontmatter `priority:` в каждом `*.instructions.md`;
+- `metadata.json` → `files.<path>.priority` (per-file);
+- `context-graph-path-index.md` — колонка **P**.
+
+Источник при `--no-llm`: `inferFilePriority` / `inferSubsystemPriority` (`src/graph-builder/plan/priority.ts`). При LLM/hybrid план может задать приоритеты в JSON; gap-fill и metadata подхватывают эвристики для пропусков.
+
+**Роутинг:** если несколько `*.instructions.md` матчат файл — предпочитай **выше** приоритет (P0 > P1 > P2). То же в `AGENTS.md` / `.codex/context-graph.md`.
+
+## Cursor rules
+
+Для **Cursor** (`build --no-llm` и hybrid) генерируются:
+
+| Путь | Роль |
+|------|------|
+| `.cursor/rules/context-graph.mdc` | Общий роутер (всегда включён) |
+| `.cursor/rules/ctxgraph--*.mdc` | По одному rule на подсистему; `globs` = `applyTo` из плана |
+| `.cursor/rules/README.context-graph.md` | Пояснение |
+| `.cursor/rules/.context-graph-manifest` | Список сгенерированных rules |
+
+При открытии файла Cursor подцепляет rule с подходящим glob — **без** ручного «прочитай instructions».
+
+Источник правды: `.github/instructions/*.instructions.md`. Файлы `ctxgraph--*` **не править вручную** — перезапишутся на следующем `build`.
+
+```bash
+context-graph build --no-llm
+```
+
+Copilot / Claude без Cursor по-прежнему опираются на корневой граф и `applyTo` в instructions; auto-attach по glob — особенность Cursor.
+
 ## Команды
 
 | Команда | Действие |
@@ -116,6 +173,7 @@ git clone https://github.com/hellhellpnick/context-graph.git
 cd context-graph
 npm install
 npm run build
+npm test
 npm link   # опционально: тест в другом проекте
 ```
 

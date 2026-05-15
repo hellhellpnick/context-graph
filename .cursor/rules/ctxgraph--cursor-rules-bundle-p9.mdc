@@ -1,0 +1,48 @@
+---
+description: "Rules — .cursor/rules/**"
+globs: .cursor/rules/**
+alwaysApply: false
+---
+
+## When to Read
+- editing or refactoring `ctxgraph--src-cli-commands-impact.mdc`
+- editing or refactoring `ctxgraph--src-cli-commands-review.mdc`
+- editing or refactoring `ctxgraph--src-cli-commands-validate.mdc`
+- editing or refactoring `ctxgraph--src-cli-index.mdc`
+
+## Overview
+- `.cursor/rules/ctxgraph--src-cli-commands-impact.mdc` (52 lines · 1 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--src-cli-commands-review.mdc` (52 lines · 1 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--src-cli-commands-validate.mdc` (49 lines · 1 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--src-cli-index.mdc` (42 lines) — # When to Read
+
+## Graph
+```mermaid
+graph LR
+  Rules[Rules]
+  Rules --> node[""]
+```
+
+## Signatures
+
+```typescript
+// ── .cursor/rules/ctxgraph--src-cli-commands-impact.mdc ──
+// ── src/cli/commands/impact.ts ──
+export function registerImpactCommand(program: Command): void { /* ~33 lines */ }
+
+// ── .cursor/rules/ctxgraph--src-cli-commands-review.mdc ──
+// ── src/cli/commands/review.ts ──
+export function registerReviewCommand(program: Command): void { /* ~41 lines */ }
+
+// ── .cursor/rules/ctxgraph--src-cli-commands-validate.mdc ──
+// ── src/cli/commands/validate.ts ──
+export function registerValidateCommand(program: Command): void { /* ~43 lines */ }
+
+```
+
+## Dependencies
+**External:**
+- ``
+
+<!-- context-graph: generated from `.github/instructions/.cursor/rules/_bundle_p9.instructions.md` -->
+_Regenerate: `context-graph build --no-llm` · Do not hand-edit this rule._

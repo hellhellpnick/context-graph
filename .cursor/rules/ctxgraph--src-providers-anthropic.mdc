@@ -1,0 +1,40 @@
+---
+description: "Anthropic — src/providers/anthropic.ts"
+globs: src/providers/anthropic.ts
+alwaysApply: false
+---
+
+## When to Read
+- editing or refactoring `anthropic.ts`
+
+## Overview
+- `src/providers/anthropic.ts` (38 lines · 1 top-level symbols) — Mirror — `src/providers/anthropic.ts`
+
+## Graph
+```mermaid
+graph LR
+  anthropic[anthropic]
+  anthropic --> types[types]
+  anthropic --> _anthropic_ai_sdk["@anthropic-ai/sdk"]
+```
+
+## Signatures
+
+```typescript
+// ── src/providers/anthropic.ts ──
+export class AnthropicProvider implements LLMProvider { /* ~34 lines */ }
+
+```
+
+## Dependencies
+**Internal:**
+- `src/providers/types`
+
+**External:**
+- `@anthropic-ai/sdk`
+
+## Error Handling
+- `Error`: "API key not found. Set the ${config.apiKeyEnv} environment variable." (`anthropic.ts`)
+
+<!-- context-graph: generated from `.github/instructions/src/providers/anthropic.instructions.md` -->
+_Regenerate: `context-graph build --no-llm` · Do not hand-edit this rule._

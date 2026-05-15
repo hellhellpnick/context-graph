@@ -54,3 +54,54 @@ export function resolveProjectRoot(cliDirArg: string | undefined, cwd: string = 
 
   return resolvedStart;
 }
+
+/** Common mistake: `context-graph build hybrid` instead of `build --hybrid`. */
+const BUILD_MODE_DIR_ALIASES = new Set([
+  'hybrid',
+  'llm',
+  'deterministic',
+  'no-llm',
+  'no_llm',
+  'nollm',
+  'offline',
+]);
+
+export type MistakenBuildModeFlag = 'hybrid' | 'deterministic' | 'llm';
+
+export interface BuildDirNormalization {
+  projectDir: string | undefined;
+  mistakenModeFlag?: MistakenBuildModeFlag;
+}
+
+/**
+ * If `[dir]` is actually a build-mode token (`hybrid`, `no-llm`, …), treat as implicit repo root.
+ */
+export function normalizeBuildDirArg(cliDirArg: string | undefined): BuildDirNormalization {
+  if (!cliDirArg) return { projectDir: undefined };
+  const key = cliDirArg.toLowerCase().replace(/_/g, '-');
+  if (!BUILD_MODE_DIR_ALIASES.has(key)) return { projectDir: cliDirArg };
+  if (key === 'hybrid') return { projectDir: undefined, mistakenModeFlag: 'hybrid' };
+  if (key === 'llm') return { projectDir: undefined, mistakenModeFlag: 'llm' };
+  return { projectDir: undefined, mistakenModeFlag: 'deterministic' };
+}
+
+export function suggestedBuildFlagForMistake(flag: MistakenBuildModeFlag): string {
+  if (flag === 'deterministic') return '--no-llm';
+  return `--${flag}`;
+}
+
+/** Exit-friendly check before writing `.context-graph.json` / instructions. */
+export function assertProjectRootExists(projectRoot: string): void {
+  let st: fs.Stats;
+  try {
+    st = fs.statSync(projectRoot);
+  } catch {
+    throw new Error(
+      `Project directory does not exist: ${projectRoot}\n` +
+        `Pass a real path: context-graph build [dir], or run from the repo root.`
+    );
+  }
+  if (!st.isDirectory()) {
+    throw new Error(`Project path is not a directory: ${projectRoot}`);
+  }
+}

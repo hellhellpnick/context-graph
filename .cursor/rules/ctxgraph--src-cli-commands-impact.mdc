@@ -1,0 +1,52 @@
+---
+description: "Impact — src/cli/commands/impact.ts"
+globs: src/cli/commands/impact.ts
+alwaysApply: false
+---
+
+## When to Read
+- editing or refactoring `impact.ts`
+
+## Overview
+- `src/cli/commands/impact.ts` (43 lines · 1 top-level symbols) — Mirror — `src/cli/commands/impact.ts`
+
+## Graph
+```mermaid
+graph LR
+  impact[impact]
+  impact --> io[io]
+  impact --> config[config]
+  impact --> graph_builder[graph-builder]
+  impact --> project_root[project-root]
+  impact --> scanner[scanner]
+  impact --> chalk["chalk"]
+  impact --> commander["commander"]
+  impact --> ora["ora"]
+```
+
+## Signatures
+
+```typescript
+// ── src/cli/commands/impact.ts ──
+export function registerImpactCommand(program: Command): void { /* ~33 lines */ }
+
+
+// CLI commands:
+//   impact
+```
+
+## Dependencies
+**Internal:**
+- `src/cli/io`
+- `src/config`
+- `src/graph-builder`
+- `src/project-root`
+- `src/scanner`
+
+**External:**
+- `chalk`
+- `commander`
+- `ora`
+
+<!-- context-graph: generated from `.github/instructions/src/cli/commands/impact.instructions.md` -->
+_Regenerate: `context-graph build --no-llm` · Do not hand-edit this rule._

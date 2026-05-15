@@ -1,0 +1,54 @@
+---
+description: "Mirror — `.cursor/rules/` (4 files, part 15/20)"
+applyTo: ".cursor/rules/**"
+priority: "P2"
+last_updated: "2026-05-15"
+---
+
+## When to Read
+- editing or refactoring `ctxgraph--src-graph-builder-messages-planning.mdc`
+- editing or refactoring `ctxgraph--src-graph-builder-messages-root.mdc`
+- editing or refactoring `ctxgraph--src-graph-builder-messages-subsystem.mdc`
+- editing or refactoring `ctxgraph--src-graph-builder-plan-infer.mdc`
+
+## Overview
+- `.cursor/rules/ctxgraph--src-graph-builder-messages-planning.mdc` (37 lines · 1 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--src-graph-builder-messages-root.mdc` (42 lines · 1 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--src-graph-builder-messages-subsystem.mdc` (43 lines · 3 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--src-graph-builder-plan-infer.mdc` (39 lines · 5 top-level symbols) — # When to Read
+
+## Graph
+```mermaid
+graph LR
+  Rules[Rules]
+```
+
+## Signatures
+
+```typescript
+// ── .cursor/rules/ctxgraph--src-graph-builder-messages-planning.mdc ──
+// ── src/graph-builder/messages/planning.ts ──
+export function buildPlanningPassMessage(scan: ScanResult): string { /* prompt template (~65 lines) */ }
+
+// ── .cursor/rules/ctxgraph--src-graph-builder-messages-root.mdc ──
+// ── src/graph-builder/messages/root.ts ──
+export function buildRootPassMessage( today: string, scanPrompt: ScanResult, plan: BuildPlan | undefined, scanFull: ScanResult, opts?: { /* prompt template (~116 lines) */ }
+
+// ── .cursor/rules/ctxgraph--src-graph-builder-messages-subsystem.mdc ──
+// ── src/graph-builder/messages/subsystem.ts ──
+export function buildFocusedContext(scan: ScanResult, sourceFiles: string[], subsystemName: string): string { /* ~21 lines */ }
+export function buildSubsystemPassMessage( today: string, subsystemPath: string, rootGraphContent: string, scanPrompt: ScanResult, scanFull: ScanResult, sourceFiles: string[], planItem?: BuildPlanI… { /* prompt template (~96 lines) */ }
+export function buildUserMessage(mode: BuildMode, scan: ScanResult, opts: BuildOptions): string { /* prompt template (~37 lines) */ }
+
+// ── .cursor/rules/ctxgraph--src-graph-builder-plan-infer.mdc ──
+// ── src/graph-builder/plan/infer.ts ──
+export function buildPlanningContextLight(scan: ScanResult): string { /* ~23 lines */ }
+export function readPackageJson(scan: ScanResult): Record<string, unknown> | null { const f = scan.files.find(x => x.path === 'package.json' && x.content); if (!f) return null; try { return JSON.parse(f.content) as Record<string, unknown…
+export function readGoModModule(scan: ScanResult): string | null { const f = scan.files.find(x => x.path === 'go.mod' && x.content); if (!f) return null; const m = f.content.match(/^module\s+(\S+)/m); return m ? m[1].trim() : null; }
+export function readComposerJson(scan: ScanResult): Record<string, unknown> | null { const f = scan.files.find(x => x.path === 'composer.json' && x.content); if (!f) return null; try { return JSON.parse(f.content) as Record<string, unkno…
+export function inferDefaultsFromScan(scan: ScanResult): Pick<BuildPlan, 'projectName' | 'projectDescription' | 'techStack' | 'buildCommand' | 'testCommand'> { /* ~63 lines */ }
+
+```
+
+## Dependencies
+- No dependencies detected

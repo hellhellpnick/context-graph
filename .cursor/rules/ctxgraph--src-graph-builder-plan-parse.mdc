@@ -1,0 +1,33 @@
+---
+description: "Parse — src/graph-builder/plan/parse.ts"
+globs: src/graph-builder/plan/parse.ts
+alwaysApply: false
+---
+
+## When to Read
+- editing or refactoring `parse.ts`
+
+## Overview
+- `src/graph-builder/plan/parse.ts` (19 lines · 1 top-level symbols) — Mirror — `src/graph-builder/plan/parse.ts`
+
+## Graph
+```mermaid
+graph LR
+  parse[parse]
+  parse --> types[types]
+```
+
+## Signatures
+
+```typescript
+// ── src/graph-builder/plan/parse.ts ──
+export function parseBuildPlan(raw: string): BuildPlan | null { /* ~16 lines */ }
+
+```
+
+## Dependencies
+**Internal:**
+- `src/graph-builder/types`
+
+<!-- context-graph: generated from `.github/instructions/src/graph-builder/plan/parse.instructions.md` -->
+_Regenerate: `context-graph build --no-llm` · Do not hand-edit this rule._

@@ -12,7 +12,14 @@ export type { Config, ContextDepth, SubsystemGrouping, SubsystemLayout } from '.
 export { scanProject, formatForLLM, classifyFile, scanForPromptDepth, GRAPH_CONTEXT_IGNORE_FILENAMES } from './scanner';
 export type { ScannedFile, ScanResult } from './scanner';
 
-export { resolveProjectRoot, tryGitRepositoryRoot } from './project-root';
+export {
+  resolveProjectRoot,
+  tryGitRepositoryRoot,
+  normalizeBuildDirArg,
+  assertProjectRootExists,
+  suggestedBuildFlagForMistake,
+} from './project-root';
+export type { BuildDirNormalization, MistakenBuildModeFlag } from './project-root';
 
 export {
   buildGraph,

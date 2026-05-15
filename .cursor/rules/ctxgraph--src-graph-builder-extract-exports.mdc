@@ -1,0 +1,54 @@
+---
+description: "Exports — src/graph-builder/extract/exports.ts"
+globs: src/graph-builder/extract/exports.ts
+alwaysApply: false
+---
+
+## When to Read
+- editing or refactoring `exports.ts`
+
+## Overview
+- `src/graph-builder/extract/exports.ts` (354 lines · 7 top-level symbols) — JSDoc attached to a declaration (leading trivia via TS API).
+
+## Graph
+```mermaid
+graph LR
+  exports[exports]
+  exports --> framework_extract[framework-extract]
+  exports --> scanner[scanner]
+  exports --> source_extract[source-extract]
+  exports --> typescript["typescript"]
+```
+
+## Signatures
+
+```typescript
+// ── src/graph-builder/extract/exports.ts ──
+/** JSDoc attached to a declaration (leading trivia via TS API). */
+export function formatAttachedJSDocBlocks(sf: ts.SourceFile, node: ts.Node): string[] { /* ~16 lines */ }
+/**
+ * Extract exports with surrounding context: JSDoc comments above the export,
+ * and the first meaningful line of the body (to hint at return type / purpose).
+ */
+export function extractExports(scan: ScanResult, sourceFiles: string[]): string { /* prompt template (~189 lines) */ }
+export const DETERMINISTIC_SOURCE_MAX_LINES = 80;
+export const DETERMINISTIC_SOURCE_SKELETON_MAX_LINES = 48;
+/** Full ## Source only when signatures are thin or UI/runtime needs script body. */
+export function shouldIncludeDeterministicSource( scan: ScanResult, sourceFiles: string[], exportBlock: string ): boolean { /* ~19 lines */ }
+export function buildDeterministicSourceSection(scan: ScanResult, sourceFiles: string[]): string[] { /* prompt template (~51 lines) */ }
+/** Mermaid nodes for Vue SFCs: props, computeds, resolve branches. */
+export function buildVueMermaidNodes( filePath: string, content: string, externalNodeIds: Set<string> ): string[] { /* prompt template (~35 lines) */ }
+
+```
+
+## Dependencies
+**Internal:**
+- `src/framework-extract`
+- `src/scanner`
+- `src/source-extract`
+
+**External:**
+- `typescript`
+
+<!-- context-graph: generated from `.github/instructions/src/graph-builder/extract/exports.instructions.md` -->
+_Regenerate: `context-graph build --no-llm` · Do not hand-edit this rule._

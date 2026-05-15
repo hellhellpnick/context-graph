@@ -1,0 +1,67 @@
+---
+description: "Rules — .cursor/rules/**"
+globs: .cursor/rules/**
+alwaysApply: false
+---
+
+## When to Read
+- editing or refactoring `ctxgraph--src-graph-builder-deterministic-cursor-rules.mdc`
+- editing or refactoring `ctxgraph--src-graph-builder-deterministic-metadata.mdc`
+- editing or refactoring `ctxgraph--src-graph-builder-deterministic-root.mdc`
+- editing or refactoring `ctxgraph--src-graph-builder-deterministic-subsystem.mdc`
+
+## Overview
+- `.cursor/rules/ctxgraph--src-graph-builder-deterministic-cursor-rules.mdc` (45 lines · 5 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--src-graph-builder-deterministic-metadata.mdc` (41 lines · 3 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--src-graph-builder-deterministic-root.mdc` (51 lines · 4 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--src-graph-builder-deterministic-subsystem.mdc` (47 lines · 1 top-level symbols) — # When to Read
+
+## Graph
+```mermaid
+graph LR
+  Rules[Rules]
+```
+
+## Signatures
+
+```typescript
+// ── .cursor/rules/ctxgraph--src-graph-builder-deterministic-cursor-rules.mdc ──
+// ── src/graph-builder/deterministic/cursor-rules.ts ──
+/** Strip YAML frontmatter from subsystem instruction markdown. */
+export function stripInstructionFrontmatter(md: string): string { if (!md.startsWith('---')) return md.trim(); const end = md.indexOf('\n---', 3); if (end === -1) return md.trim(); const after = md.indexOf('\n', end + 4); return (after =…
+/** `applyTo` from plan → Cursor `globs` string (comma-separated). */
+export function applyToToCursorGlobs(applyTo: string): string { const parts = applyTo .split(',') .map(s => s.trim()) .filter(Boolean); if (parts.length === 0) return '**/*'; return parts .map(p => p.replace(/\\/g, '/')) .join(', '); }
+export function slugFromInstructionFile(instructionRel: string): string { const base = instructionRel.replace(/\.instructions\.md$/i, ''); const slug = base.replace(/[^a-zA-Z0-9]+/g, '-').replace(/^-+|-+$/g, ''); const name = `${RULE_PRE…
+export function buildCursorRuleMdc( planItem: BuildPlanItem, instructionRelPath: string, instructionBody: string ): string { /* prompt template (~24 lines) */ }
+/**
+ * Emit one \`.cursor/rules/ctxgraph--<slug>.mdc\` per subsystem so Cursor auto-loads
+ * instructions without asking the model to open files manually.
+ */
+export function appendCursorRuleFiles(plan: BuildPlan, files: OutputFile[]): void { /* prompt template (~38 lines) */ }
+
+// ── .cursor/rules/ctxgraph--src-graph-builder-deterministic-metadata.mdc ──
+// ── src/graph-builder/deterministic/metadata.ts ──
+export function buildMetadataJson(today: string, scan: ScanResult, plan?: BuildPlan): string { /* ~49 lines */ }
+/** Flat table: every instruction path ↔ applyTo ↔ sources (for LLMs and search). */
+export function buildContextGraphPathIndexMd(today: string, plan: BuildPlan): string { /* prompt template (~20 lines) */ }
+/** Build index.md content from plan subsystems — no LLM guessing */
+export function buildIndexMd(today: string, plan?: BuildPlan): string { /* prompt template (~42 lines) */ }
+
+// ── .cursor/rules/ctxgraph--src-graph-builder-deterministic-root.mdc ──
+// ── src/graph-builder/deterministic/root.ts ──
+export function buildDeterministicCopilotInstructions( today: string, scan: ScanResult, plan: BuildPlan ): string { /* prompt template (~172 lines) */ }
+export function buildDeterministicChangelog(today: string, plan: BuildPlan): string { const lines = [ `# Context Graph — Changelog`, ``, `## ${today} — Initial Build`, ``, `Subsystems created:`, ...plan.subsystems.map(s => `- \`${s.file}…
+export function buildDeterministicCopilotIgnore(scan: ScanResult): string { /* ~31 lines */ }
+export function injectDeterministicRootFiles( today: string, scan: ScanResult, plan: BuildPlan, files: OutputFile[], llmCopilotContent?: string ): void { /* prompt template (~123 lines) */ }
+
+// ── .cursor/rules/ctxgraph--src-graph-builder-deterministic-subsystem.mdc ──
+// ── src/graph-builder/deterministic/subsystem.ts ──
+export function buildDeterministicSubsystemFile( today: string, instructionPath: string, planItem: BuildPlanItem | undefined, scan: ScanResult, sourceFiles: string[] ): OutputFile { /* prompt template (~265 lines) */ }
+
+```
+
+## Dependencies
+- No dependencies detected
+
+<!-- context-graph: generated from `.github/instructions/.cursor/rules/_bundle_p12.instructions.md` -->
+_Regenerate: `context-graph build --no-llm` · Do not hand-edit this rule._

@@ -2,7 +2,7 @@
 description: "Mirror — `python/context_graph/` (2 files)"
 applyTo: "python/context_graph/**"
 priority: "P2"
-last_updated: "2026-05-13"
+last_updated: "2026-05-15"
 ---
 
 ## When to Read
@@ -10,26 +10,118 @@ last_updated: "2026-05-13"
 - editing or refactoring `cli.py`
 
 ## Overview
-- `python/context_graph/__init__.py` (2 lines) — Mirror — `python/context_graph/` (2 files)
-- `python/context_graph/cli.py` (64 lines) — Mirror — `python/context_graph/` (2 files)
+- `python/context_graph/__init__.py` (2 lines) — context_graph — Python wrapper for the context-graph Node.js CLI
+- `python/context_graph/cli.py` (64 lines · 2 top-level symbols) — context_graph.cli ----------------- Thin wrapper that delegates all execution to the Node.js context-graph CLI. Node.js >=18 is required.
 
 ## Graph
 ```mermaid
 graph LR
-  Context Graph[Context Graph]
+  Context_Graph[Context Graph]
+  Context_Graph --> __future__["__future__"]
+  Context_Graph --> pathlib["pathlib"]
+  Context_Graph --> shutil["shutil"]
+  Context_Graph --> subprocess["subprocess"]
+  Context_Graph --> sys["sys"]
 ```
 
 ## Signatures
 
-```typescript
-(no explicit exports found — check source files below)
+```python
+// ── python/context_graph/__init__.py ──
+// Python module
+
+// ── python/context_graph/cli.py ──
+// Python module
+def _find_binary() -> list[str]:
+def main() -> None:
+
+```
+
+## Source
+
+### `python/context_graph/__init__.py`
+
+```python
+# context_graph — Python wrapper for the context-graph Node.js CLI
+
+```
+
+### `python/context_graph/cli.py`
+
+```python
+"""
+context_graph.cli
+-----------------
+Thin wrapper that delegates all execution to the Node.js context-graph CLI.
+Node.js >=18 is required.
+"""
+from __future__ import annotations
+
+import shutil
+import subprocess
+import sys
+from pathlib import Path
+
+
+def _find_binary() -> list[str]:
+    """Return the command prefix to invoke context-graph."""
+    # 1. Local node_modules (project-local install)
+    local = Path.cwd() / "node_modules" / ".bin" / "context-graph"
+    local_cmd = local.with_suffix(".cmd")
+    if local.exists():
+        return [str(local)]
+    if local_cmd.exists():
+        return [str(local_cmd)]
+
+    # 2. Globally installed binary
+    if shutil.which("context-graph"):
+        return ["context-graph"]
+
+    # 3. npx fallback (downloads on demand)
+    if shutil.which("npx"):
+        return ["npx", "--yes", "context-graph"]
+
+    return []
+
+
+def main() -> None:
+    if shutil.which("node") is None:
+        print(
+            "Error: Node.js >=18 is required to run context-graph.\n"
+            "Install it from https://nodejs.org",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+
+    prefix = _find_binary()
+    if not prefix:
+        print(
+            "Error: context-graph CLI not found and npx is unavailable.\n"
+            "Install it with:  npm install -g context-graph",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+
+    cmd = prefix + sys.argv[1:]
+    try:
+        result = subprocess.run(cmd, check=False)
+        sys.exit(result.returncode)
+    except KeyboardInterrupt:
+        sys.exit(130)
+
+
+if __name__ == "__main__":
+    main()
+
 ```
 
 ## Dependencies
-- No dependencies detected
-
-## Error Handling
-- No explicit throws detected
+**External:**
+- `__future__`
+- `pathlib`
+- `shutil`
+- `subprocess`
+- `sys`
 
 ## Danger Zone 🔴
-- No env vars or side effects detected
+- **[process]** subprocess / shell

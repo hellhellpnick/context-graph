@@ -12,9 +12,8 @@ Start here:
 - `.github/instructions/index.md` (navigation)
 - `.github/instructions/context-graph-path-index.md` (all `applyTo` routes)
 
-If your tool supports VS Code-style instruction frontmatter, read all:
-- `.github/instructions/**/*.instructions.md`
+Cursor (auto, no manual routing):
+- `.cursor/rules/context-graph.mdc` — always on
+- `.cursor/rules/ctxgraph--*.mdc` — one rule per subsystem; `globs` = `applyTo`
 
-Routing rule:
-- When working on a file, pick the instruction file whose frontmatter `applyTo` glob matches that path.
-- If unsure, start at `.github/instructions/index.md` then open the referenced subsystem file.
+Other tools — read `.github/instructions/**/*.instructions.md` when `applyTo` matches the file you edit.

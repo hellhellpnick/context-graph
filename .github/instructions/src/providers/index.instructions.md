@@ -1,15 +1,15 @@
 ---
 description: "Mirror — `src/providers/index.ts`"
 applyTo: "src/providers/index.ts"
-priority: "P2"
-last_updated: "2026-05-13"
+priority: "P0"
+last_updated: "2026-05-15"
 ---
 
 ## When to Read
 - editing or refactoring `index.ts`
 
 ## Overview
-- `src/providers/index.ts` (19 lines · 2 exports) — Mirror — `src/providers/index.ts`
+- `src/providers/index.ts` (19 lines · 2 top-level symbols) — Mirror — `src/providers/index.ts`
 
 ## Graph
 ```mermaid
@@ -37,6 +37,3 @@ export type { LLMProvider, LLMMessage, LLMUsage, LLMResponse, ProviderConfig } f
 
 ## Error Handling
 - `Error`: "Unknown provider: ${(config as ProviderConfig).provider}" (`index.ts`)
-
-## Danger Zone 🔴
-- No env vars or side effects detected

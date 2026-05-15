@@ -1,0 +1,57 @@
+---
+description: "Mirror — `test/` (3 files)"
+applyTo: "test/**"
+priority: "P2"
+last_updated: "2026-05-15"
+---
+
+## When to Read
+- editing or refactoring `extract.test.mjs`
+- editing or refactoring `priority.test.mjs`
+- editing or refactoring `project-root.test.mjs`
+
+## Overview
+- `test/extract.test.mjs` (80 lines · 1 top-level symbols) — Mirror — `test/` (3 files)
+- `test/priority.test.mjs` (60 lines) — @type {Array<{ path: string, want: string, opts?: object }>}
+- `test/project-root.test.mjs` (44 lines) — Mirror — `test/` (3 files)
+
+## Graph
+```mermaid
+graph LR
+  Test[Test]
+  Test --> misc[misc]
+  Test --> priority[priority]
+  Test --> project_root[project-root]
+  Test --> source_extract[source-extract]
+  Test --> typescript["typescript"]
+```
+
+## Signatures
+
+```typescript
+// ── test/extract.test.mjs ──
+ * Framework-aware deterministic extraction (no LLM).
+ */
+export function foo() {}`;
+
+// ── test/priority.test.mjs ──
+// ── skeleton ──
+const fileCases = [ /* template ×13 */ ].join('\n');
+
+
+// CLI commands:
+//   build
+```
+
+## Dependencies
+**Internal:**
+- `dist/graph-builder/extract/misc`
+- `dist/graph-builder/plan/priority`
+- `dist/project-root`
+- `dist/source-extract`
+
+**External:**
+- `typescript`
+
+## Danger Zone 🔴
+- **[fs]** filesystem I/O

@@ -1,15 +1,15 @@
 ---
 description: "Mirror — `src/writer.ts`"
 applyTo: "src/writer.ts"
-priority: "P2"
-last_updated: "2026-05-13"
+priority: "P0"
+last_updated: "2026-05-15"
 ---
 
 ## When to Read
 - editing or refactoring `writer.ts`
 
 ## Overview
-- `src/writer.ts` (191 lines · 4 exports) — Parse LLM response with multiple fallback strategies for different output formats.
+- `src/writer.ts` (191 lines · 4 top-level symbols) — Parse LLM response with multiple fallback strategies for different output formats.
 
 ## Graph
 ```mermaid
@@ -31,16 +31,13 @@ export interface WriteResult { created: string[]; updated: string[]; errors: { p
  *   3. ## FILE: path\n```...```
  *   4. ```path/to/file.ext\n...```
  */
-export function parseOutputFiles(response: string): OutputFile[] { // Strategy 1: Primary format with <<<FILE:>>> delimiters let files = parsePrimaryFormat(response); if (files.length > 0) return files; // Strategy 2: HTML comments with …
-export function writeOutputFiles(files: OutputFile[], projectRoot: string): WriteResult { const result: WriteResult = { created: [], updated: [], errors: [] }; for (const file of files) { // Guard against path traversal (normalize for ca…
+export function parseOutputFiles(response: string): OutputFile[] { /* prompt template (~17 lines) */ }
+export function writeOutputFiles(files: OutputFile[], projectRoot: string): WriteResult { /* ~33 lines */ }
 
 ```
 
 ## Dependencies
 - No dependencies detected
 
-## Error Handling
-- No explicit throws detected
-
 ## Danger Zone 🔴
-- No env vars or side effects detected
+- **[fs]** filesystem I/O

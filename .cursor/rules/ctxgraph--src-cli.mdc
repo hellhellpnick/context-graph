@@ -1,0 +1,44 @@
+---
+description: "Cli — src/cli.ts"
+globs: src/cli.ts
+alwaysApply: false
+---
+
+## When to Read
+- editing or refactoring `cli.ts`
+
+## Overview
+- `src/cli.ts` (6 lines) — CLI entry — command implementations live under `./cli/`.
+
+## Graph
+```mermaid
+graph LR
+  cli[cli]
+  cli --> index[index]
+```
+
+## Signatures
+
+```typescript
+(no exports — see ## Source for full script)
+```
+
+## Source
+
+### `src/cli.ts`
+
+```typescript
+#!/usr/bin/env node
+/**
+ * CLI entry — command implementations live under `./cli/`.
+ */
+import './cli/index';
+
+```
+
+## Dependencies
+**Internal:**
+- `src/cli/index`
+
+<!-- context-graph: generated from `.github/instructions/src/cli.instructions.md` -->
+_Regenerate: `context-graph build --no-llm` · Do not hand-edit this rule._

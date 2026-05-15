@@ -1,0 +1,62 @@
+---
+description: "Project Root — src/project-root.ts"
+globs: src/project-root.ts
+alwaysApply: false
+---
+
+## When to Read
+- editing or refactoring `project-root.ts`
+
+## Overview
+- `src/project-root.ts` (108 lines · 7 top-level symbols) — Git work tree root, or null if `cwd` is not inside a Git repository.
+
+## Graph
+```mermaid
+graph LR
+  project_root[project-root]
+```
+
+## Signatures
+
+```typescript
+// ── src/project-root.ts ──
+/**
+ * Git work tree root, or null if `cwd` is not inside a Git repository.
+ */
+export function tryGitRepositoryRoot(cwd: string): string | null { try { const out = execFileSync('git', ['rev-parse', '--show-toplevel'], { cwd, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'], }).trim(); if (!out) return null; re…
+/**
+ * Resolves where `.github/instructions/` and `.context-graph.json` live.
+ *
+ * - **Implicit cwd** (no CLI `[dir]`, or `dir` is `.` / same as `process.cwd()`):
+ *   1. `CONTEXT_GRAPH_ROOT` if set and points to an existing directory
+ *   2. else Git repository root from cwd (`git rev-parse --show-toplevel`)
+ *   3. else `path.resolve(cwd)`
+ * - **Explicit `[dir]`** (subfolder path): that path only — no Git uplift (monorepo package roots).
+ */
+export function resolveProjectRoot(cliDirArg: string | undefined, cwd: string = process.cwd()): string { /* ~26 lines */ }
+export type MistakenBuildModeFlag = 'hybrid' | 'deterministic' | 'llm';
+export interface BuildDirNormalization { projectDir: string | undefined; mistakenModeFlag?: MistakenBuildModeFlag; }
+/**
+ * If `[dir]` is actually a build-mode token (`hybrid`, `no-llm`, …), treat as implicit repo root.
+ */
+export function normalizeBuildDirArg(cliDirArg: string | undefined): BuildDirNormalization { if (!cliDirArg) return { projectDir: undefined }; const key = cliDirArg.toLowerCase().replace(/_/g, '-'); if (!BUILD_MODE_DIR_ALIASES.has(key)) …
+export function suggestedBuildFlagForMistake(flag: MistakenBuildModeFlag): string { if (flag === 'deterministic') return '--no-llm'; return `--${flag}`; }
+/** Exit-friendly check before writing `.context-graph.json` / instructions. */
+export function assertProjectRootExists(projectRoot: string): void { let st: fs.Stats; try { st = fs.statSync(projectRoot); } catch { throw new Error( `Project directory does not exist: ${projectRoot}\n` + `Pass a real path: context-grap…
+
+```
+
+## Dependencies
+- No dependencies detected
+
+## Error Handling
+- `Error`: "Project directory does not exist: ${projectRoot}\n` +
+        " (`project-root.ts`)
+- `Error`: "Project path is not a directory: ${projectRoot}" (`project-root.ts`)
+
+## Danger Zone 🔴
+- **[env]** reads `process.env.CONTEXT_GRAPH_ROOT`
+- **[fs]** filesystem I/O
+
+<!-- context-graph: generated from `.github/instructions/src/project-root.instructions.md` -->
+_Regenerate: `context-graph build --no-llm` · Do not hand-edit this rule._

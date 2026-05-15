@@ -1,0 +1,52 @@
+---
+description: "Module Entry — .npmignore"
+globs: .npmignore
+alwaysApply: false
+---
+
+## When to Read
+- editing or refactoring `.npmignore`
+
+## Overview
+- `.npmignore` (16 lines) — Mirror — `.npmignore`
+
+## Graph
+```mermaid
+graph LR
+  node[]
+```
+
+## Signatures
+
+```typescript
+(no exports — see ## Source for full script)
+```
+
+## Source
+
+### `.npmignore`
+
+```typescript
+src/
+node_modules/
+*.ts
+!*.d.ts
+tsconfig.json
+.git/
+.github/
+.env
+.env.*
+.context-graph-last-build
+.context-graph-debug.txt
+.codex/
+.cursor/
+*.md.instructions.md
+python/
+
+```
+
+## Dependencies
+- No dependencies detected
+
+<!-- context-graph: generated from `.github/instructions/npmignore.instructions.md` -->
+_Regenerate: `context-graph build --no-llm` · Do not hand-edit this rule._

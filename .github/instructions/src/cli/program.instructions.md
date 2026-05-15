@@ -1,0 +1,57 @@
+---
+description: "Mirror — `src/cli/program.ts`"
+applyTo: "src/cli/program.ts"
+priority: "P1"
+last_updated: "2026-05-15"
+---
+
+## When to Read
+- editing or refactoring `program.ts`
+
+## Overview
+- `src/cli/program.ts` (25 lines · 1 top-level symbols) — Mirror — `src/cli/program.ts`
+
+## Graph
+```mermaid
+graph LR
+  program[program]
+  program --> actualize[actualize]
+  program --> agents[agents]
+  program --> build[build]
+  program --> hook_check[hook-check]
+  program --> impact[impact]
+  program --> review[review]
+  program --> validate[validate]
+  program --> version[version]
+  program --> commander["commander"]
+```
+
+## Signatures
+
+```typescript
+// ── src/cli/program.ts ──
+export const program = new Command();
+
+```
+
+## Source
+
+### `src/cli/program.ts`
+
+```typescript
+const program = new Command()
+```
+
+## Dependencies
+**Internal:**
+- `src/cli/commands/actualize`
+- `src/cli/commands/agents`
+- `src/cli/commands/build`
+- `src/cli/commands/hook-check`
+- `src/cli/commands/impact`
+- `src/cli/commands/review`
+- `src/cli/commands/validate`
+- `src/cli/version`
+
+**External:**
+- `commander`

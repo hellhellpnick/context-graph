@@ -1,20 +1,28 @@
 ---
 description: "Mirror — `src/index.ts`"
 applyTo: "src/index.ts"
-priority: "P2"
-last_updated: "2026-05-13"
+priority: "P0"
+last_updated: "2026-05-15"
 ---
 
 ## When to Read
 - editing or refactoring `index.ts`
 
 ## Overview
-- `src/index.ts` (56 lines · 16 exports) — Programmatic API — for embedding context-graph in other tools
+- `src/index.ts` (63 lines · 17 top-level symbols) — Programmatic API — for embedding context-graph in other tools
 
 ## Graph
 ```mermaid
 graph LR
   index[index]
+  index --> agents[agents]
+  index --> agents_catalog[agents-catalog]
+  index --> config[config]
+  index --> graph_builder[graph-builder]
+  index --> hooks[hooks]
+  index --> project_root[project-root]
+  index --> providers[providers]
+  index --> scanner[scanner]
 ```
 
 ## Signatures
@@ -25,7 +33,8 @@ export { loadConfig, initConfig, initConfigInteractive, getModelMaxTokens, MODEL
 export type { Config, ContextDepth, SubsystemGrouping, SubsystemLayout } from './config'
 export { scanProject, formatForLLM, classifyFile, scanForPromptDepth, GRAPH_CONTEXT_IGNORE_FILENAMES } from './scanner'
 export type { ScannedFile, ScanResult } from './scanner'
-export { resolveProjectRoot, tryGitRepositoryRoot } from './project-root'
+export { resolveProjectRoot, tryGitRepositoryRoot, normalizeBuildDirArg, assertProjectRootExists, suggestedBuildFlagForMistake, } from './project-root'
+export type { BuildDirNormalization, MistakenBuildModeFlag } from './project-root'
 export { buildGraph, buildGraphMultiPass, buildGraphDeterministic, estimateCost, parseBuildPlan, repairBuildPlan, repairOptionsFromConfig, } from './graph-builder'
 export type { BuildMode, BuildOptions, GraphResult, MultiPassResult, BuildPlan, BuildPlanItem, BuildCallbacks, RepairBuildPlanOptions, DeterministicBuildOptions, HybridBuildOptions, } from './graph-builder'
 export { parseOutputFiles, writeOutputFiles } from './writer'
@@ -41,10 +50,13 @@ export type { AgentEntry, AgentMatchRule } from './agents-catalog'
 ```
 
 ## Dependencies
-- No dependencies detected
-
-## Error Handling
-- No explicit throws detected
-
-## Danger Zone 🔴
-- No env vars or side effects detected
+**Internal:**
+- `src/agents`
+- `src/agents-catalog`
+- `src/config`
+- `src/graph-builder`
+- `src/hooks`
+- `src/project-root`
+- `src/providers`
+- `src/scanner`
+- `src/writer`

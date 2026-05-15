@@ -1,20 +1,20 @@
 ---
 description: "Mirror — `src/project-root.ts`"
 applyTo: "src/project-root.ts"
-priority: "P2"
-last_updated: "2026-05-13"
+priority: "P1"
+last_updated: "2026-05-15"
 ---
 
 ## When to Read
 - editing or refactoring `project-root.ts`
 
 ## Overview
-- `src/project-root.ts` (57 lines · 2 exports) — Git work tree root, or null if `cwd` is not inside a Git repository.
+- `src/project-root.ts` (108 lines · 7 top-level symbols) — Git work tree root, or null if `cwd` is not inside a Git repository.
 
 ## Graph
 ```mermaid
 graph LR
-  project-root[project-root]
+  project_root[project-root]
 ```
 
 ## Signatures
@@ -34,7 +34,16 @@ export function tryGitRepositoryRoot(cwd: string): string | null { try { const o
  *   3. else `path.resolve(cwd)`
  * - **Explicit `[dir]`** (subfolder path): that path only — no Git uplift (monorepo package roots).
  */
-export function resolveProjectRoot(cliDirArg: string | undefined, cwd: string = process.cwd()): string { const resolvedCwd = path.resolve(cwd); const start = cliDirArg ? path.resolve(cwd, cliDirArg) : resolvedCwd; const resolvedStart = p…
+export function resolveProjectRoot(cliDirArg: string | undefined, cwd: string = process.cwd()): string { /* ~26 lines */ }
+export type MistakenBuildModeFlag = 'hybrid' | 'deterministic' | 'llm';
+export interface BuildDirNormalization { projectDir: string | undefined; mistakenModeFlag?: MistakenBuildModeFlag; }
+/**
+ * If `[dir]` is actually a build-mode token (`hybrid`, `no-llm`, …), treat as implicit repo root.
+ */
+export function normalizeBuildDirArg(cliDirArg: string | undefined): BuildDirNormalization { if (!cliDirArg) return { projectDir: undefined }; const key = cliDirArg.toLowerCase().replace(/_/g, '-'); if (!BUILD_MODE_DIR_ALIASES.has(key)) …
+export function suggestedBuildFlagForMistake(flag: MistakenBuildModeFlag): string { if (flag === 'deterministic') return '--no-llm'; return `--${flag}`; }
+/** Exit-friendly check before writing `.context-graph.json` / instructions. */
+export function assertProjectRootExists(projectRoot: string): void { let st: fs.Stats; try { st = fs.statSync(projectRoot); } catch { throw new Error( `Project directory does not exist: ${projectRoot}\n` + `Pass a real path: context-grap…
 
 ```
 
@@ -42,7 +51,10 @@ export function resolveProjectRoot(cliDirArg: string | undefined, cwd: string = 
 - No dependencies detected
 
 ## Error Handling
-- No explicit throws detected
+- `Error`: "Project directory does not exist: ${projectRoot}\n` +
+        " (`project-root.ts`)
+- `Error`: "Project path is not a directory: ${projectRoot}" (`project-root.ts`)
 
 ## Danger Zone 🔴
-- Reads `process.env.CONTEXT_GRAPH_ROOT`
+- **[env]** reads `process.env.CONTEXT_GRAPH_ROOT`
+- **[fs]** filesystem I/O

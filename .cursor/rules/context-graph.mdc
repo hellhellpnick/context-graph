@@ -13,13 +13,12 @@ Response style (ALWAYS):
 - Prefer bullets. Each bullet <= 18 words.
 - If unsure, say "unknown" instead of guessing.
 
-Always read first:
+Subsystem context (automatic in Cursor):
+- `.cursor/rules/ctxgraph--*.mdc` — attached when you edit files matching `globs` (from `applyTo`).
+
+Manual routing (Copilot / Claude / other):
 - `.github/instructions/copilot-instructions.md`
-- `.github/instructions/context-graph-path-index.md` (flat map: instruction → `applyTo`)
+- `.github/instructions/context-graph-path-index.md`
+- Match `.instructions.md` by `applyTo`; prefer higher `priority` (P0>P1>P2).
 
-Then route by file path:
-- For a given edited file, open the `.instructions.md` whose frontmatter `applyTo` matches.
-- If multiple match, prefer higher `priority` (P0>P1>P2).
-- If none match, open `.github/instructions/index.md` or `context-graph-path-index.md`, then pick the subsystem.
-
-All instruction files are authoritative over guesses. Prefer facts from instructions over assumptions.
+Instructions are authoritative over guesses.

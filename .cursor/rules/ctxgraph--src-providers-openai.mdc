@@ -1,0 +1,36 @@
+---
+description: "Openai — src/providers/openai.ts"
+globs: src/providers/openai.ts
+alwaysApply: false
+---
+
+## When to Read
+- editing or refactoring `openai.ts`
+
+## Overview
+- `src/providers/openai.ts` (48 lines · 1 top-level symbols) — Mirror — `src/providers/openai.ts`
+
+## Graph
+```mermaid
+graph LR
+  openai[openai]
+  openai --> types[types]
+```
+
+## Signatures
+
+```typescript
+// ── src/providers/openai.ts ──
+export class OpenAIProvider implements LLMProvider { /* ~44 lines */ }
+
+```
+
+## Dependencies
+**Internal:**
+- `src/providers/types`
+
+**External:**
+- `openai`
+
+<!-- context-graph: generated from `.github/instructions/src/providers/openai.instructions.md` -->
+_Regenerate: `context-graph build --no-llm` · Do not hand-edit this rule._

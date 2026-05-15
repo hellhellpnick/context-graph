@@ -8,8 +8,12 @@ import type { LLMUsage } from './providers/types';
 import type { ScanResult } from './scanner';
 import { formatForLLM, scanForPromptDepth } from './scanner';
 import {
+  extractGoImports,
+  extractGoSymbolLines,
   extractPhpSymbolLines,
   extractPhpUseStatements,
+  extractPythonImports,
+  extractPythonSymbolLines,
   scriptOrSelfForAnalysis,
 } from './source-extract';
 import type { OutputFile } from './writer';
@@ -103,7 +107,7 @@ interface SubsystemMapping {
 
 /** Node / Python / Rust / PHP env access heuristics for Danger Zone + mermaid. */
 function fileReadsEnvironment(content: string): boolean {
-  return /process\.env|os\.environ|std::env|getenv\s*\(|(?:^|[^\w$.])env\s*\(\s*['"][^'"]+['"]|(?:^|[^\w$])\$_ENV(?:\[|\b)|(?:^|[^\w$])\$_SERVER\s*\[/i.test(
+  return /process\.env|os\.environ|os\.getenv\s*\(|std::env|getenv\s*\(|(?:^|[^\w$.])env\s*\(\s*['"][^'"]+['"]|(?:^|[^\w$])\$_ENV(?:\[|\b)|(?:^|[^\w$])\$_SERVER\s*\[/i.test(
     content
   );
 }
@@ -288,6 +292,14 @@ function extractExports(scan: ScanResult, sourceFiles: string[]): string {
       fileExports.push(...extractPhpSymbolLines(body));
     }
 
+    if (fileExports.length === 0 && /\.py$/i.test(f.path)) {
+      fileExports.push(...extractPythonSymbolLines(body));
+    }
+
+    if (fileExports.length === 0 && /\.go$/i.test(f.path)) {
+      fileExports.push(...extractGoSymbolLines(body));
+    }
+
     if (fileExports.length === 0) {
       const codeLines = body.split('\n');
 
@@ -392,6 +404,12 @@ function extractImports(scan: ScanResult, sourceFiles: string[]): string[] {
     } else if (/\.php$/i.test(f.path)) {
       for (const u of extractPhpUseStatements(body)) deps.add(u);
       continue;
+    } else if (/\.py$/i.test(f.path)) {
+      for (const mod of extractPythonImports(body)) deps.add(mod);
+      continue;
+    } else if (/\.go$/i.test(f.path)) {
+      for (const p of extractGoImports(body)) addDep(p, f.path);
+      continue;
     }
 
     const lines = body.split('\n');
@@ -419,14 +437,14 @@ function isBarrelFile(content: string): boolean {
 
 // ── Deterministic dependency graph (file-level) ────────────────────────────
 
-const TS_JS_EXTS = ['.ts', '.tsx', '.js', '.jsx', '.mjs', '.cjs', '.vue'];
+const TS_JS_EXTS = ['.ts', '.tsx', '.js', '.jsx', '.mjs', '.cjs', '.vue', '.go', '.py'];
 
 function isTsJsLikePath(p: string): boolean {
   return /\.(ts|tsx|js|jsx|mjs|cjs|vue)$/i.test(p);
 }
 
 function stripKnownExt(p: string): string {
-  return p.replace(/\.(ts|tsx|js|jsx|mjs|cjs|vue)$/i, '');
+  return p.replace(/\.(ts|tsx|js|jsx|mjs|cjs|vue|go|py)$/i, '');
 }
 
 function extractImportSpecifiersFromTsAst(filePath: string, content: string): string[] {
@@ -550,6 +568,11 @@ function buildDeterministicDependencyGraph(scan: ScanResult): string {
       }
     }
 
+    if (specs.length === 0 && /\.go$/i.test(from)) {
+      specs = extractGoImports(body);
+      kind = 'import';
+    }
+
     for (const s of specs) {
       const resolved = resolveInternalImport(from, s, existing);
       if (!resolved) continue;
@@ -631,6 +654,24 @@ function extractFilePurpose(content: string): string | null {
         const desc = lines[j].trim().replace(/^\*\s?/, '');
         if (desc && !desc.startsWith('@') && !desc.startsWith('/')) return desc;
       }
+    }
+    if ((t.startsWith('"""') || t.startsWith("'''")) && i < 12) {
+      const q = t.startsWith('"""') ? '"""' : "'''";
+      if (t.length > q.length * 2 && t.endsWith(q)) {
+        return t.slice(3, -3).trim().replace(/\s+/g, ' ').slice(0, 220);
+      }
+      const parts: string[] = [];
+      for (let j = i + 1; j < Math.min(lines.length, i + 16); j++) {
+        const L = lines[j];
+        if (L.includes(q)) {
+          const before = L.split(q)[0]?.trim();
+          if (before) parts.push(before);
+          break;
+        }
+        const trimmed = L.trim();
+        if (trimmed) parts.push(trimmed);
+      }
+      if (parts.length) return parts.join(' ').slice(0, 220);
     }
     if (t.startsWith('//') && i < 6) {
       const desc = t.replace(/^\/\/\s*/, '');
@@ -882,6 +923,13 @@ function readPackageJson(scan: ScanResult): Record<string, unknown> | null {
   }
 }
 
+function readGoModModule(scan: ScanResult): string | null {
+  const f = scan.files.find(x => x.path === 'go.mod' && x.content);
+  if (!f) return null;
+  const m = f.content.match(/^module\s+(\S+)/m);
+  return m ? m[1].trim() : null;
+}
+
 function readComposerJson(scan: ScanResult): Record<string, unknown> | null {
   const f = scan.files.find(x => x.path === 'composer.json' && x.content);
   if (!f) return null;
@@ -895,10 +943,16 @@ function readComposerJson(scan: ScanResult): Record<string, unknown> | null {
 function inferDefaultsFromScan(scan: ScanResult): Pick<BuildPlan, 'projectName' | 'projectDescription' | 'techStack' | 'buildCommand' | 'testCommand'> {
   const pkg = readPackageJson(scan);
   const composer = readComposerJson(scan);
+  const goModule = readGoModModule(scan);
 
   let name = typeof pkg?.name === 'string' ? pkg.name : 'Project';
   let desc =
     typeof pkg?.description === 'string' ? pkg.description : 'Codebase (auto-inferred)';
+
+  if ((!pkg || name === 'Project') && goModule) {
+    const seg = goModule.split('/').pop();
+    if (seg) name = seg;
+  }
 
   if ((!pkg || name === 'Project') && composer) {
     const cName = composer.name;
@@ -934,9 +988,11 @@ function inferDefaultsFromScan(scan: ScanResult): Pick<BuildPlan, 'projectName' 
     if (!techStack.includes('PHP')) techStack.push('PHP');
   }
   if (scan.files.some(f => f.path.endsWith('.vue'))) techStack.push('Vue');
+  if (scan.files.some(f => f.path.endsWith('.go'))) {
+    if (!techStack.includes('Go')) techStack.push('Go');
+  }
   if (scan.files.some(f => f.path.endsWith('.ts') || f.path.endsWith('.tsx'))) techStack.push('TypeScript');
   if (scan.files.some(f => f.path.endsWith('.py'))) techStack.push('Python');
-  if (scan.files.some(f => f.path.endsWith('.go'))) techStack.push('Go');
   if (scan.files.some(f => f.path.endsWith('.rs'))) techStack.push('Rust');
   if (techStack.length === 0) techStack.push('Unknown');
   return {
@@ -1823,8 +1879,12 @@ function buildSnippetForFiles(scan: ScanResult, sourceFiles: string[], maxChars:
           }
         })()
       : /\.php$/i.test(sf)
-        ? extractPhpSymbolLines(body).join('\n\n') || pickLinesFallback(f.content).join('\n')
-        : pickLinesFallback(f.content).join('\n');
+        ? extractPhpSymbolLines(f.content).join('\n\n')
+        : /\.py$/i.test(sf)
+          ? extractPythonSymbolLines(f.content).join('\n\n')
+          : /\.go$/i.test(sf)
+            ? extractGoSymbolLines(f.content).join('\n\n')
+            : pickLinesFallback(f.content).join('\n');
 
     const chunk = `\n// ── ${sf} ──\n` + picked;
     if (chunk.length > budget) break;
@@ -2086,6 +2146,23 @@ function llmContentMatchesRealExports(
         if (fn) realNames.push(fn[1]);
       }
     }
+    if (/\.py$/i.test(sf)) {
+      for (const line of extractPythonSymbolLines(scanned.content)) {
+        const defm = line.match(/def\s+(\w+)\s*\(/);
+        if (defm) realNames.push(defm[1]);
+        const clm = line.match(/class\s+(\w+)/);
+        if (clm) realNames.push(clm[1]);
+      }
+    }
+    if (/\.go$/i.test(sf)) {
+      for (const line of extractGoSymbolLines(scanned.content)) {
+        if (!line.startsWith('func ')) continue;
+        const m = line.match(/^func(?:\s+\([^)]+\))?\s+(\w+)\s*\(/);
+        if (m) realNames.push(m[1]);
+        const ty = line.match(/^type\s+(\w+)\s+/);
+        if (ty) realNames.push(ty[1]);
+      }
+    }
   }
   if (realNames.length === 0) return true; // no exports → can't validate
   const hits = realNames.filter(name => llmContent.includes(name)).length;
@@ -2178,6 +2255,8 @@ function buildDeterministicSubsystemFile(
     const lineCount = scanned.lines;
     const exportCount = (() => {
       if (/\.php$/i.test(sf)) return extractPhpSymbolLines(scanned.content).length;
+      if (/\.py$/i.test(sf)) return extractPythonSymbolLines(scanned.content).length;
+      if (/\.go$/i.test(sf)) return extractGoSymbolLines(scanned.content).length;
       const { body } = scriptOrSelfForAnalysis(sf, scanned.content);
       const exp = body.split('\n').filter(l => /^export\s/.test(l.trim())).length;
       if (exp > 0) return exp;
@@ -2209,7 +2288,13 @@ function buildDeterministicSubsystemFile(
 
   // Dependencies
   const deps = extractImports(scan, sourceFiles);
-  const internalDeps = deps.filter(d => !d.includes('/node_modules/') && !d.startsWith('@') && d.includes('/'));
+  const internalDeps = deps.filter(d => {
+    if (d.includes('node_modules') || d.startsWith('@')) return false;
+    if (!d.includes('/')) return false;
+    const first = d.split('/')[0]!;
+    if (first.includes('.') && !first.startsWith('.')) return false;
+    return true;
+  });
   const externalDeps = deps.filter(d => !internalDeps.includes(d));
 
   // Env vars read (Node + PHP / Laravel)
@@ -2221,8 +2306,11 @@ function buildDeterministicSubsystemFile(
     for (const m of text.matchAll(/process\.env\.([A-Z_][A-Z0-9_]*)/g)) envVars.push(`process.env.${m[1]}`);
     for (const m of text.matchAll(/process\.env\[['"]([A-Z_][A-Z0-9_]*)['"]\]/g)) envVars.push(`process.env.${m[1]}`);
     for (const m of text.matchAll(/getenv\s*\(\s*['"]([^'"]+)['"]\s*\)/g)) envVars.push(`getenv('${m[1]}')`);
-    for (const m of text.matchAll(/(?:^|[^\w$.])env\s*\(\s*['"]([^'"]+)['"]\s*\)/gm)) envVars.push(`env('${m[1]}')`);
+    for (const m of text.matchAll(/(?:^|[^\w])env\s*\(\s*['"]([^'"]+)['"]\s*\)/gm)) envVars.push(`env('${m[1]}')`);
     for (const m of text.matchAll(/\$_ENV\s*\[\s*['"]([^'"]+)['"]\s*\]/g)) envVars.push(`$_ENV['${m[1]}']`);
+    for (const m of text.matchAll(/os\.environ\.get\s*\(\s*['"]([^'"]+)['"]/g)) envVars.push(`os.environ.get('${m[1]}')`);
+    for (const m of text.matchAll(/os\.environ\s*\[\s*['"]([^'"]+)['"]\s*\]/g)) envVars.push(`os.environ['${m[1]}']`);
+    for (const m of text.matchAll(/os\.getenv\s*\(\s*['"]([^'"]+)['"]\s*\)/g)) envVars.push(`os.getenv('${m[1]}')`);
   }
   const uniqueEnvVars = [...new Set(envVars)];
 
@@ -2263,7 +2351,10 @@ function buildDeterministicSubsystemFile(
   }
 
   const hasPhp = sourceFiles.some(p => /\.php$/i.test(p));
-  const sigFence = hasPhp && sourceFiles.every(p => /\.php$/i.test(p)) ? 'php' : 'typescript';
+  const allPhp = hasPhp && sourceFiles.every(p => /\.php$/i.test(p));
+  const allPy = sourceFiles.every(p => /\.py$/i.test(p));
+  const allGo = sourceFiles.every(p => /\.go$/i.test(p));
+  const sigFence = allPhp ? 'php' : allPy ? 'python' : allGo ? 'go' : 'typescript';
 
   const content = [
     '---',
@@ -2625,6 +2716,25 @@ function extractExportNamesForNotes(scan: ScanResult, sourceFiles: string[]): st
         if (c) out.add(c[1]);
         const fn = line.match(/function\s+(\w+)\s*\(/i);
         if (fn) out.add(fn[1]);
+      }
+      continue;
+    }
+
+    if (/\.py$/i.test(sfPath)) {
+      for (const line of extractPythonSymbolLines(f.content)) {
+        const defm = line.match(/def\s+(\w+)\s*\(/);
+        if (defm) out.add(defm[1]);
+        const clm = line.match(/class\s+(\w+)/);
+        if (clm) out.add(clm[1]);
+      }
+      continue;
+    }
+
+    if (/\.go$/i.test(sfPath)) {
+      for (const line of extractGoSymbolLines(f.content)) {
+        if (!line.startsWith('func ')) continue;
+        const m = line.match(/^func(?:\s+\([^)]+\))?\s+(\w+)\s*\(/);
+        if (m) out.add(m[1]);
       }
       continue;
     }

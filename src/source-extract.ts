@@ -1,5 +1,5 @@
 /**
- * Shared helpers for Vue SFC / PHP so scanner + deterministic graph use the same shapes.
+ * Shared helpers for Vue / PHP / Python / Go so scanner + deterministic graph use the same shapes.
  */
 
 /** `dev/composables/foo.ts`, `src/composables/bar.js`, etc. */
@@ -94,4 +94,135 @@ export function extractPhpUseStatements(php: string): string[] {
     }
   }
   return [...new Set(out)].sort();
+}
+
+// ── Python ─────────────────────────────────────────────────────────────────
+
+/** Top-level defs / classes (heuristic, not a full parser). */
+export function extractPythonSymbolLines(py: string): string[] {
+  const out: string[] = [];
+  const seen = new Set<string>();
+  const push = (s: string) => {
+    const t = s.trim().replace(/\s+/g, ' ');
+    if (t.length < 3 || seen.has(t)) return;
+    seen.add(t);
+    out.push(t.length > 240 ? `${t.slice(0, 237)}…` : t);
+  };
+
+  for (const rawLine of py.replace(/\r\n/g, '\n').split('\n')) {
+    if (/^\s*#/.test(rawLine)) continue;
+    const line = rawLine.split('#')[0].trim();
+    if (!line) continue;
+    if (/^(async\s+)?def\s+\w+\s*\(/.test(line)) push(line);
+    else if (/^class\s+\w+/.test(line)) push(line.split(':')[0].trim());
+    else if (/^@\w+/.test(line) && line.length < 120) push(line);
+  }
+
+  return out.slice(0, 120);
+}
+
+/** `import x` / `from pkg import` / relative `from ... import` (dependency hints). */
+export function extractPythonImports(py: string): string[] {
+  const out: string[] = [];
+  for (const rawLine of py.replace(/\r\n/g, '\n').split('\n')) {
+    if (/^\s*#/.test(rawLine)) continue;
+    const line = rawLine.split('#')[0].trim();
+    if (!line) continue;
+
+    const fromM = line.match(/^from\s+([\w.]+)\s+import\s+/);
+    if (fromM) {
+      out.push(fromM[1]);
+      continue;
+    }
+    const relFrom = line.match(/^from\s+(\.+)\s*import\s+/);
+    if (relFrom) {
+      out.push(relFrom[1]);
+      continue;
+    }
+
+    const importM = line.match(/^import\s+(.+)$/);
+    if (importM) {
+      const rest = importM[1].split(/\s+as\s+/i)[0].trim();
+      for (const part of rest.split(',')) {
+        const name = part.trim().split(/\s+/)[0];
+        if (name) out.push(name);
+      }
+    }
+  }
+  return [...new Set(out.filter(Boolean))].sort();
+}
+
+// ── Go ───────────────────────────────────────────────────────────────────
+
+function goStringContent(quoted: string): string {
+  if (quoted.length < 2 || quoted[0] !== '"' || quoted[quoted.length - 1] !== '"') return '';
+  return quoted.slice(1, -1).replace(/\\"/g, '"');
+}
+
+/** `import "path"`, `import alias "path"`, and `import ( ... )`. */
+export function extractGoImports(go: string): string[] {
+  const paths: string[] = [];
+  const s = go.replace(/\r\n/g, '\n');
+
+  for (const m of s.matchAll(/\bimport\s+\w+\s+("(?:\\.|[^"\\])*")/g)) {
+    const p = goStringContent(m[1]);
+    if (p) paths.push(p);
+  }
+  for (const m of s.matchAll(/\bimport\s+("(?:\\.|[^"\\])*")/g)) {
+    const p = goStringContent(m[1]);
+    if (p) paths.push(p);
+  }
+
+  let search = 0;
+  while (search < s.length) {
+    const pos = s.indexOf('import', search);
+    if (pos === -1) break;
+    if (pos > 0 && /[a-zA-Z0-9_]/.test(s[pos - 1]!)) {
+      search = pos + 6;
+      continue;
+    }
+    let i = pos + 6;
+    while (i < s.length && /\s/.test(s[i]!)) i++;
+    if (s[i] !== '(') {
+      search = pos + 6;
+      continue;
+    }
+    let depth = 1;
+    const open = i;
+    i++;
+    while (i < s.length && depth > 0) {
+      const c = s[i]!;
+      if (c === '(') depth++;
+      else if (c === ')') depth--;
+      i++;
+    }
+    const inner = s.slice(open + 1, i - 1);
+    for (const m of inner.matchAll(/"((?:\\.|[^"\\])*)"/g)) paths.push(m[1]);
+    search = i;
+  }
+
+  return [...new Set(paths)].sort();
+}
+
+/** `package`, `func`, `type`, one-line `const` / `var` (heuristic). */
+export function extractGoSymbolLines(go: string): string[] {
+  const out: string[] = [];
+  const seen = new Set<string>();
+  const push = (s: string) => {
+    const t = s.trim().replace(/\s+/g, ' ');
+    if (t.length < 2 || seen.has(t)) return;
+    seen.add(t);
+    out.push(t.length > 240 ? `${t.slice(0, 237)}…` : t);
+  };
+
+  for (const rawLine of go.replace(/\r\n/g, '\n').split('\n')) {
+    const line = rawLine.split('//')[0].trim();
+    if (!line) continue;
+    if (/^package\s+\w+/.test(line)) push(line);
+    else if (/^func\s+/.test(line)) push(line);
+    else if (/^type\s+\w+/.test(line)) push(line.split('{')[0].trim());
+    else if (/^(const|var)\s+/.test(line) && !line.includes('{')) push(line);
+  }
+
+  return out.slice(0, 120);
 }

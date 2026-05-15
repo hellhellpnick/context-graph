@@ -98,9 +98,10 @@ const TIER1_RE = [
   /^public\/index\.php$/,
 ];
 
-/** Tier-2 surface: default lines vs composables vs Vue `<script>` extract. */
+/** Tier-2 surface: default lines vs composables vs Vue script vs Python/Go. */
 const TIER2_LINES_DEFAULT = 30;
 const TIER2_LINES_COMPOSABLE = 120;
+const TIER2_LINES_GO_PY = 150;
 const TIER2_VUE_SCRIPT_MAX_CHARS = 16000;
 
 export function classifyFile(relPath: string): 0 | 1 | 2 | 3 {
@@ -209,6 +210,9 @@ export async function scanProject(
             truncated = !hasScript && raw.length > TIER2_VUE_SCRIPT_MAX_CHARS;
           }
           content = body;
+        } else if (/\.(py|go)$/i.test(np)) {
+          content = allLines.slice(0, TIER2_LINES_GO_PY).join('\n');
+          truncated = allLines.length > TIER2_LINES_GO_PY;
         } else if (isComposableLikePath(np)) {
           content = allLines.slice(0, TIER2_LINES_COMPOSABLE).join('\n');
           truncated = allLines.length > TIER2_LINES_COMPOSABLE;
@@ -279,7 +283,7 @@ export function formatForLLM(scan: ScanResult): string {
   const tier2 = scan.files.filter(f => f.tier === 2 && f.content);
   if (tier2.length > 0) {
     parts.push(
-      '\n\n## Tier 2: Surface (30 lines default; composables 120; Vue = all `<script>` bodies, capped)\n'
+      '\n\n## Tier 2: Surface (30 lines default; composables 120; Python/Go 150; Vue = `<script>` extract)\n'
     );
     for (const f of tier2) {
       parts.push(`\n### FILE: ${f.path}\n\`\`\`\n${f.content}\n\`\`\``);
@@ -287,6 +291,8 @@ export function formatForLLM(scan: ScanResult): string {
       const np = f.path.replace(/\\/g, '/');
       if (/\.vue$/i.test(np)) {
         parts.push('\n[... vue SFC may be larger; script extract may be capped ...]');
+      } else if (/\.(py|go)$/i.test(np) && f.lines > TIER2_LINES_GO_PY) {
+        parts.push(`\n[... ${f.lines - TIER2_LINES_GO_PY} more lines ...]`);
       } else if (isComposableLikePath(np) && f.lines > TIER2_LINES_COMPOSABLE) {
         parts.push(`\n[... ${f.lines - TIER2_LINES_COMPOSABLE} more lines ...]`);
       } else if (f.lines > TIER2_LINES_DEFAULT) {

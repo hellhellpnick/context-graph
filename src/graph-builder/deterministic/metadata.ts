@@ -2,7 +2,18 @@ import type { ScanResult } from '../../scanner';
 import type { BuildPlan } from '../types';
 import { inferFilePriority } from '../plan/priority';
 
-export function buildMetadataJson(today: string, scan: ScanResult, plan?: BuildPlan): string {
+export interface MetadataProjectSettings {
+  buildStrategy?: string;
+  instructionTargets?: string[];
+  installAgents?: boolean;
+}
+
+export function buildMetadataJson(
+  today: string,
+  scan: ScanResult,
+  plan?: BuildPlan,
+  projectSettings?: MetadataProjectSettings
+): string {
   const sourceFiles = scan.files.filter(f => f.tier !== 3 && f.content && f.lines > 0);
 
   // Determine complexity and danger_zone from actual content/size
@@ -49,7 +60,11 @@ export function buildMetadataJson(today: string, scan: ScanResult, plan?: BuildP
     .slice(0, 5)
     .map(f => f.path);
 
-  return JSON.stringify({ generated: today, files: filesObj, hotspots }, null, 2);
+  const payload: Record<string, unknown> = { generated: today, files: filesObj, hotspots };
+  if (projectSettings) {
+    payload.project = projectSettings;
+  }
+  return JSON.stringify(payload, null, 2);
 }
 
 /** Flat table: every instruction path ↔ applyTo ↔ sources (for LLMs and search). */
@@ -94,7 +109,8 @@ export function buildIndexMd(today: string, plan?: BuildPlan): string {
     ``,
     `_Generated: ${today}_`,
     ``,
-    `**Full path ↔ applyTo list:** [context-graph-path-index.md](context-graph-path-index.md)`,
+    `**Name lookup (LinkTag, useSeo, …):** [symbol-index.md](symbol-index.md)`,
+    `**Full path ↔ applyTo:** [context-graph-path-index.md](context-graph-path-index.md)`,
     ``,
   ];
 

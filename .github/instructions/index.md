@@ -1,42 +1,38 @@
 # Context Graph — Instruction Index
 
-_Generated: 2026-05-15_
+_Generated: 2026-05-18_
 
 **Full path ↔ applyTo list:** [context-graph-path-index.md](context-graph-path-index.md)
 
 ## .cursor
 | File | Source Files | Priority | Area | Description |
 |------|-------------|----------|------|-------------|
-| [.cursor/rules/_bundle_p10.instructions.md](.cursor/rules/_bundle_p10.instructions.md) | `.cursor/rules/ctxgraph--src-cli-io.mdc`, `.cursor/rules/ctxgraph--src-cli-program.mdc`, `.cursor/rules/ctxgraph--src-cli-version.mdc`, `.cursor/rules/ctxgraph--src-cli.mdc` | P2 | Rules | Mirror — `.cursor/rules/` (4 files, part 10/20) |
-| [.cursor/rules/_bundle_p11.instructions.md](.cursor/rules/_bundle_p11.instructions.md) | `.cursor/rules/ctxgraph--src-config.mdc`, `.cursor/rules/ctxgraph--src-framework-extract.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-constants.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-cost.mdc` | P2 | Rules | Mirror — `.cursor/rules/` (4 files, part 11/20) |
-| [.cursor/rules/_bundle_p12.instructions.md](.cursor/rules/_bundle_p12.instructions.md) | `.cursor/rules/ctxgraph--src-graph-builder-deterministic-cursor-rules.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-deterministic-metadata.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-deterministic-root.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-deterministic-subsystem.mdc` | P2 | Rules | Mirror — `.cursor/rules/` (4 files, part 12/20) |
-| [.cursor/rules/_bundle_p13.instructions.md](.cursor/rules/_bundle_p13.instructions.md) | `.cursor/rules/ctxgraph--src-graph-builder-discovery.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-extract-deps-graph.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-extract-exports.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-extract-imports.mdc` | P2 | Rules | Mirror — `.cursor/rules/` (4 files, part 13/20) |
-| [.cursor/rules/_bundle_p14.instructions.md](.cursor/rules/_bundle_p14.instructions.md) | `.cursor/rules/ctxgraph--src-graph-builder-extract-misc.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-index.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-llm-notes.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-llm-validate.mdc` | P2 | Rules | Mirror — `.cursor/rules/` (4 files, part 14/20) |
-| [.cursor/rules/_bundle_p15.instructions.md](.cursor/rules/_bundle_p15.instructions.md) | `.cursor/rules/ctxgraph--src-graph-builder-messages-planning.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-messages-root.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-messages-subsystem.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-plan-infer.mdc` | P2 | Rules | Mirror — `.cursor/rules/` (4 files, part 15/20) |
-| [.cursor/rules/_bundle_p16.instructions.md](.cursor/rules/_bundle_p16.instructions.md) | `.cursor/rules/ctxgraph--src-graph-builder-plan-layout.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-plan-parse.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-plan-priority.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-plan-repair.mdc` | P2 | Rules | Mirror — `.cursor/rules/` (4 files, part 16/20) |
-| [.cursor/rules/_bundle_p17.instructions.md](.cursor/rules/_bundle_p17.instructions.md) | `.cursor/rules/ctxgraph--src-graph-builder-prompt.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-types.mdc`, `.cursor/rules/ctxgraph--src-graph-builder.mdc`, `.cursor/rules/ctxgraph--src-hooks.mdc` | P2 | Rules | Mirror — `.cursor/rules/` (4 files, part 17/20) |
-| [.cursor/rules/_bundle_p18.instructions.md](.cursor/rules/_bundle_p18.instructions.md) | `.cursor/rules/ctxgraph--src-index.mdc`, `.cursor/rules/ctxgraph--src-project-root.mdc`, `.cursor/rules/ctxgraph--src-providers-anthropic.mdc`, `.cursor/rules/ctxgraph--src-providers-index.mdc` | P2 | Rules | Mirror — `.cursor/rules/` (4 files, part 18/20) |
-| [.cursor/rules/_bundle_p19.instructions.md](.cursor/rules/_bundle_p19.instructions.md) | `.cursor/rules/ctxgraph--src-providers-openai.mdc`, `.cursor/rules/ctxgraph--src-providers-types.mdc`, `.cursor/rules/ctxgraph--src-scanner.mdc`, `.cursor/rules/ctxgraph--src-source-extract.mdc` | P2 | Rules | Mirror — `.cursor/rules/` (4 files, part 19/20) |
-| [.cursor/rules/_bundle_p2.instructions.md](.cursor/rules/_bundle_p2.instructions.md) | `.cursor/rules/ctxgraph--cursor-rules-bundle-p13.mdc`, `.cursor/rules/ctxgraph--cursor-rules-bundle-p14.mdc`, `.cursor/rules/ctxgraph--cursor-rules-bundle-p15.mdc`, `.cursor/rules/ctxgraph--cursor-rules-bundle-p2.mdc` | P2 | Rules | Mirror — `.cursor/rules/` (4 files, part 2/20) |
-| [.cursor/rules/_bundle_p20.instructions.md](.cursor/rules/_bundle_p20.instructions.md) | `.cursor/rules/ctxgraph--src-writer.mdc`, `.cursor/rules/ctxgraph--test-bundle.mdc` | P2 | Rules | Mirror — `.cursor/rules/` (2 files, part 20/20) |
-| [.cursor/rules/_bundle_p3.instructions.md](.cursor/rules/_bundle_p3.instructions.md) | `.cursor/rules/ctxgraph--cursor-rules-bundle-p3.mdc`, `.cursor/rules/ctxgraph--cursor-rules-bundle-p4.mdc`, `.cursor/rules/ctxgraph--cursor-rules-bundle-p5.mdc`, `.cursor/rules/ctxgraph--cursor-rules-bundle-p6.mdc` | P2 | Rules | Mirror — `.cursor/rules/` (4 files, part 3/20) |
-| [.cursor/rules/_bundle_p4.instructions.md](.cursor/rules/_bundle_p4.instructions.md) | `.cursor/rules/ctxgraph--cursor-rules-bundle-p7.mdc`, `.cursor/rules/ctxgraph--cursor-rules-bundle-p8.mdc` | P2 | Rules | Mirror — `.cursor/rules/` (2 files, part 4/20) |
-| [.cursor/rules/_bundle_p6.instructions.md](.cursor/rules/_bundle_p6.instructions.md) | `.cursor/rules/ctxgraph--cursor-rules-bundle.mdc`, `.cursor/rules/ctxgraph--npmignore.mdc`, `.cursor/rules/ctxgraph--python-context-graph-bundle.mdc`, `.cursor/rules/ctxgraph--scripts-split-graph-builder.mdc` | P2 | Rules | Mirror — `.cursor/rules/` (4 files, part 6/20) |
-| [.cursor/rules/_bundle_p7.instructions.md](.cursor/rules/_bundle_p7.instructions.md) | `.cursor/rules/ctxgraph--src-agents-catalog.mdc`, `.cursor/rules/ctxgraph--src-agents.mdc`, `.cursor/rules/ctxgraph--src-cli-agents-install.mdc`, `.cursor/rules/ctxgraph--src-cli-build-run.mdc` | P2 | Rules | Mirror — `.cursor/rules/` (4 files, part 7/20) |
-| [.cursor/rules/_bundle_p8.instructions.md](.cursor/rules/_bundle_p8.instructions.md) | `.cursor/rules/ctxgraph--src-cli-commands-actualize.mdc`, `.cursor/rules/ctxgraph--src-cli-commands-agents.mdc`, `.cursor/rules/ctxgraph--src-cli-commands-build.mdc`, `.cursor/rules/ctxgraph--src-cli-commands-hook-check.mdc` | P2 | Rules | Mirror — `.cursor/rules/` (4 files, part 8/20) |
-| [.cursor/rules/_bundle_p9.instructions.md](.cursor/rules/_bundle_p9.instructions.md) | `.cursor/rules/ctxgraph--src-cli-commands-impact.mdc`, `.cursor/rules/ctxgraph--src-cli-commands-review.mdc`, `.cursor/rules/ctxgraph--src-cli-commands-validate.mdc`, `.cursor/rules/ctxgraph--src-cli-index.mdc` | P2 | Rules | Mirror — `.cursor/rules/` (4 files, part 9/20) |
-| [.cursor/rules/_bundle.instructions.md](.cursor/rules/_bundle.instructions.md) | `.cursor/rules/context-graph.mdc`, `.cursor/rules/ctxgraph--cursor-rules-bundle-p10.mdc`, `.cursor/rules/ctxgraph--cursor-rules-bundle-p11.mdc`, `.cursor/rules/ctxgraph--cursor-rules-bundle-p12.mdc` | P2 | Rules | Mirror — `.cursor/rules/` (4 files, part 1/20) |
-| [.cursor/rules/ctxgraph--cursor-rules-bundle-p9.instructions.md](.cursor/rules/ctxgraph--cursor-rules-bundle-p9.instructions.md) | `.cursor/rules/ctxgraph--cursor-rules-bundle-p9.mdc` | P2 | Ctxgraph Cursor Rules Bundle P9 | Mirror — `.cursor/rules/ctxgraph--cursor-rules-bundle-p9.mdc` |
-
-## Root
-| File | Source Files | Priority | Area | Description |
-|------|-------------|----------|------|-------------|
-| [npmignore.instructions.md](npmignore.instructions.md) | `.npmignore` | P2 | Module Entry | Mirror — `.npmignore` |
+| [.cursor/rules/_bundle_p10.instructions.md](.cursor/rules/_bundle_p10.instructions.md) | `.cursor/rules/ctxgraph--src-graph-builder-llm-notes.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-llm-validate.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-messages-planning.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-messages-root.mdc` | P2 | Rules | Mirror — `.cursor/rules/` (4 files, part 10/16) |
+| [.cursor/rules/_bundle_p11.instructions.md](.cursor/rules/_bundle_p11.instructions.md) | `.cursor/rules/ctxgraph--src-graph-builder-messages-subsystem.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-plan-infer.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-plan-layout.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-plan-parse.mdc` | P2 | Rules | Mirror — `.cursor/rules/` (4 files, part 11/16) |
+| [.cursor/rules/_bundle_p12.instructions.md](.cursor/rules/_bundle_p12.instructions.md) | `.cursor/rules/ctxgraph--src-graph-builder-plan-priority.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-plan-repair.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-plan-stack-profile.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-prompt.mdc` | P2 | Rules | Mirror — `.cursor/rules/` (4 files, part 12/16) |
+| [.cursor/rules/_bundle_p13.instructions.md](.cursor/rules/_bundle_p13.instructions.md) | `.cursor/rules/ctxgraph--src-graph-builder-types.mdc`, `.cursor/rules/ctxgraph--src-graph-builder.mdc`, `.cursor/rules/ctxgraph--src-hooks.mdc`, `.cursor/rules/ctxgraph--src-index.mdc` | P2 | Rules | Mirror — `.cursor/rules/` (4 files, part 13/16) |
+| [.cursor/rules/_bundle_p14.instructions.md](.cursor/rules/_bundle_p14.instructions.md) | `.cursor/rules/ctxgraph--src-instruction-targets.mdc`, `.cursor/rules/ctxgraph--src-project-graph.mdc`, `.cursor/rules/ctxgraph--src-project-root.mdc`, `.cursor/rules/ctxgraph--src-providers-anthropic.mdc` | P2 | Rules | Mirror — `.cursor/rules/` (4 files, part 14/16) |
+| [.cursor/rules/_bundle_p15.instructions.md](.cursor/rules/_bundle_p15.instructions.md) | `.cursor/rules/ctxgraph--src-providers-index.mdc`, `.cursor/rules/ctxgraph--src-providers-openai.mdc`, `.cursor/rules/ctxgraph--src-providers-types.mdc`, `.cursor/rules/ctxgraph--src-scanner.mdc` | P2 | Rules | Mirror — `.cursor/rules/` (4 files, part 15/16) |
+| [.cursor/rules/_bundle_p16.instructions.md](.cursor/rules/_bundle_p16.instructions.md) | `.cursor/rules/ctxgraph--src-source-extract.mdc`, `.cursor/rules/ctxgraph--src-writer.mdc`, `.cursor/rules/ctxgraph--test-bundle-p2.mdc`, `.cursor/rules/ctxgraph--test-bundle.mdc` | P2 | Rules | Mirror — `.cursor/rules/` (4 files, part 16/16) |
+| [.cursor/rules/_bundle_p2.instructions.md](.cursor/rules/_bundle_p2.instructions.md) | `.cursor/rules/ctxgraph--src-agents-catalog.mdc`, `.cursor/rules/ctxgraph--src-agents.mdc`, `.cursor/rules/ctxgraph--src-cli-agents-install.mdc`, `.cursor/rules/ctxgraph--src-cli-build-run.mdc` | P2 | Rules | Mirror — `.cursor/rules/` (4 files, part 2/16) |
+| [.cursor/rules/_bundle_p3.instructions.md](.cursor/rules/_bundle_p3.instructions.md) | `.cursor/rules/ctxgraph--src-cli-commands-actualize.mdc`, `.cursor/rules/ctxgraph--src-cli-commands-agents.mdc`, `.cursor/rules/ctxgraph--src-cli-commands-build.mdc`, `.cursor/rules/ctxgraph--src-cli-commands-hook-check.mdc` | P2 | Rules | Mirror — `.cursor/rules/` (4 files, part 3/16) |
+| [.cursor/rules/_bundle_p4.instructions.md](.cursor/rules/_bundle_p4.instructions.md) | `.cursor/rules/ctxgraph--src-cli-commands-impact.mdc`, `.cursor/rules/ctxgraph--src-cli-commands-review.mdc`, `.cursor/rules/ctxgraph--src-cli-commands-validate.mdc`, `.cursor/rules/ctxgraph--src-cli-index.mdc` | P2 | Rules | Mirror — `.cursor/rules/` (4 files, part 4/16) |
+| [.cursor/rules/_bundle_p5.instructions.md](.cursor/rules/_bundle_p5.instructions.md) | `.cursor/rules/ctxgraph--src-cli-io.mdc`, `.cursor/rules/ctxgraph--src-cli-program.mdc`, `.cursor/rules/ctxgraph--src-cli-version.mdc`, `.cursor/rules/ctxgraph--src-cli.mdc` | P2 | Rules | Mirror — `.cursor/rules/` (4 files, part 5/16) |
+| [.cursor/rules/_bundle_p6.instructions.md](.cursor/rules/_bundle_p6.instructions.md) | `.cursor/rules/ctxgraph--src-config.mdc`, `.cursor/rules/ctxgraph--src-framework-extract.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-constants.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-cost.mdc` | P2 | Rules | Mirror — `.cursor/rules/` (4 files, part 6/16) |
+| [.cursor/rules/_bundle_p7.instructions.md](.cursor/rules/_bundle_p7.instructions.md) | `.cursor/rules/ctxgraph--src-graph-builder-deterministic-cursor-rules.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-deterministic-metadata.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-deterministic-root-project.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-deterministic-root-slim.mdc` | P2 | Rules | Mirror — `.cursor/rules/` (4 files, part 7/16) |
+| [.cursor/rules/_bundle_p8.instructions.md](.cursor/rules/_bundle_p8.instructions.md) | `.cursor/rules/ctxgraph--src-graph-builder-deterministic-root.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-deterministic-subsystem.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-discovery.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-extract-deps-graph.mdc` | P2 | Rules | Mirror — `.cursor/rules/` (4 files, part 8/16) |
+| [.cursor/rules/_bundle_p9.instructions.md](.cursor/rules/_bundle_p9.instructions.md) | `.cursor/rules/ctxgraph--src-graph-builder-extract-exports.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-extract-imports.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-extract-misc.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-index.mdc` | P2 | Rules | Mirror — `.cursor/rules/` (4 files, part 9/16) |
+| [.cursor/rules/_bundle.instructions.md](.cursor/rules/_bundle.instructions.md) | `.cursor/rules/context-graph.mdc`, `.cursor/rules/ctxgraph--python-context-graph-bundle.mdc`, `.cursor/rules/ctxgraph--root-bundle.mdc`, `.cursor/rules/ctxgraph--scripts-split-graph-builder.mdc` | P2 | Rules | Mirror — `.cursor/rules/` (4 files, part 1/16) |
 
 ## Python
 | File | Source Files | Priority | Area | Description |
 |------|-------------|----------|------|-------------|
 | [python/context_graph/_bundle.instructions.md](python/context_graph/_bundle.instructions.md) | `python/context_graph/__init__.py`, `python/context_graph/cli.py` | P2 | Context Graph | Mirror — `python/context_graph/` (2 files) |
+
+## Root
+| File | Source Files | Priority | Area | Description |
+|------|-------------|----------|------|-------------|
+| [root/_bundle.instructions.md](root/_bundle.instructions.md) | `.npmignore`, `Untitled` | P2 | Root files | Mirror — `./` (2 files) |
 
 ## Scripts
 | File | Source Files | Priority | Area | Description |
@@ -69,6 +65,8 @@ _Generated: 2026-05-15_
 | [src/graph-builder/cost.instructions.md](src/graph-builder/cost.instructions.md) | `src/graph-builder/cost.ts` | P1 | Cost | Mirror — `src/graph-builder/cost.ts` |
 | [src/graph-builder/deterministic/cursor-rules.instructions.md](src/graph-builder/deterministic/cursor-rules.instructions.md) | `src/graph-builder/deterministic/cursor-rules.ts` | P1 | Cursor Rules | Mirror — `src/graph-builder/deterministic/cursor-rules.ts` |
 | [src/graph-builder/deterministic/metadata.instructions.md](src/graph-builder/deterministic/metadata.instructions.md) | `src/graph-builder/deterministic/metadata.ts` | P1 | Metadata | Mirror — `src/graph-builder/deterministic/metadata.ts` |
+| [src/graph-builder/deterministic/root-project.instructions.md](src/graph-builder/deterministic/root-project.instructions.md) | `src/graph-builder/deterministic/root-project.ts` | P1 | Root Project | Mirror — `src/graph-builder/deterministic/root-project.ts` |
+| [src/graph-builder/deterministic/root-slim.instructions.md](src/graph-builder/deterministic/root-slim.instructions.md) | `src/graph-builder/deterministic/root-slim.ts` | P1 | Root Slim | Mirror — `src/graph-builder/deterministic/root-slim.ts` |
 | [src/graph-builder/deterministic/root.instructions.md](src/graph-builder/deterministic/root.instructions.md) | `src/graph-builder/deterministic/root.ts` | P1 | Root | Mirror — `src/graph-builder/deterministic/root.ts` |
 | [src/graph-builder/deterministic/subsystem.instructions.md](src/graph-builder/deterministic/subsystem.instructions.md) | `src/graph-builder/deterministic/subsystem.ts` | P1 | Subsystem | Mirror — `src/graph-builder/deterministic/subsystem.ts` |
 | [src/graph-builder/discovery.instructions.md](src/graph-builder/discovery.instructions.md) | `src/graph-builder/discovery.ts` | P1 | Discovery | Mirror — `src/graph-builder/discovery.ts` |
@@ -87,10 +85,13 @@ _Generated: 2026-05-15_
 | [src/graph-builder/plan/parse.instructions.md](src/graph-builder/plan/parse.instructions.md) | `src/graph-builder/plan/parse.ts` | P1 | Parse | Mirror — `src/graph-builder/plan/parse.ts` |
 | [src/graph-builder/plan/priority.instructions.md](src/graph-builder/plan/priority.instructions.md) | `src/graph-builder/plan/priority.ts` | P1 | Priority | Mirror — `src/graph-builder/plan/priority.ts` |
 | [src/graph-builder/plan/repair.instructions.md](src/graph-builder/plan/repair.instructions.md) | `src/graph-builder/plan/repair.ts` | P1 | Repair | Mirror — `src/graph-builder/plan/repair.ts` |
+| [src/graph-builder/plan/stack-profile.instructions.md](src/graph-builder/plan/stack-profile.instructions.md) | `src/graph-builder/plan/stack-profile.ts` | P1 | Stack Profile | Mirror — `src/graph-builder/plan/stack-profile.ts` |
 | [src/graph-builder/prompt.instructions.md](src/graph-builder/prompt.instructions.md) | `src/graph-builder/prompt.ts` | P2 | Prompt | Mirror — `src/graph-builder/prompt.ts` |
 | [src/graph-builder/types.instructions.md](src/graph-builder/types.instructions.md) | `src/graph-builder/types.ts` | P1 | Types | Mirror — `src/graph-builder/types.ts` |
 | [src/hooks.instructions.md](src/hooks.instructions.md) | `src/hooks.ts` | P1 | Hooks | Mirror — `src/hooks.ts` |
 | [src/index.instructions.md](src/index.instructions.md) | `src/index.ts` | P0 | Index | Mirror — `src/index.ts` |
+| [src/instruction-targets.instructions.md](src/instruction-targets.instructions.md) | `src/instruction-targets.ts` | P2 | Instruction Targets | Mirror — `src/instruction-targets.ts` |
+| [src/project-graph.instructions.md](src/project-graph.instructions.md) | `src/project-graph.ts` | P2 | Project Graph | Mirror — `src/project-graph.ts` |
 | [src/project-root.instructions.md](src/project-root.instructions.md) | `src/project-root.ts` | P1 | Project Root | Mirror — `src/project-root.ts` |
 | [src/providers/anthropic.instructions.md](src/providers/anthropic.instructions.md) | `src/providers/anthropic.ts` | P1 | Anthropic | Mirror — `src/providers/anthropic.ts` |
 | [src/providers/index.instructions.md](src/providers/index.instructions.md) | `src/providers/index.ts` | P0 | Index | Mirror — `src/providers/index.ts` |
@@ -103,7 +104,8 @@ _Generated: 2026-05-15_
 ## Test
 | File | Source Files | Priority | Area | Description |
 |------|-------------|----------|------|-------------|
-| [test/_bundle.instructions.md](test/_bundle.instructions.md) | `test/extract.test.mjs`, `test/priority.test.mjs`, `test/project-root.test.mjs` | P2 | Test | Mirror — `test/` (3 files) |
+| [test/_bundle_p2.instructions.md](test/_bundle_p2.instructions.md) | `test/priority.test.mjs`, `test/project-root.test.mjs`, `test/repair-stack.test.mjs`, `test/root-slim.test.mjs` | P2 | Test | Mirror — `test/` (4 files, part 2/2) |
+| [test/_bundle.instructions.md](test/_bundle.instructions.md) | `test/copilotignore.test.mjs`, `test/extract.test.mjs`, `test/instruction-targets.test.mjs`, `test/php-extract.test.mjs` | P2 | Test | Mirror — `test/` (4 files, part 1/2) |
 
 ## Quick Navigation
 - **Danger Zones**: see `copilot-instructions.md § Danger Zones`

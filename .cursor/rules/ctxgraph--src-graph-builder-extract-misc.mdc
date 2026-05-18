@@ -8,7 +8,7 @@ alwaysApply: false
 - editing or refactoring `misc.ts`
 
 ## Overview
-- `src/graph-builder/extract/misc.ts` (81 lines · 4 top-level symbols) — `export * from` / `export { } from` targets (barrel files).
+- `src/graph-builder/extract/misc.ts` (103 lines · 5 top-level symbols) — Mirror — `src/graph-builder/extract/misc.ts`
 
 ## Graph
 ```mermaid
@@ -25,6 +25,8 @@ export function extractCliCommands(content: string): string[] { const commands: 
 export function extractReExportTargets(content: string): string[] { const out: string[] = []; for (const line of content.split('\n')) { const t = line.trim(); const star = t.match(/^export\s+\*\s+from\s+['"]([^'"]+)['"]/); if (star) out.…
 /** Reject auto-extracted purpose lines that are code hints, not file intent. */
 export function isWeakFilePurpose(purpose: string): boolean { const t = purpose.trim(); if (t.length < 12) return true; return PURPOSE_COMMENT_SKIP.test(t); }
+/** Lines before first top-level declaration (file banner only). */
+export function fileHeaderSlice(content: string): string { const lines = content.split('\n'); const header: string[] = []; for (const line of lines) { const t = line.trim(); if (!t) { header.push(line); continue; } if ( /^(export\s|impor…
 /** One-line purpose summary: JSDoc / file-level `//` / `#` (PHP) — not in-function comments. */
 export function extractFilePurpose(content: string): string | null { /* ~45 lines */ }
 

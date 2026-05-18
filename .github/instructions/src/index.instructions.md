@@ -2,14 +2,14 @@
 description: "Mirror — `src/index.ts`"
 applyTo: "src/index.ts"
 priority: "P0"
-last_updated: "2026-05-15"
+last_updated: "2026-05-18"
 ---
 
 ## When to Read
 - editing or refactoring `index.ts`
 
 ## Overview
-- `src/index.ts` (63 lines · 17 top-level symbols) — Programmatic API — for embedding context-graph in other tools
+- `src/index.ts` (79 lines · 18 top-level symbols) — Programmatic API — for embedding context-graph in other tools
 
 ## Graph
 ```mermaid
@@ -30,12 +30,13 @@ graph LR
 ```typescript
 // ── src/index.ts ──
 export { loadConfig, initConfig, initConfigInteractive, getModelMaxTokens, MODEL_MAX_OUTPUT_TOKENS, providerAllowsMissingApiKey, } from './config'
-export type { Config, ContextDepth, SubsystemGrouping, SubsystemLayout } from './config'
+export type { Config, ContextDepth, SubsystemGrouping, SubsystemLayout, InstructionTargetId } from './config'
+export { INSTRUCTION_TARGET_IDS, INSTRUCTION_TARGET_LABELS, hasConfiguredInstructionTargets, hasConfiguredInstallAgents, needsInstructionTargetSetup, needsInstallAgentsSetup, normalizeInstructionTargets, parseInstallAgentsEnv, resolveIns…
 export { scanProject, formatForLLM, classifyFile, scanForPromptDepth, GRAPH_CONTEXT_IGNORE_FILENAMES } from './scanner'
 export type { ScannedFile, ScanResult } from './scanner'
 export { resolveProjectRoot, tryGitRepositoryRoot, normalizeBuildDirArg, assertProjectRootExists, suggestedBuildFlagForMistake, } from './project-root'
 export type { BuildDirNormalization, MistakenBuildModeFlag } from './project-root'
-export { buildGraph, buildGraphMultiPass, buildGraphDeterministic, estimateCost, parseBuildPlan, repairBuildPlan, repairOptionsFromConfig, } from './graph-builder'
+export { buildGraph, buildGraphMultiPass, buildGraphDeterministic, estimateCost, parseBuildPlan, repairBuildPlan, repairOptionsFromConfig, resolveRepairOptions, } from './graph-builder'
 export type { BuildMode, BuildOptions, GraphResult, MultiPassResult, BuildPlan, BuildPlanItem, BuildCallbacks, RepairBuildPlanOptions, DeterministicBuildOptions, HybridBuildOptions, } from './graph-builder'
 export { parseOutputFiles, writeOutputFiles } from './writer'
 export type { OutputFile, WriteResult } from './writer'

@@ -2,7 +2,7 @@
 description: "Mirror — `src/agents.ts`"
 applyTo: "src/agents.ts"
 priority: "P1"
-last_updated: "2026-05-15"
+last_updated: "2026-05-18"
 ---
 
 ## When to Read

@@ -2,14 +2,14 @@
 description: "Mirror — `src/graph-builder/constants.ts`"
 applyTo: "src/graph-builder/constants.ts"
 priority: "P1"
-last_updated: "2026-05-15"
+last_updated: "2026-05-18"
 ---
 
 ## When to Read
 - editing or refactoring `constants.ts`
 
 ## Overview
-- `src/graph-builder/constants.ts` (114 lines · 9 top-level symbols) — Shared constants for graph-builder.
+- `src/graph-builder/constants.ts` (161 lines · 19 top-level symbols) — Shared constants for graph-builder.
 
 ## Graph
 ```mermaid
@@ -23,10 +23,29 @@ graph LR
 // ── src/graph-builder/constants.ts ──
 /** Shared constants for graph-builder. */
 export const OUTPUT_FORMAT_INSTRUCTION = ` --- ## MANDATORY OUTPUT FORMAT You MUST wrap every output file in these exact delimiters. No prose outside the blocks. <<<FILE: path/relative/to/project/r… { /* prompt template (~23 lines) */ }
-export const SPLIT_DIRS = new Set(['src', 'lib', 'app', 'cmd', 'internal']);
+/** Per-file instruction split for TS/Go-style trees — not Laravel `app/` (use by-folder there). */
+export const SPLIT_DIRS = new Set(['src', 'lib', 'cmd', 'internal']);
 export const MAX_SOURCE_FILES_PER_AUTO_SUBSYSTEM_DEFAULT = 4;
 /** Default cap for `by-folder` grouping when config does not override. */
 export const MAX_FILES_PER_FOLDER_SUBSYSTEM_DEFAULT = 48;
+/** Auto slim `copilot-instructions.md` when plan has at least this many subsystems. */
+export const ROOT_SLIM_AUTO_SUBSYSTEM_THRESHOLD = 40;
+/** Auto slim when total mapped source files exceed this (e.g. Laravel `app/` one-file-per-subsystem). */
+export const ROOT_SLIM_AUTO_SOURCE_FILES_THRESHOLD = 80;
+/** Max tier-1 paths listed in root Data Flow (non-slim included). */
+export const ROOT_DATA_FLOW_ENTRY_CAP = 12;
+/** Max Quick Navigation entries in slim root (plus path-index pointer). */
+export const ROOT_SLIM_QUICK_NAV_CAP = 40;
+/** Max directory groups in slim Architecture Overview. */
+export const ROOT_SLIM_ARCH_GROUP_CAP = 28;
+/** Max mermaid nodes in slim root dependency graph. */
+export const ROOT_SLIM_DEP_GRAPH_MAX_NODES = 48;
+/** Max env/danger file bullets in slim root. */
+export const ROOT_SLIM_DANGER_CAP = 24;
+/** Max per-file PHP routing blocks in one folder bundle instruction. */
+export const PHP_BUNDLE_ROUTING_FILE_CAP = 36;
+/** Extra one-line PHP index rows after cap. */
+export const PHP_BUNDLE_INDEX_TAIL = 16;
 /**
  * Files that should NOT get their own instruction subsystem.
  * Documentation, non-code configs, lock-files, images, etc.
@@ -36,6 +55,8 @@ export const INSTRUCTION_EXCLUDE_RE = [ /^README(\..+)?$/i, /^EXAMPLES(\..+)?$/i
 export const DIR_TO_INSTRUCTION_PREFIX: Record<string, string> = { src: 'core', lib: 'core', app: 'core', internal: 'core', cmd: 'core', 'src/providers': 'infra', python: 'python', scripts: 'infra', '.github': 'infra', };
 export const MAX_MIRROR_INSTRUCTION_REL_LEN = 200;
 export const SOURCE_EXT_RE = /\.(ts|tsx|js|jsx|mjs|cjs|vue|py|go|rs|java|kt|cs|rb|php)$/i;
+/** Baseline .copilotignore patterns (gitignore syntax; ** matches any depth). */
+export const COPILOTIGNORE_BASELINE: readonly string[] = [ '**/node_modules/', '**/dist/', '**/build/', '**/coverage/', '**/.nyc_output/', '**/__pycache__/', '**/.venv/', '**/venv/', '**/.git/', '**/vendor/', '**/.next/', '**/.nuxt/', '*…
 export const PRICING: Record<string, { /* ~16 lines */ }
 
 ```

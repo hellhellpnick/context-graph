@@ -14,7 +14,7 @@ const fileCases = [
   { path: 'src/scanner.ts', want: 'P0' },
   { path: 'src/graph-builder/plan/priority.ts', want: 'P1' },
   { path: 'src/project-root.ts', want: 'P1' },
-  { path: 'composables/useNews.ts', want: 'P0' },
+  { path: 'composables/useNews.ts', want: 'P1' },
   { path: 'package.json', want: 'P1', opts: { tier: 1 } },
   { path: 'src/index.ts', want: 'P0', opts: { tier: 1 } },
   { path: '.github/workflows/ci.yml', want: 'P1', opts: { tier: 0 } },

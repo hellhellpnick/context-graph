@@ -1,4 +1,6 @@
 import type { SubsystemGrouping, SubsystemLayout } from '../config';
+import type { InstructionTargetId } from '../instruction-targets';
+import type { MetadataProjectSettings } from './deterministic/metadata';
 import type { LLMUsage } from '../providers/types';
 import type { OutputFile } from '../writer';
 
@@ -43,6 +45,10 @@ export interface DeterministicBuildOptions {
   slimRoot?: boolean;
   /** Merged into repairBuildPlan (e.g. subsystemGrouping for fewer instruction files). */
   repair?: RepairBuildPlanOptions;
+  /** Tool adapters to emit (from `.context-graph.json` / prompt). */
+  instructionTargets?: InstructionTargetId[];
+  /** Written into `.github/instructions/metadata.json` → `project`. */
+  projectMetadata?: MetadataProjectSettings;
 }
 
 export interface BuildPlanItem {

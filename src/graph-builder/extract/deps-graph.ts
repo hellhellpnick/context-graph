@@ -76,7 +76,10 @@ export function resolveInternalImport(
   return null;
 }
 
-export function buildDeterministicDependencyGraph(scan: ScanResult): string {
+export function buildDeterministicDependencyGraph(
+  scan: ScanResult,
+  opts?: { maxNodes?: number }
+): string {
   const files = scan.files.filter(f => f.tier !== 3 && f.content);
   const existing = new Set(files.map(f => f.path.replace(/\\/g, '/')));
 
@@ -95,7 +98,7 @@ export function buildDeterministicDependencyGraph(scan: ScanResult): string {
   const readsEnv = fileReadsEnvironment;
 
   // Cap nodes for very large repos to keep root file reasonable in deterministic mode.
-  const MAX_NODES = 140;
+  const MAX_NODES = opts?.maxNodes ?? 140;
   const selected = files.length <= MAX_NODES
     ? files
     : [

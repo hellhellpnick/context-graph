@@ -1,157 +1,236 @@
 # @hellpnick/context-graph
 
-CLI генерирует набор файлов **`.github/instructions/`** и **`.github/copilot-instructions.md`** из дерева репозитория — для Copilot / Cursor и похожих режимов.
+**English** · [Русский](./README.ru.md)
 
-- **`build --no-llm`** — без сети и без API-ключа, только статический разбор (удобно как база и для CI).
-- **`build` / `actualize` / `hybrid`** — при наличии ключа и провайдера текст и структура дополняются через LLM.
+CLI that turns a repository tree into an **AI routing graph**: `.github/instructions/` (per-subsystem `*.instructions.md`), root navigation, and optional tool-specific entrypoints (Cursor, Copilot, Claude Code, …).
 
-## Требования
+- **`build --no-llm`** — fully offline: deterministic scan, no API key, CI-friendly.
+- **`build` / `build --hybrid`** — optional LLM passes to enrich structure and notes when keys are configured.
+
+## Requirements
 
 - **Node.js 18+**
-- Репозиторий с **git** (корень проекта и опциональный pre-push hook).
+- A **git** repository at the project root (optional pre-push reminder hook).
 
-В вашем PHP / Python / Go проекте **не нужны** `tsconfig`, TypeScript в приложении и т.п.: публикуется уже собранный `dist/`, а пакет **`typescript`** тянется как обычная **зависимость** этого CLI (нужен рантайму для разбора `.ts`/`.vue` и т.д.).
+Your app repo does **not** need TypeScript or `tsconfig`. The published package ships compiled `dist/`; the `typescript` dependency is for parsing `.ts` / `.vue` during scan.
 
-## Установка
+## Install
 
 ```bash
 npm install -D @hellpnick/context-graph
 ```
 
-Первый прогон без LLM:
+First run (no network):
 
 ```bash
 npx context-graph build --no-llm
 ```
 
-Дальше — с облаком или Ollama: положи ключи в `.env` или создай `.context-graph.json` при первом интерактивном `build` без `--no-llm`.
+For cloud or local LLM: add keys to `.env`, or run interactive `build` once (without `--no-llm`) to create `.context-graph.json`.
 
-## Что появляется в репозитории
+## Quick start
 
-| Путь | Назначение |
-|------|------------|
-| `.github/instructions/` | Подсистемные `*.instructions.md`, `index.md`, при необходимости `metadata.json` |
-| `.github/copilot-instructions.md` | Корневой граф и навигация |
-| `.copilotignore` | Подсказка по исключениям для сканирования |
-| `.context-graph.json` | Конфиг (создаётся при первом интерактивном запуске) |
-| `.context-graph-last-build` | Ref последней сборки для diff (не обязателен в VCS) |
+```bash
+# Target repo
+cd /path/to/your-project
+npx context-graph build --no-llm
 
-**Имеет смысл коммитить:** `.github/instructions/`, `.github/copilot-instructions.md`, `.copilotignore`, при использовании Cursor — свой rule под граф, если завёл.
+# Or from anywhere
+npx context-graph build --no-llm /path/to/your-project
+```
 
-**Не коммитить:** `.env`, секреты, `.context-graph-last-build` (по желанию).
+Non-interactive CI (skip setup prompts):
 
-## Init-файлы (якоря для агентов)
+```bash
+export CONTEXT_GRAPH_INSTRUCTION_TARGETS=copilot,cursor
+export CONTEXT_GRAPH_INSTALL_AGENTS=false
+npx context-graph build --no-llm
+```
 
-При `build` / `build --no-llm` CLI дополнительно пишет короткие **роутеры** — они указывают на `.github/instructions/`, а не дублируют весь граф:
+## Generated artifacts
 
-| Путь | Инструмент |
-|------|------------|
+| Path | Role |
+|------|------|
+| `.github/instructions/` | Subsystem `*.instructions.md`, `index.md`, `context-graph-path-index.md`, optional `metadata.json` |
+| `.github/copilot-instructions.md` | Root graph and navigation |
+| `.copilotignore` | Standard ignore patterns written by build; also read on **next** scan |
+| `.context-graph.json` | Provider, strategy, instruction targets, grouping (created on first interactive run) |
+| `.context-graph-last-build` | Last build git ref for diff / `actualize` (optional in VCS) |
+
+**Commit:** `.github/instructions/`, `.github/copilot-instructions.md`, `.copilotignore`, and any tool entrypoints you use (e.g. `.cursor/rules/`, `CLAUDE.md`).
+
+**Do not commit:** `.env`, secrets, `.context-graph-last-build` (optional).
+
+## Tool entrypoints (`instructionTargets`)
+
+On `build`, short **routers** point agents at the graph instead of duplicating it:
+
+| Path | Tool |
+|------|------|
 | `CLAUDE.md` | Claude Code |
-| `AGENTS.md` | Cursor / Codex / общие агенты |
+| `AGENTS.md` | Cursor / Codex / generic agents |
 | `GEMINI.md` | Gemini |
-| `.github/copilot-instructions.md` | GitHub Copilot (корень) |
-| `.codex/context-graph.md` | Codex |
+| `.github/copilot-instructions.md` | GitHub Copilot |
+| `.codex/context-graph.md` | OpenAI Codex |
 | `.windsurf/rules/context-graph.md` | Windsurf |
 | `.clinerules/context-graph.md` | Cline |
 
-Содержимое: «читай `copilot-instructions.md` → `index.md` → подсистему по `applyTo`».
+Configure in `.context-graph.json`:
 
-## Приоритет P0 / P1 / P2
+```json
+{
+  "instructionTargets": ["copilot", "cursor", "claude"],
+  "installAgents": false
+}
+```
 
-Метка **срочности контекста** (не «важность бизнеса»):
+Or env: `CONTEXT_GRAPH_INSTRUCTION_TARGETS=copilot,cursor` (comma-separated, or `all`).
 
-| Уровень | Смысл | Примеры эвристик (`--no-llm`) |
-|---------|--------|-------------------------------|
-| **P0** | Всегда нужен при правках зоны | `pages/*`, composables, `src/index.ts`, entry CLI |
-| **P1** | Часто нужен | `package.json`, `src/graph-builder/**`, stores, крупные Vue |
-| **P2** | Редко / листья | тесты, prompt-модули, мелкие компоненты |
+## Excluding paths from the graph
 
-Где живёт:
+Scan order (later rules add to earlier):
 
-- frontmatter `priority:` в каждом `*.instructions.md`;
-- `metadata.json` → `files.<path>.priority` (per-file);
-- `context-graph-path-index.md` — колонка **P**.
+1. `.gitignore`
+2. `.copilotignore` (if present)
+3. **`.graph-context-ignore`** or **`.context-graph-ignore`** (context-graph only; gitignore syntax)
 
-Источник при `--no-llm`: `inferFilePriority` / `inferSubsystemPriority` (`src/graph-builder/plan/priority.ts`). При LLM/hybrid план может задать приоритеты в JSON; gap-fill и metadata подхватывают эвристики для пропусков.
+Example for a large Laravel app (focus backend):
 
-**Роутинг:** если несколько `*.instructions.md` матчат файл — предпочитай **выше** приоритет (P0 > P1 > P2). То же в `AGENTS.md` / `.codex/context-graph.md`.
+```gitignore
+resources/**
+docs/**
+tests/**
+*.min.js
+```
+
+Built-in **tier 3** always skips `node_modules/`, `vendor/`, lockfiles, binaries, etc.
+
+**Subsystem pass:** `INSTRUCTION_EXCLUDE_RE` drops README, all `*.md`, lockfiles, and config-only names from per-file instructions (they may still appear in the tree/metadata).
+
+> **Note:** `.copilotignore` affects **context-graph scanning** and is regenerated on build. GitHub Copilot’s official “content exclusion” is configured in GitHub settings, not necessarily via a repo file.
+
+## Priority P0 / P1 / P2
+
+Urgency for **context routing** (not business importance):
+
+| Level | Meaning | Examples (`--no-llm`) |
+|-------|---------|------------------------|
+| **P0** | Load when editing this zone | `pages/*`, composables, entry CLI, API controllers |
+| **P1** | Often needed | `package.json`, stores, core modules |
+| **P2** | Rare / leaf | tests, small components, mocks |
+
+Stored in: `priority:` frontmatter, `metadata.json`, and `context-graph-path-index.md`.
+
+When several `*.instructions.md` match a file, prefer **higher** priority (P0 > P1 > P2).
 
 ## Cursor rules
 
-Для **Cursor** (`build --no-llm` и hybrid) генерируются:
+With target `cursor` (default in many setups):
 
-| Путь | Роль |
+| Path | Role |
 |------|------|
-| `.cursor/rules/context-graph.mdc` | Общий роутер (всегда включён) |
-| `.cursor/rules/ctxgraph--*.mdc` | По одному rule на подсистему; `globs` = `applyTo` из плана |
-| `.cursor/rules/README.context-graph.md` | Пояснение |
-| `.cursor/rules/.context-graph-manifest` | Список сгенерированных rules |
+| `.cursor/rules/context-graph.mdc` | Global router (always on) |
+| `.cursor/rules/ctxgraph--*.mdc` | One rule per subsystem; `globs` = `applyTo` |
+| `.cursor/rules/README.context-graph.md` | Short explanation |
+| `.cursor/rules/.context-graph-manifest` | Generated rule list |
 
-При открытии файла Cursor подцепляет rule с подходящим glob — **без** ручного «прочитай instructions».
+Do **not** hand-edit `ctxgraph--*` — regenerate with `build`.
 
-Источник правды: `.github/instructions/*.instructions.md`. Файлы `ctxgraph--*` **не править вручную** — перезапишутся на следующем `build`.
+## Commands
 
-```bash
-context-graph build --no-llm
-```
+| Command | Action |
+|---------|--------|
+| `build [dir]` | Full graph from scratch |
+| `actualize [dir]` | Update from diff since last build (`--all` = full rescan) |
+| `validate [dir]` | Exit `1` if graph is stale (CI) |
+| `agents [dir]` | Fetch recommended agents into `.github/agents/` |
+| `review [dir]` | LLM quality report (no writes) |
+| `impact <file> [dir]` | LLM: blast radius of changing a file |
+| `hook-check [dir]` | Used by git pre-push hook |
 
-Copilot / Claude без Cursor по-прежнему опираются на корневой граф и `applyTo` в instructions; auto-attach по glob — особенность Cursor.
+### `build` flags
 
-## Команды
+| Flag | Effect |
+|------|--------|
+| `--no-llm` | Deterministic only |
+| `--hybrid` | Scaffold + LLM notes on selected subsystems |
+| `--provider` / `--model` | One-off override |
+| `--subsystem-grouping default\|by-folder` | One instruction per directory (large monorepos) |
+| `--subsystem-layout mirror\|canonical` | Path layout under `.github/instructions/` |
+| `--dry-run` | List files without writing |
+| `--no-hook` | Skip pre-push hook install |
+| `--json` / `--quiet` | Machine / silent output |
 
-| Команда | Действие |
-|---------|----------|
-| `build [dir]` | Собрать граф с нуля |
-| `actualize [dir]` | Обновить существующий граф (по умолчанию по diff с last-build; `--all` — весь проект) |
-| `validate [dir]` | Exit `1`, если граф устарел относительно last-build (для CI) |
-| `review [dir]` | Отчёт LLM по качеству графа, файлы не перезаписывает |
-| `impact <file> [dir]` | LLM: что затронет изменение файла |
-| `hook-check [dir]` | Внутренняя: вызывается из git pre-push |
+## Build strategies
 
-Полезные флаги `build`:
+| Strategy | Config / CLI | Behavior |
+|----------|----------------|----------|
+| **deterministic** | `--no-llm` or `"buildStrategy": "deterministic"` | Scan + heuristics + PHP/Laravel routing extract; no network |
+| **hybrid** | `--hybrid` or `"buildStrategy": "hybrid"` | Deterministic files + LLM notes on top subsystems |
+| **llm** | default when API key present | Full multipass LLM plan |
 
-- `--no-llm` — только детерминированная генерация.
-- `--provider` / `--model` — переопределить провайдера и модель на один запуск.
-- `--no-hook` — не ставить pre-push hook.
+**Large PHP / Laravel:** auto **`by-folder`** grouping when `artisan` + `composer.json` are detected (avoids one instruction per file under `app/`).
 
-## Провайдеры
+**Slim root:** `copilot-instructions.md` switches to a compact hub when the project has ≥40 subsystems or ≥80 source files (or when `contextDepth` is `slim`).
 
-| `provider` | Когда |
-|------------|--------|
+## Providers
+
+| `provider` | When |
+|------------|------|
 | `openai` | `OPENAI_API_KEY` |
 | `anthropic` | `ANTHROPIC_API_KEY` |
-| `ollama` | Локально, отдельного секрета нет, нужен `ollama serve` и модель |
-| `openai-compat` | Любой OpenAI-совместимый `baseUrl` + ключ из `apiKeyEnv` |
+| `ollama` | Local `ollama serve` + model (no cloud key) |
+| `openai-compat` | Custom `baseUrl` + `apiKeyEnv` |
 
-Приоритет настроек: **аргументы CLI** → **переменные окружения** (`CONTEXT_GRAPH_*` и ключи) → **`.context-graph.json`** → значения по умолчанию.
+**Precedence:** CLI flags → `CONTEXT_GRAPH_*` env → `.context-graph.json` → defaults.
 
-Переменные с префиксом `CONTEXT_GRAPH_` см. в `src/config.ts` или сгенерируй конфиг интерактивно один раз.
+### Environment variables
 
-## Контекст в промпте: `slim` и `full`
+| Variable | Purpose |
+|----------|---------|
+| `CONTEXT_GRAPH_ROOT` | Project root when cwd is not the repo |
+| `CONTEXT_GRAPH_PROVIDER` | `openai` \| `anthropic` \| `ollama` \| `openai-compat` |
+| `CONTEXT_GRAPH_MODEL` | Model id |
+| `CONTEXT_GRAPH_BASE_URL` | OpenAI-compatible base URL |
+| `CONTEXT_GRAPH_BUILD_STRATEGY` | `deterministic` \| `hybrid` \| `llm` |
+| `CONTEXT_GRAPH_CONTEXT_DEPTH` | `slim` \| `full` (prompt size; `slim` default for ollama) |
+| `CONTEXT_GRAPH_MAX_FILES` | Scan file cap (default 200) |
+| `CONTEXT_GRAPH_MAX_INPUT_TOKENS` | Scan token budget (default 80000) |
+| `CONTEXT_GRAPH_INSTRUCTION_TARGETS` | e.g. `copilot,cursor` or `all` |
+| `CONTEXT_GRAPH_INSTALL_AGENTS` | `true` \| `false` |
+| `CONTEXT_GRAPH_SUBSYSTEM_GROUPING` | `default` \| `by-folder` |
+| `CONTEXT_GRAPH_SUBSYSTEM_LAYOUT` | `mirror` \| `canonical` |
+| `CONTEXT_GRAPH_HYBRID_MAX_SUBSYSTEMS` | Hybrid LLM note count |
+| `CONTEXT_GRAPH_OUTPUT_STYLE` | `normal` \| `compact` |
 
-- **`full`** — в LLM уходит больше текста из скана.
-- **`slim`** — тела файлов урезаются по строкам; для `ollama` по умолчанию включён `slim`, чтобы не раздувать вход.
+### Example `.context-graph.json`
 
-Поле в JSON: `"contextDepth": "slim"` или `"full"`, либо `CONTEXT_GRAPH_CONTEXT_DEPTH`.
+```json
+{
+  "provider": "openai",
+  "model": "gpt-4o-mini",
+  "buildStrategy": "deterministic",
+  "contextDepth": "full",
+  "subsystemGrouping": "by-folder",
+  "instructionTargets": ["copilot", "cursor", "agents"],
+  "installAgents": false,
+  "maxFiles": 300,
+  "maxInputTokens": 120000
+}
+```
 
-## Pre-push hook
+## Scan tiers
 
-После `build` (если не `--no-hook`) в `.git/hooks/pre-push` добавляется напоминание: много ли значимых файлов изменилось с последней сборки. Ответ **N** по умолчанию, push **не блокируется**. В CI / без TTY лишнего шума нет.
+| Tier | Treatment |
+|------|-----------|
+| **0** | CI, Docker, makefiles — full text (within budget) |
+| **1** | Entrypoints & manifests (`package.json`, `composer.json`, `artisan`, …) — full |
+| **2** | Source — **surface** (default ~30 lines; more for composables, Vue `<script>`, `.py`/`.go`) |
+| **3** | Skipped — `node_modules`, `vendor`, locks, images, minified assets |
 
-Отключить один раз: `git push --no-verify`. Навсегда: удалить или отредактировать hook.
+Exports/imports for deterministic mode use regex + TypeScript parser where applicable.
 
-## Как устроен скан
-
-Файлам задаётся tier; tier **3** (lock-файлы, бинарники, `node_modules`, …) не читается.
-
-- **0** — CI, Docker, makefile-уровень: целиком в контексте.
-- **1** — entrypoints и корневые манифесты (`package.json`, `composer.json`, `go.mod`, `pyproject.toml`, `artisan`, …): целиком (с ограничением по бюджету токенов).
-- **2** — остальной код: не весь файл, а **поверхность** (например 30 строк по умолчанию; для composables, Vue `<script>`, `.py`/`.go` — больше, см. `scanner.ts`).
-- Экспорты/импорты для детерминированного режима вытаскиваются эвристиками и через `typescript` там, где это уместно (в т.ч. из Vue SFC).
-
-Лимиты по умолчанию: порядка **200 файлов** и **80k** условных токенов на скан — настраиваются в конфиге.
-
-## Программный API
+## Programmatic API
 
 ```ts
 import { scanProject, buildGraph, writeOutputFiles, loadConfig } from '@hellpnick/context-graph';
@@ -162,26 +241,26 @@ const { files } = await buildGraph(scan, config, 'BUILD');
 writeOutputFiles(files, process.cwd());
 ```
 
-## Python-обёртка
+## Python wrapper
 
-В каталоге `python/` лежит обёртка с entrypoint `context-graph` (см. `python/pyproject.toml`). На PyPI пакет может называться иначе — ориентируйся на фактическое имя публикации; под капотом всё равно нужен **Node 18+**.
+See [`python/README.md`](./python/README.md). Entrypoint `context-graph` in `python/pyproject.toml`; **Node 18+** is still required underneath.
 
-## Разработка этого репозитория
+## Developing this repo
 
 ```bash
-git clone https://github.com/hellhellpnick/context-graph.git
+git clone git@github.com:hellhellpnick/context-graph.git
 cd context-graph
 npm install
 npm run build
 npm test
-npm link   # опционально: тест в другом проекте
+npm link   # optional: test CLI in another project
 ```
 
-## Ссылки
+## Links
 
-- [graph-create-agent.md](./graph-create-agent.md) — системный промпт для LLM-проходов.
-- [Документация Copilot: custom instructions](https://docs.github.com/en/copilot/customizing-copilot/adding-custom-instructions-for-github-copilot)
+- [graph-create-agent.md](./graph-create-agent.md) — LLM system prompt for graph passes
+- [Copilot: custom instructions](https://docs.github.com/en/copilot/customizing-copilot/adding-custom-instructions-for-github-copilot)
 
-## Лицензия
+## License
 
 MIT

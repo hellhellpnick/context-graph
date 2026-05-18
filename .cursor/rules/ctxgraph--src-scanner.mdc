@@ -8,7 +8,7 @@ alwaysApply: false
 - editing or refactoring `scanner.ts`
 
 ## Overview
-- `src/scanner.ts` (344 lines · 7 top-level symbols) — Root files with gitignore-style rules, scanned after `.gitignore` / `.copilotignore`.
+- `src/scanner.ts` (344 lines · 7 top-level symbols) — Mirror — `src/scanner.ts`
 
 ## Graph
 ```mermaid

@@ -2,14 +2,14 @@
 description: "Mirror — `src/scanner.ts`"
 applyTo: "src/scanner.ts"
 priority: "P0"
-last_updated: "2026-05-15"
+last_updated: "2026-05-18"
 ---
 
 ## When to Read
 - editing or refactoring `scanner.ts`
 
 ## Overview
-- `src/scanner.ts` (344 lines · 7 top-level symbols) — Root files with gitignore-style rules, scanned after `.gitignore` / `.copilotignore`.
+- `src/scanner.ts` (344 lines · 7 top-level symbols) — Mirror — `src/scanner.ts`
 
 ## Graph
 ```mermaid

@@ -7,6 +7,7 @@ import { registerImpactCommand } from './commands/impact';
 import { registerValidateCommand } from './commands/validate';
 import { registerHookCheckCommand } from './commands/hook-check';
 import { registerAgentsCommand } from './commands/agents';
+import { registerResolveCommand } from './commands/resolve';
 
 export const program = new Command();
 
@@ -22,3 +23,4 @@ registerImpactCommand(program);
 registerValidateCommand(program);
 registerHookCheckCommand(program);
 registerAgentsCommand(program);
+registerResolveCommand(program);

@@ -1,20 +1,22 @@
 ---
-description: "Mirror — `.npmignore`"
+description: "Mirror — `./` (2 files)"
 applyTo: ".npmignore"
 priority: "P2"
-last_updated: "2026-05-15"
+last_updated: "2026-05-18"
 ---
 
 ## When to Read
 - editing or refactoring `.npmignore`
+- editing or refactoring `Untitled`
 
 ## Overview
-- `.npmignore` (16 lines) — Mirror — `.npmignore`
+- `.npmignore` (16 lines) — Mirror — `./` (2 files)
+- `Untitled` (2 lines) — Mirror — `./` (2 files)
 
 ## Graph
 ```mermaid
 graph LR
-  node[]
+  Root_files[Root files]
 ```
 
 ## Signatures
@@ -44,6 +46,13 @@ tsconfig.json
 *.md.instructions.md
 python/
 
+```
+
+### `Untitled`
+
+```typescript
+   "complexity": "low",
+      "danger_zone": false,
 ```
 
 ## Dependencies

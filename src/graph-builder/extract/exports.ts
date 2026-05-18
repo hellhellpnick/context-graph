@@ -2,10 +2,16 @@ import ts from 'typescript';
 import path from 'path';
 import type { ScanResult } from '../../scanner';
 import {
+  PHP_BUNDLE_INDEX_TAIL,
+  PHP_BUNDLE_ROUTING_FILE_CAP,
+} from '../constants';
+import {
   extractGoSymbolLines,
   extractPhpSymbolLines,
   extractPythonSymbolLines,
   compactTsExportLine,
+  buildPhpOneLineSummary,
+  buildPhpRoutingSignatures,
   buildVueRoutingSignatures,
   extractScriptSkeleton,
   extractVueComputedBranches,
@@ -52,6 +58,14 @@ export function formatAttachedJSDocBlocks(sf: ts.SourceFile, node: ts.Node): str
 export function extractExports(scan: ScanResult, sourceFiles: string[]): string {
   const sourcePaths = new Set(sourceFiles);
   const out: string[] = [];
+
+  const phpPathsInBundle = sourceFiles.filter(p => /\.php$/i.test(p)).sort();
+  const phpCap =
+    phpPathsInBundle.length > PHP_BUNDLE_ROUTING_FILE_CAP
+      ? PHP_BUNDLE_ROUTING_FILE_CAP
+      : phpPathsInBundle.length;
+  const phpIncluded = new Set(phpPathsInBundle.slice(0, phpCap));
+  const phpOmitted = phpPathsInBundle.length - phpCap;
 
   const isTsJsLike = (p: string) => /\.(ts|tsx|js|jsx|mjs|cjs)$/i.test(p);
 
@@ -121,6 +135,7 @@ export function extractExports(scan: ScanResult, sourceFiles: string[]): string 
 
   for (const f of scan.files) {
     if (!sourcePaths.has(f.path) || !f.content) continue;
+    if (/\.php$/i.test(f.path) && phpOmitted > 0 && !phpIncluded.has(f.path)) continue;
     const fileExports: string[] = [];
     const { body, virtualPath } = scriptOrSelfForAnalysis(f.path, f.content);
 
@@ -135,12 +150,11 @@ export function extractExports(scan: ScanResult, sourceFiles: string[]): string 
 
     if (fileExports.length === 0 && /\.php$/i.test(f.path)) {
       const { bullets: runtime } = extractRuntimeSection(f.path, f.content);
-      fileExports.push('// PHP module');
+      fileExports.push(...buildPhpRoutingSignatures(f.path, body));
       if (runtime.length > 0) {
         fileExports.push('// runtime:');
         for (const r of runtime) fileExports.push(`// - ${r}`);
       }
-      fileExports.push(...extractPhpSymbolLines(body));
     }
 
     if (fileExports.length === 0 && /\.py$/i.test(f.path)) {
@@ -236,6 +250,21 @@ export function extractExports(scan: ScanResult, sourceFiles: string[]): string 
     }
   }
 
+  if (phpOmitted > 0) {
+    out.push(
+      `// … +${phpOmitted} more .php in this folder — search path-index by filename`,
+      ''
+    );
+    for (const p of phpPathsInBundle.slice(phpCap, phpCap + PHP_BUNDLE_INDEX_TAIL)) {
+      const scanned = scan.files.find(f => f.path === p);
+      if (scanned?.content) out.push(buildPhpOneLineSummary(p, scanned.content));
+    }
+    if (phpOmitted > PHP_BUNDLE_INDEX_TAIL) {
+      out.push(`// … +${phpOmitted - PHP_BUNDLE_INDEX_TAIL} more`);
+    }
+    out.push('');
+  }
+
   return out.length > 0 ? out.join('\n') : '(no exports — see ## Source for full script)';
 }
 
@@ -249,9 +278,11 @@ export function shouldIncludeDeterministicSource(
   exportBlock: string
 ): boolean {
   if (sourceFiles.every(p => /\.vue$/i.test(p))) return false;
+  if (sourceFiles.every(p => /\.php$/i.test(p))) return false;
   if (!exportBlock.trim() || /no exports/i.test(exportBlock)) return true;
   if (exportBlock.length < 100) return true;
-  if (sourceFiles.some(p => /\.(php|py|go|cs)$/i.test(p))) return true;
+  if (/routing summary/i.test(exportBlock) && exportBlock.length >= 180) return false;
+  if (sourceFiles.some(p => /\.(py|go|cs)$/i.test(p)) && exportBlock.length < 180) return true;
   if (sourceFiles.every(p => isMessageOrPromptPath(p))) return false;
 
   for (const sf of sourceFiles) {

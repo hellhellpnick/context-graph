@@ -2,14 +2,14 @@
 description: "Mirror — `src/graph-builder/discovery.ts`"
 applyTo: "src/graph-builder/discovery.ts"
 priority: "P1"
-last_updated: "2026-05-15"
+last_updated: "2026-05-18"
 ---
 
 ## When to Read
 - editing or refactoring `discovery.ts`
 
 ## Overview
-- `src/graph-builder/discovery.ts` (55 lines · 2 top-level symbols) — @internal kept for fallback only
+- `src/graph-builder/discovery.ts` (55 lines · 2 top-level symbols) — Mirror — `src/graph-builder/discovery.ts`
 
 ## Graph
 ```mermaid

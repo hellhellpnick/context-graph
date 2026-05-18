@@ -5,54 +5,139 @@ alwaysApply: false
 ---
 
 ## When to Read
-- editing or refactoring `ctxgraph--cursor-rules-bundle.mdc`
-- editing or refactoring `ctxgraph--npmignore.mdc`
-- editing or refactoring `ctxgraph--python-context-graph-bundle.mdc`
-- editing or refactoring `ctxgraph--scripts-split-graph-builder.mdc`
+- editing or refactoring `ctxgraph--src-config.mdc`
+- editing or refactoring `ctxgraph--src-framework-extract.mdc`
+- editing or refactoring `ctxgraph--src-graph-builder-constants.mdc`
+- editing or refactoring `ctxgraph--src-graph-builder-cost.mdc`
 
 ## Overview
-- `.cursor/rules/ctxgraph--cursor-rules-bundle.mdc` (58 lines) — # When to Read
-- `.cursor/rules/ctxgraph--npmignore.mdc` (52 lines) — # When to Read
-- `.cursor/rules/ctxgraph--python-context-graph-bundle.mdc` (129 lines) — # When to Read
-- `.cursor/rules/ctxgraph--scripts-split-graph-builder.mdc` (49 lines · 3 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--src-config.mdc` (82 lines · 16 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--src-framework-extract.mdc` (51 lines · 10 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--src-graph-builder-constants.mdc` (67 lines · 19 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--src-graph-builder-cost.mdc` (35 lines · 1 top-level symbols) — # When to Read
 
 ## Graph
 ```mermaid
 graph LR
   Rules[Rules]
   Rules --> node[""]
+  Rules --> ENV{{"env / config"}}
 ```
 
 ## Signatures
 
 ```typescript
-(no exports — see ## Source for full script)
+// ── .cursor/rules/ctxgraph--src-config.mdc ──
+// ── src/config.ts ──
+export type { InstructionTargetId } from './instruction-targets'
+export { INSTRUCTION_TARGET_IDS, INSTRUCTION_TARGET_LABELS, hasConfiguredInstructionTargets, hasConfiguredInstallAgents, needsInstructionTargetSetup, needsInstallAgentsSetup, needsDeterministicPreferencesSetup, normalizeInstructionTarget…
+export { projectGraphExists } from './project-graph'
+/** `slim` = smaller prompts for local LLMs (truncated bodies + shorter root pass). */
+export type ContextDepth = 'full' | 'slim';
+export type BuildStrategy = 'llm' | 'hybrid' | 'deterministic';
+export type OutputStyle = 'normal' | 'compact';
+/** How gap-filled / deterministic subsystems group source files (see repairBuildPlan). */
+export type SubsystemGrouping = 'default' | 'by-folder';
+/** Where instruction files live under `.github/instructions/`: mirror repo paths vs legacy core/infra. */
+export type SubsystemLayout = 'mirror' | 'canonical';
+export interface Config { /* prompt template (~29 lines) */ }
+export const MODEL_MAX_OUTPUT_TOKENS: Record<string, number> = { /* ~24 lines */ }
+export function getModelMaxTokens(model: string): number { // Exact match first, then prefix match (e.g. 'gpt-4o-2024-11-20' → 'gpt-4o') if (MODEL_MAX_OUTPUT_TOKENS[model]) return MODEL_MAX_OUTPUT_TOKENS[model]; for (const key of Object.…
+/** Ollama does not use a real API key (see `openai.ts` placeholder). */
+export function providerAllowsMissingApiKey(provider: ProviderConfig['provider']): boolean { return provider === 'ollama'; }
+export function loadConfig(projectRoot: string): Config { /* ~130 lines */ }
+/** Raw `.context-graph.json` object (for target prompt / merge writes). */
+export function readConfigFile(projectRoot: string): ConfigFile { const configPath = path.join(projectRoot, '.context-graph.json'); if (!fs.existsSync(configPath)) return {}; try { return JSON.parse(fs.readFileSync(configPath, 'utf8')) a…
+export function initConfig( projectRoot: string, providerName?: string, model?: string ): boolean { /* ~24 lines */ }
+export async function initConfigInteractive(projectRoot: string): Promise<boolean> { /* ~56 lines */ }
+
+// ── .cursor/rules/ctxgraph--src-framework-extract.mdc ──
+// ── src/framework-extract.ts ──
+export type FrameworkId = | 'nuxt' | 'vue' | 'react' | 'next' | 'angular' | 'python' | 'php' | 'csharp';
+/** Detect stacks present in a file (path + content). */
+export function detectFrameworks(relPath: string, content: string): FrameworkId[] { /* ~40 lines */ }
+export function extractCSharpSymbolLines(cs: string): string[] { /* ~23 lines */ }
+export function extractRuntimeSection( relPath: string, content: string ): { /* ~39 lines */ }
+export function extractDeterministicErrorsForFile( relPath: string, content: string, fileLabel?: string ): string[] { /* ~24 lines */ }
+export function extractSideEffectsForFile(relPath: string, content: string): string[] { /* ~21 lines */ }
+/** Extra split-score boosts per detected stack. */
+export function frameworkSplitScoreBoost(relPath: string, content: string): number { /* ~33 lines */ }
+/** Import buckets for Dependencies section. */
+export function classifyFrameworkImports(deps: string[]): { /* ~25 lines */ }
+/** Split score including all framework heuristics. */
+export function instructionSplitScoreFull(relPath: string, content: string, lines?: number): number { return instructionSplitScore(relPath, content, lines) + frameworkSplitScoreBoost(relPath, content); }
+export function needsOwnInstructionFile(relPath: string, content: string, lines?: number): boolean { const norm = relPath.replace(/\\/g, '/'); const top = norm.split('/')[0]; if (['src', 'lib', 'app', 'cmd', 'internal'].includes(top)) re…
+
+// ── .cursor/rules/ctxgraph--src-graph-builder-constants.mdc ──
+// ── src/graph-builder/constants.ts ──
+/** Shared constants for graph-builder. */
+export const OUTPUT_FORMAT_INSTRUCTION = ` --- ## MANDATORY OUTPUT FORMAT You MUST wrap every output file in these exact delimiters. No prose outside the blocks. <<<FILE: path/relative/to/project/r… { /* prompt template (~23 lines) */ }
+/** Per-file instruction split for TS/Go-style trees — not Laravel `app/` (use by-folder there). */
+export const SPLIT_DIRS = new Set(['src', 'lib', 'cmd', 'internal']);
+export const MAX_SOURCE_FILES_PER_AUTO_SUBSYSTEM_DEFAULT = 4;
+/** Default cap for `by-folder` grouping when config does not override. */
+export const MAX_FILES_PER_FOLDER_SUBSYSTEM_DEFAULT = 48;
+/** Auto slim `copilot-instructions.md` when plan has at least this many subsystems. */
+export const ROOT_SLIM_AUTO_SUBSYSTEM_THRESHOLD = 40;
+/** Auto slim when total mapped source files exceed this (e.g. Laravel `app/` one-file-per-subsystem). */
+export const ROOT_SLIM_AUTO_SOURCE_FILES_THRESHOLD = 80;
+/** Max tier-1 paths listed in root Data Flow (non-slim included). */
+export const ROOT_DATA_FLOW_ENTRY_CAP = 12;
+/** Max Quick Navigation entries in slim root (plus path-index pointer). */
+export const ROOT_SLIM_QUICK_NAV_CAP = 40;
+/** Max directory groups in slim Architecture Overview. */
+export const ROOT_SLIM_ARCH_GROUP_CAP = 28;
+/** Max mermaid nodes in slim root dependency graph. */
+export const ROOT_SLIM_DEP_GRAPH_MAX_NODES = 48;
+/** Max env/danger file bullets in slim root. */
+export const ROOT_SLIM_DANGER_CAP = 24;
+/** Max per-file PHP routing blocks in one folder bundle instruction. */
+export const PHP_BUNDLE_ROUTING_FILE_CAP = 36;
+/** Extra one-line PHP index rows after cap. */
+export const PHP_BUNDLE_INDEX_TAIL = 16;
+/**
+ * Files that should NOT get their own instruction subsystem.
+ * Documentation, non-code configs, lock-files, images, etc.
+ * They are still present in the scan (for metadata.json / tree) but excluded from subsystem passes.
+ */
+export const INSTRUCTION_EXCLUDE_RE = [ /^README(\..+)?$/i, /^EXAMPLES(\..+)?$/i, /^CONTRIBUTING(\..+)?$/i, /^CHANGELOG(\..+)?$/i, /^LICENSE(\..+)?$/i, /^CODE_OF_CONDUCT(\..+)?$/i, /^\.gitignore$/,… { /* ~44 lines */ }
+export const DIR_TO_INSTRUCTION_PREFIX: Record<string, string> = { src: 'core', lib: 'core', app: 'core', internal: 'core', cmd: 'core', 'src/providers': 'infra', python: 'python', scripts: 'infra', '.github': 'infra', };
+export const MAX_MIRROR_INSTRUCTION_REL_LEN = 200;
+export const SOURCE_EXT_RE = /\.(ts|tsx|js|jsx|mjs|cjs|vue|py|go|rs|java|kt|cs|rb|php)$/i;
+/** Baseline .copilotignore patterns (gitignore syntax; ** matches any depth). */
+export const COPILOTIGNORE_BASELINE: readonly string[] = [ '**/node_modules/', '**/dist/', '**/build/', '**/coverage/', '**/.nyc_output/', '**/__pycache__/', '**/.venv/', '**/venv/', '**/.git/', '**/vendor/', '**/.next/', '**/.nuxt/', '*…
+export const PRICING: Record<string, { /* ~16 lines */ }
+
+// ── .cursor/rules/ctxgraph--src-graph-builder-cost.mdc ──
+// ── src/graph-builder/cost.ts ──
+export function estimateCost(model: string, usage: LLMUsage): number | null { const pricing = PRICING[model]; if (!pricing) { const key = Object.keys(PRICING).find(k => model.startsWith(k)); if (!key) return null; const p = PRICING[key];…
+
 ```
-
-## Source
-
-### `.cursor/rules/ctxgraph--cursor-rules-bundle.mdc`
-
-_Prompt/message module — see ## Signatures; open repo file to edit templates._
-
-### `.cursor/rules/ctxgraph--npmignore.mdc`
-
-_Prompt/message module — see ## Signatures; open repo file to edit templates._
-
-### `.cursor/rules/ctxgraph--python-context-graph-bundle.mdc`
-
-_Prompt/message module — see ## Signatures; open repo file to edit templates._
-
-### `.cursor/rules/ctxgraph--scripts-split-graph-builder.mdc`
-
-_Prompt/message module — see ## Signatures; open repo file to edit templates._
 
 ## Dependencies
 **External:**
 - ``
 
 ## Danger Zone 🔴
+- **[env]** reads `process.env.CONTEXT_GRAPH_PROVIDER`
+- **[env]** reads `process.env.CONTEXT_GRAPH_BASE_URL`
+- **[env]** reads `process.env.CONTEXT_GRAPH_CONTEXT_DEPTH`
+- **[env]** reads `process.env.CONTEXT_GRAPH_BUILD_STRATEGY`
+- **[env]** reads `process.env.CONTEXT_GRAPH_HYBRID_MAX_SUBSYSTEMS`
+- **[env]** reads `process.env.CONTEXT_GRAPH_HYBRID_NOTES_MODE`
+- **[env]** reads `process.env.CONTEXT_GRAPH_OUTPUT_STYLE`
+- **[env]** reads `process.env.CONTEXT_GRAPH_SUBSYSTEM_GROUPING`
+- **[env]** reads `process.env.CONTEXT_GRAPH_MAX_FILES_PER_FOLDER_SUBSYSTEM`
+- **[env]** reads `process.env.CONTEXT_GRAPH_SUBSYSTEM_LAYOUT`
+- **[env]** reads `process.env.CONTEXT_GRAPH_INSTRUCTION_TARGETS`
+- **[env]** reads `process.env.CONTEXT_GRAPH_INSTALL_AGENTS`
+- **[env]** reads `process.env.CONTEXT_GRAPH_MODEL`
+- **[env]** reads `process.env.CONTEXT_GRAPH_MAX_OUTPUT_TOKENS`
+- **[env]** reads `process.env.CONTEXT_GRAPH_MAX_FILES`
+- **[env]** reads `process.env.CONTEXT_GRAPH_MAX_INPUT_TOKENS`
 - **[fs]** filesystem I/O
+- **[env]** getenv('${m[1]}')
+- **[env]** env('${m[1]}')
 
 <!-- context-graph: generated from `.github/instructions/.cursor/rules/_bundle_p6.instructions.md` -->
 _Regenerate: `context-graph build --no-llm` · Do not hand-edit this rule._

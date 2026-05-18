@@ -225,6 +225,13 @@ export function buildDeterministicSubsystemFile(
   const includeSource = shouldIncludeDeterministicSource(scan, sourceFiles, exportBlock);
   const sourceSection = includeSource ? buildDeterministicSourceSection(scan, sourceFiles) : [];
 
+  const DEP_LIST_CAP = 12;
+  const capDepList = (list: string[]) => {
+    if (list.length <= DEP_LIST_CAP) return list;
+    const rest = list.length - DEP_LIST_CAP;
+    return [...list.slice(0, DEP_LIST_CAP), `… +${rest} more (open repo for full list)`];
+  };
+
   const hasPhp = sourceFiles.some(p => /\.php$/i.test(p));
   const allPhp = hasPhp && sourceFiles.every(p => /\.php$/i.test(p));
   const allPy = sourceFiles.every(p => /\.py$/i.test(p));
@@ -276,11 +283,23 @@ export function buildDeterministicSubsystemFile(
       ? [`## ${runtimeSectionTitle}`, ...runtimeLines.map(l => `- ${l}`), '']
       : []),
     '## Dependencies',
-    ...(internalDeps.length > 0 ? ['**Internal:**', ...internalDeps.map(d => `- \`${d}\``), ''] : []),
-    ...(nuxtDeps.length > 0 ? ['**Nuxt:**', ...nuxtDeps.map(d => `- \`${d}\``), ''] : []),
-    ...(nextDeps.length > 0 ? ['**Next.js:**', ...nextDeps.map(d => `- \`${d}\``), ''] : []),
-    ...(angularDeps.length > 0 ? ['**Angular:**', ...angularDeps.map(d => `- \`${d}\``), ''] : []),
-    ...(externalDeps.length > 0 ? ['**External:**', ...externalDeps.map(d => `- \`${d}\``), ''] : []),
+    ...(internalDeps.length > 0
+      ? ['**Internal:**', ...capDepList(internalDeps).map(d => `- \`${d}\``), '']
+      : []),
+    ...(nuxtDeps.length > 0 ? ['**Nuxt:**', ...capDepList(nuxtDeps).map(d => `- \`${d}\``), ''] : []),
+    ...(nextDeps.length > 0 ? ['**Next.js:**', ...capDepList(nextDeps).map(d => `- \`${d}\``), ''] : []),
+    ...(angularDeps.length > 0
+      ? ['**Angular:**', ...capDepList(angularDeps).map(d => `- \`${d}\``), '']
+      : []),
+    ...(externalDeps.length > 0
+      ? [
+          allPhp && externalDeps.length > DEP_LIST_CAP
+            ? `**External:** (${externalDeps.length} imports — graph shows top edges)`
+            : '**External:**',
+          ...capDepList(externalDeps).map(d => `- \`${d}\``),
+          '',
+        ]
+      : []),
     ...(internalDeps.length === 0 &&
     externalDeps.length === 0 &&
     nuxtDeps.length === 0 &&

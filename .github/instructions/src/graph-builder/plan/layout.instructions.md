@@ -2,14 +2,14 @@
 description: "Mirror — `src/graph-builder/plan/layout.ts`"
 applyTo: "src/graph-builder/plan/layout.ts"
 priority: "P1"
-last_updated: "2026-05-15"
+last_updated: "2026-05-18"
 ---
 
 ## When to Read
 - editing or refactoring `layout.ts`
 
 ## Overview
-- `src/graph-builder/plan/layout.ts` (159 lines · 8 top-level symbols) — Copilot prompts expect several concrete use cases; pad short auto-generated lists.
+- `src/graph-builder/plan/layout.ts` (159 lines · 8 top-level symbols) — Mirror — `src/graph-builder/plan/layout.ts`
 
 ## Graph
 ```mermaid

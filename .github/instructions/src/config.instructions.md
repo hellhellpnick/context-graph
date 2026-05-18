@@ -2,19 +2,20 @@
 description: "Mirror — `src/config.ts`"
 applyTo: "src/config.ts"
 priority: "P0"
-last_updated: "2026-05-15"
+last_updated: "2026-05-18"
 ---
 
 ## When to Read
 - editing or refactoring `config.ts`
 
 ## Overview
-- `src/config.ts` (335 lines · 12 top-level symbols) — `slim` = smaller prompts for local LLMs (truncated bodies + shorter root pass).
+- `src/config.ts` (392 lines · 16 top-level symbols) — Mirror — `src/config.ts`
 
 ## Graph
 ```mermaid
 graph LR
   config[config]
+  config --> instruction_targets[instruction-targets]
   config --> types[types]
   config --> dotenv["dotenv"]
   config --> ENV{{"env / config"}}
@@ -24,6 +25,9 @@ graph LR
 
 ```typescript
 // ── src/config.ts ──
+export type { InstructionTargetId } from './instruction-targets'
+export { INSTRUCTION_TARGET_IDS, INSTRUCTION_TARGET_LABELS, hasConfiguredInstructionTargets, hasConfiguredInstallAgents, needsInstructionTargetSetup, needsInstallAgentsSetup, needsDeterministicPreferencesSetup, normalizeInstructionTarget…
+export { projectGraphExists } from './project-graph'
 /** `slim` = smaller prompts for local LLMs (truncated bodies + shorter root pass). */
 export type ContextDepth = 'full' | 'slim';
 export type BuildStrategy = 'llm' | 'hybrid' | 'deterministic';
@@ -32,12 +36,14 @@ export type OutputStyle = 'normal' | 'compact';
 export type SubsystemGrouping = 'default' | 'by-folder';
 /** Where instruction files live under `.github/instructions/`: mirror repo paths vs legacy core/infra. */
 export type SubsystemLayout = 'mirror' | 'canonical';
-export interface Config { /* prompt template (~25 lines) */ }
+export interface Config { /* prompt template (~29 lines) */ }
 export const MODEL_MAX_OUTPUT_TOKENS: Record<string, number> = { /* ~24 lines */ }
 export function getModelMaxTokens(model: string): number { // Exact match first, then prefix match (e.g. 'gpt-4o-2024-11-20' → 'gpt-4o') if (MODEL_MAX_OUTPUT_TOKENS[model]) return MODEL_MAX_OUTPUT_TOKENS[model]; for (const key of Object.…
 /** Ollama does not use a real API key (see `openai.ts` placeholder). */
 export function providerAllowsMissingApiKey(provider: ProviderConfig['provider']): boolean { return provider === 'ollama'; }
-export function loadConfig(projectRoot: string): Config { /* ~118 lines */ }
+export function loadConfig(projectRoot: string): Config { /* ~130 lines */ }
+/** Raw `.context-graph.json` object (for target prompt / merge writes). */
+export function readConfigFile(projectRoot: string): ConfigFile { const configPath = path.join(projectRoot, '.context-graph.json'); if (!fs.existsSync(configPath)) return {}; try { return JSON.parse(fs.readFileSync(configPath, 'utf8')) a…
 export function initConfig( projectRoot: string, providerName?: string, model?: string ): boolean { /* ~24 lines */ }
 export async function initConfigInteractive(projectRoot: string): Promise<boolean> { /* ~56 lines */ }
 
@@ -45,6 +51,7 @@ export async function initConfigInteractive(projectRoot: string): Promise<boolea
 
 ## Dependencies
 **Internal:**
+- `src/instruction-targets`
 - `src/providers/types`
 
 **External:**
@@ -64,6 +71,8 @@ export async function initConfigInteractive(projectRoot: string): Promise<boolea
 - **[env]** reads `process.env.CONTEXT_GRAPH_SUBSYSTEM_GROUPING`
 - **[env]** reads `process.env.CONTEXT_GRAPH_MAX_FILES_PER_FOLDER_SUBSYSTEM`
 - **[env]** reads `process.env.CONTEXT_GRAPH_SUBSYSTEM_LAYOUT`
+- **[env]** reads `process.env.CONTEXT_GRAPH_INSTRUCTION_TARGETS`
+- **[env]** reads `process.env.CONTEXT_GRAPH_INSTALL_AGENTS`
 - **[env]** reads `process.env.CONTEXT_GRAPH_MODEL`
 - **[env]** reads `process.env.CONTEXT_GRAPH_MAX_OUTPUT_TOKENS`
 - **[env]** reads `process.env.CONTEXT_GRAPH_MAX_FILES`

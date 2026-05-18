@@ -20,7 +20,13 @@ export {
   partitionInstructionChunks,
   humanAreaName,
 } from './plan/layout';
-export { repairBuildPlan, repairOptionsFromConfig, groupPathsIntoAutoSubsystems } from './plan/repair';
+export {
+  repairBuildPlan,
+  repairOptionsFromConfig,
+  resolveRepairOptions,
+  groupPathsIntoAutoSubsystems,
+} from './plan/repair';
+export { detectProjectStackProfile, shouldAutoFolderGrouping } from './plan/stack-profile';
 export { inferFilePriority, inferSubsystemPriority, maxPriority } from './plan/priority';
 export type { InstructionPriority } from './plan/priority';
 export {

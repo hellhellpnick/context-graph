@@ -1,102 +1,114 @@
 ---
-description: "Mirror — `.cursor/rules/` (4 files, part 14/20)"
+description: "Mirror — `.cursor/rules/` (4 files, part 14/16)"
 applyTo: ".cursor/rules/**"
 priority: "P2"
-last_updated: "2026-05-15"
+last_updated: "2026-05-18"
 ---
 
 ## When to Read
-- editing or refactoring `ctxgraph--src-graph-builder-extract-misc.mdc`
-- editing or refactoring `ctxgraph--src-graph-builder-index.mdc`
-- editing or refactoring `ctxgraph--src-graph-builder-llm-notes.mdc`
-- editing or refactoring `ctxgraph--src-graph-builder-llm-validate.mdc`
+- editing or refactoring `ctxgraph--src-instruction-targets.mdc`
+- editing or refactoring `ctxgraph--src-project-graph.mdc`
+- editing or refactoring `ctxgraph--src-project-root.mdc`
+- editing or refactoring `ctxgraph--src-providers-anthropic.mdc`
 
 ## Overview
-- `.cursor/rules/ctxgraph--src-graph-builder-extract-misc.mdc` (40 lines · 4 top-level symbols) — # When to Read
-- `.cursor/rules/ctxgraph--src-graph-builder-index.mdc` (97 lines · 29 top-level symbols) — # When to Read
-- `.cursor/rules/ctxgraph--src-graph-builder-llm-notes.mdc` (50 lines · 6 top-level symbols) — # When to Read
-- `.cursor/rules/ctxgraph--src-graph-builder-llm-validate.mdc` (52 lines · 6 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--src-instruction-targets.mdc` (69 lines · 23 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--src-project-graph.mdc` (35 lines · 1 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--src-project-root.mdc` (62 lines · 7 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--src-providers-anthropic.mdc` (40 lines · 1 top-level symbols) — # When to Read
 
 ## Graph
 ```mermaid
 graph LR
   Rules[Rules]
-  Rules --> node[""]
 ```
 
 ## Signatures
 
 ```typescript
-// ── .cursor/rules/ctxgraph--src-graph-builder-extract-misc.mdc ──
-// ── src/graph-builder/extract/misc.ts ──
-export function extractCliCommands(content: string): string[] { const commands: string[] = []; const lines = content.split('\n'); for (const line of lines) { // Commander: .command('build [dir]') const m = line.match(/\.command\(\s*['"](…
-/** `export * from` / `export { } from` targets (barrel files). */
-export function extractReExportTargets(content: string): string[] { const out: string[] = []; for (const line of content.split('\n')) { const t = line.trim(); const star = t.match(/^export\s+\*\s+from\s+['"]([^'"]+)['"]/); if (star) out.…
-/** Reject auto-extracted purpose lines that are code hints, not file intent. */
-export function isWeakFilePurpose(purpose: string): boolean { const t = purpose.trim(); if (t.length < 12) return true; return PURPOSE_COMMENT_SKIP.test(t); }
-/** One-line purpose summary: JSDoc / file-level `//` / `#` (PHP) — not in-function comments. */
-export function extractFilePurpose(content: string): string | null { /* ~45 lines */ }
-
-// ── .cursor/rules/ctxgraph--src-graph-builder-index.mdc ──
-// ── src/graph-builder/index.ts ──
+// ── .cursor/rules/ctxgraph--src-instruction-targets.mdc ──
+// ── src/instruction-targets.ts ──
 /**
- * Graph builder — modular layout (was monolithic graph-builder.ts).
+ * Which AI tool entrypoints context-graph emits (adapters + tool-specific files).
+ * Core graph (`.github/instructions/*.instructions.md`, index, path-index) is always built.
  */
-export * from './types'
-export { /* prompt template (~1 lines) */ }
-export { loadSystemPrompt, loadExistingGraph, styleDirective, fileReadsEnvironment } from './prompt'
-export { extractExports, buildDeterministicSourceSection, shouldIncludeDeterministicSource, buildVueMermaidNodes, } from './extract/exports'
-export { extractImports } from './extract/imports'
-export { buildDeterministicDependencyGraph } from './extract/deps-graph'
-export { extractCliCommands, extractFilePurpose } from './extract/misc'
-export { isBarrelFile } from './extract/imports'
-export { parseBuildPlan } from './plan/parse'
-export { buildPlanningContextLight, inferDefaultsFromScan } from './plan/infer'
-export { partitionInstructionChunks, humanAreaName, } from './plan/layout'
-export { repairBuildPlan, repairOptionsFromConfig, groupPathsIntoAutoSubsystems } from './plan/repair'
-export { inferFilePriority, inferSubsystemPriority, maxPriority } from './plan/priority'
-export type { InstructionPriority } from './plan/priority'
-export { buildDeterministicCopilotInstructions, buildDeterministicChangelog, buildDeterministicCopilotIgnore, injectDeterministicRootFiles, } from './deterministic/root'
-export { appendCursorRuleFiles } from './deterministic/cursor-rules'
-export { buildMetadataJson, buildContextGraphPathIndexMd, buildIndexMd, } from './deterministic/metadata'
-export { buildDeterministicSubsystemFile } from './deterministic/subsystem'
-export { mergeLlmProse, sanitizeMermaidBlocks, subsystemOutputLooksOk, llmContentMatchesRealExports, buildSubsystemRepairMessage, insertAfterHeading, } from './llm/validate'
-export { /* prompt template (~8 lines) */ }
-export { buildPlanningPassMessage } from './messages/planning'
-export { buildRootPassMessage } from './messages/root'
-export { /* prompt template (~1 lines) */ }
-export { parseSubsystemMappings, findMissingSubsystemPaths } from './discovery'
-export { estimateCost } from './cost'
-export { buildGraphDeterministic } from './build/deterministic'
-export { buildGraph } from './build/single'
-export { buildGraphHybrid } from './build/hybrid'
-export { buildGraphMultiPass } from './build/multipass'
+export type InstructionTargetId = | 'copilot' | 'cursor' | 'claude' | 'agents' | 'gemini' | 'windsurf' | 'codex' | 'cline';
+export const INSTRUCTION_TARGET_IDS: InstructionTargetId[] = [ 'copilot', 'cursor', 'claude', 'agents', 'gemini', 'windsurf', 'codex', 'cline', ];
+export const INSTRUCTION_TARGET_LABELS: Record<InstructionTargetId, string> = { copilot: 'GitHub Copilot (.github/copilot-instructions.md, .copilotignore)', cursor: 'Cursor (.cursor/rules/context-graph.mdc + ctxgraph--*.mdc per file)', c…
+export interface DeterministicPreferences { instructionTargets: InstructionTargetId[]; installAgents: boolean; }
+export function isInstructionTargetId(v: string): v is InstructionTargetId { return TARGET_SET.has(v); }
+export function normalizeInstructionTargets(raw: unknown): InstructionTargetId[] | null { /* ~17 lines */ }
+export function parseInstructionTargetsEnv(envVal: string | undefined): InstructionTargetId[] | null { if (!envVal?.trim()) return null; if (envVal.trim().toLowerCase() === 'all') return [...INSTRUCTION_TARGET_IDS]; const parts = envVal.…
+export function parseInstallAgentsEnv(envVal: string | undefined): boolean | null { if (!envVal?.trim()) return null; const v = envVal.trim().toLowerCase(); if (v === '1' || v === 'true' || v === 'yes' || v === 'on') return true; if (v =…
+export function instructionTargetsFromConfigFile( fileConfig: { instructionTargets?: unknown } ): InstructionTargetId[] | null { return normalizeInstructionTargets(fileConfig.instructionTargets); }
+export function installAgentsFromConfigFile( fileConfig: { installAgents?: unknown } ): boolean | null { return typeof fileConfig.installAgents === 'boolean' ? fileConfig.installAgents : null; }
+export function hasConfiguredInstructionTargets( fileConfig: { instructionTargets?: unknown } ): boolean { return instructionTargetsFromConfigFile(fileConfig) !== null; }
+export function hasConfiguredInstallAgents(fileConfig: { installAgents?: unknown }): boolean { return typeof fileConfig.installAgents === 'boolean'; }
+export function isInstructionTargetEnabled( targets: InstructionTargetId[], id: InstructionTargetId ): boolean { return targets.includes(id); }
+/** Persist no-llm user choices into `.context-graph.json` (merge, keep provider/model). */
+export function persistDeterministicPreferences( projectRoot: string, prefs: DeterministicPreferences ): void { /* ~18 lines */ }
+/** @deprecated use persistDeterministicPreferences */
+export function saveInstructionTargetsToConfig( projectRoot: string, targets: InstructionTargetId[] ): void { persistDeterministicPreferences(projectRoot, { instructionTargets: targets, installAgents: false, }); }
+export function needsInstructionTargetSetup(fileConfig: ConfigFileSlice): boolean { if (parseInstructionTargetsEnv(process.env.CONTEXT_GRAPH_INSTRUCTION_TARGETS)) return false; return !hasConfiguredInstructionTargets(fileConfig); }
+export function needsInstallAgentsSetup(fileConfig: ConfigFileSlice): boolean { if (parseInstallAgentsEnv(process.env.CONTEXT_GRAPH_INSTALL_AGENTS) !== null) return false; return !hasConfiguredInstallAgents(fileConfig); }
+export function needsDeterministicPreferencesSetup(fileConfig: ConfigFileSlice): boolean { return needsInstructionTargetSetup(fileConfig) || needsInstallAgentsSetup(fileConfig); }
+/** Ask which AI adapters to generate (does not write config — caller persists). */
+export async function promptInstructionTargetsInteractive(opts?: { /* ~73 lines */ }
+/** Ask whether to fetch agency-agents into `.github/agents/` (does not write config). */
+export async function promptInstallAgentsInteractive(): Promise<boolean> { /* ~31 lines */ }
+export async function resolveInstructionTargets(opts: { /* ~17 lines */ }
+export function resolveInstallAgents(fileConfig: ConfigFileSlice): boolean { const fromEnv = parseInstallAgentsEnv(process.env.CONTEXT_GRAPH_INSTALL_AGENTS); if (fromEnv !== null) return fromEnv; const fromFile = installAgentsFromConfigF…
+/**
+ * no-llm first-time / incomplete config: prompt for targets + agents, persist once.
+ */
+export async function ensureDeterministicSetup(opts: { /* ~74 lines */ }
 
-// ── .cursor/rules/ctxgraph--src-graph-builder-llm-notes.mdc ──
-// ── src/graph-builder/llm/notes.ts ──
-export function insertNotesSection(md: string, notes: string, afterHeading: string): string { /* ~14 lines */ }
-export function buildNotesPrompt( config: Config, kind: 'root' | 'subsystem', title: string, exportsBlock: string, snippet: string ): string { /* prompt template (~32 lines) */ }
-export function buildSnippetForFiles(scan: ScanResult, sourceFiles: string[], maxChars: number): string { /* prompt template (~93 lines) */ }
-export function insertExportNotesUnderSignatures(md: string, notes: string): string { if (!notes.trim()) return md; const clean = notes.trim().replace(/\r\n/g, '\n'); const section = `### Notes (LLM)\n\n${clean}\n`; return insertAfterHea…
-export function extractExportNamesForNotes(scan: ScanResult, sourceFiles: string[]): string[] { /* ~76 lines */ }
-export function buildExportNotesPrompt(config: Config, title: string, exportNames: string[], snippet: string): string { /* prompt template (~23 lines) */ }
+// ── .cursor/rules/ctxgraph--src-project-graph.mdc ──
+// ── src/project-graph.ts ──
+/** True when a prior context-graph build left core files under `.github/instructions/`. */
+export function projectGraphExists(projectRoot: string): boolean { return GRAPH_MARKER_PATHS.some(rel => fs.existsSync(path.join(projectRoot, rel))); }
 
-// ── .cursor/rules/ctxgraph--src-graph-builder-llm-validate.mdc ──
-// ── src/graph-builder/llm/validate.ts ──
-export function mergeLlmProse(skeleton: string, llmContent: string): string { /* ~26 lines */ }
-export function insertAfterHeading(md: string, heading: string, insert: string): string { const re = new RegExp(`^## ${heading}\\b[^\\n]*\\n`, 'm'); const m = re.exec(md); if (!m) return md + '\n\n' + insert; const insertAt = m.index + m…
-export function subsystemOutputLooksOk(files: OutputFile[], instructionPath: string): boolean { const norm = instructionPath.replace(/\\/g, '/'); const base = path.posix.basename(norm); return files.some(f => { const fp = f.path.replace(…
-/** Sanitize mermaid code blocks: strip lines with common LLM syntax errors. */
-export function sanitizeMermaidBlocks(content: string): string { /* ~22 lines */ }
-export function llmContentMatchesRealExports( llmContent: string, scan: ScanResult, sourceFiles: string[] ): boolean { /* ~49 lines */ }
-/** Second-chance prompt when local models skip <<<EOF>>> or add prose. */
-export function buildSubsystemRepairMessage(today: string, instructionPath: string, planItem?: BuildPlanItem): string { /* prompt template (~33 lines) */ }
+// ── .cursor/rules/ctxgraph--src-project-root.mdc ──
+// ── src/project-root.ts ──
+/**
+ * Git work tree root, or null if `cwd` is not inside a Git repository.
+ */
+export function tryGitRepositoryRoot(cwd: string): string | null { try { const out = execFileSync('git', ['rev-parse', '--show-toplevel'], { cwd, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'], }).trim(); if (!out) return null; re…
+ * Resolves where `.github/instructions/` and `.context-graph.json` live.
+ *
+ * - **Implicit cwd** (no CLI `[dir]`, or `dir` is `.` / same as `process.cwd()`):
+ *   1. `CONTEXT_GRAPH_ROOT` if set and points to an existing directory
+ *   2. else Git repository root from cwd (`git rev-parse --show-toplevel`)
+ *   3. else `path.resolve(cwd)`
+ * - **Explicit `[dir]`** (subfolder path): that path only — no Git uplift (monorepo package roots).
+ */
+export function resolveProjectRoot(cliDirArg: string | undefined, cwd: string = process.cwd()): string { /* ~26 lines */ }
+export type MistakenBuildModeFlag = 'hybrid' | 'deterministic' | 'llm';
+export interface BuildDirNormalization { projectDir: string | undefined; mistakenModeFlag?: MistakenBuildModeFlag; }
+/**
+ * If `[dir]` is actually a build-mode token (`hybrid`, `no-llm`, …), treat as implicit repo root.
+ */
+export function normalizeBuildDirArg(cliDirArg: string | undefined): BuildDirNormalization { if (!cliDirArg) return { projectDir: undefined }; const key = cliDirArg.toLowerCase().replace(/_/g, '-'); if (!BUILD_MODE_DIR_ALIASES.has(key)) …
+export function suggestedBuildFlagForMistake(flag: MistakenBuildModeFlag): string { if (flag === 'deterministic') return '--no-llm'; return `--${flag}`; }
+/** Exit-friendly check before writing `.context-graph.json` / instructions. */
+export function assertProjectRootExists(projectRoot: string): void { let st: fs.Stats; try { st = fs.statSync(projectRoot); } catch { throw new Error( `Project directory does not exist: ${projectRoot}\n` + `Pass a real path: context-grap…
 
+// ── .cursor/rules/ctxgraph--src-providers-anthropic.mdc ──
+// ── src/providers/anthropic.ts ──
+export class AnthropicProvider implements LLMProvider { /* ~34 lines */ }
 
-// CLI commands:
-//   build
 ```
 
 ## Dependencies
-**External:**
-- ``
+- No dependencies detected
+
+## Error Handling
+- `Error`: "Project directory does not exist: ${projectRoot}\n` + `Pass a real path: context-grap…
+
+``" (`ctxgraph--src-project-root.mdc`)
+
+## Danger Zone 🔴
+- **[env]** reads `process.env.CONTEXT_GRAPH_INSTRUCTION_TARGETS`
+- **[env]** reads `process.env.CONTEXT_GRAPH_INSTALL_AGENTS`
+- **[fs]** filesystem I/O
+- **[env]** reads `process.env.CONTEXT_GRAPH_ROOT`

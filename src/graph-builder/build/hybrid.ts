@@ -5,7 +5,7 @@ import type { OutputFile } from '../../writer';
 import { scanForPromptDepth } from '../../scanner';
 import type { BuildCallbacks, HybridBuildOptions, MultiPassResult } from '../types';
 import { createProvider } from '../../providers';
-import { repairBuildPlan, repairOptionsFromConfig } from '../plan/repair';
+import { repairBuildPlan, resolveRepairOptions } from '../plan/repair';
 import { appendCursorRuleFiles } from '../deterministic/cursor-rules';
 import { injectDeterministicRootFiles } from '../deterministic/root';
 import { buildDeterministicSubsystemFile } from '../deterministic/subsystem';
@@ -40,7 +40,7 @@ export async function buildGraphHybrid(
   const scanPrompt = config.contextDepth === 'slim' ? scanForPromptDepth(scanFull, 'slim') : scanFull;
 
   // Deterministic plan (no LLM planning pass)
-  const plan = repairBuildPlan(scanFull, null, repairOptionsFromConfig(config));
+  const plan = repairBuildPlan(scanFull, null, resolveRepairOptions(scanFull, config));
   onPlanReady?.(plan);
 
   const totalExpected = 1 + 1 + plan.subsystems.length; // "plan" (synthetic) + root + subsystems
@@ -55,7 +55,15 @@ export async function buildGraphHybrid(
 
   // Pass 1: deterministic root files (scaffold)
   const allFiles: OutputFile[] = [];
-  injectDeterministicRootFiles(today, scanFull, plan, allFiles);
+  injectDeterministicRootFiles(
+    today,
+    scanFull,
+    plan,
+    allFiles,
+    undefined,
+    config.contextDepth === 'slim' ? { slimRoot: true } : undefined,
+    config.instructionTargets
+  );
   passes++;
   onPassComplete?.(passes, totalExpected, 'root files · deterministic', allFiles.filter(f =>
     f.path === '.github/instructions/copilot-instructions.md' ||
@@ -128,7 +136,7 @@ export async function buildGraphHybrid(
     onPassComplete?.(passes, totalExpected, `${s.file} · notes`, [det], cost);
   }
 
-  appendCursorRuleFiles(plan, allFiles);
+  appendCursorRuleFiles(plan, allFiles, config.instructionTargets);
 
   return {
     files: allFiles,

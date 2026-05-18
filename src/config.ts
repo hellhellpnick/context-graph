@@ -2,6 +2,32 @@ import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
 import type { ProviderConfig } from './providers/types';
+import {
+  INSTRUCTION_TARGET_IDS,
+  instructionTargetsFromConfigFile,
+  installAgentsFromConfigFile,
+  parseInstructionTargetsEnv,
+  parseInstallAgentsEnv,
+  type InstructionTargetId,
+} from './instruction-targets';
+export type { InstructionTargetId } from './instruction-targets';
+export {
+  INSTRUCTION_TARGET_IDS,
+  INSTRUCTION_TARGET_LABELS,
+  hasConfiguredInstructionTargets,
+  hasConfiguredInstallAgents,
+  needsInstructionTargetSetup,
+  needsInstallAgentsSetup,
+  needsDeterministicPreferencesSetup,
+  normalizeInstructionTargets,
+  parseInstallAgentsEnv,
+  resolveInstructionTargets,
+  resolveInstallAgents,
+  ensureDeterministicSetup,
+  persistDeterministicPreferences,
+  saveInstructionTargetsToConfig,
+} from './instruction-targets';
+export { projectGraphExists } from './project-graph';
 
 /** `slim` = smaller prompts for local LLMs (truncated bodies + shorter root pass). */
 export type ContextDepth = 'full' | 'slim';
@@ -39,6 +65,10 @@ export interface Config {
    * `canonical`: legacy `core/` / `infra/` layout from heuristics.
    */
   subsystemLayout: SubsystemLayout;
+  /** Tool-specific entrypoints to emit (Copilot, Cursor, CLAUDE.md, …). Core graph always built. */
+  instructionTargets: InstructionTargetId[];
+  /** Fetch agency-agents skill files into `.github/agents/` after build. */
+  installAgents: boolean;
 }
 
 interface ConfigFile {
@@ -57,6 +87,10 @@ interface ConfigFile {
   subsystemGrouping?: string;
   maxFilesPerFolderSubsystem?: number;
   subsystemLayout?: string;
+  /** `all` or list: copilot, cursor, claude, agents, gemini, windsurf, codex, cline */
+  instructionTargets?: unknown;
+  /** Download recommended agents into `.github/agents/` on build. */
+  installAgents?: boolean;
 }
 
 // Hard limits per model — prevents 400 errors from exceeding model caps
@@ -225,6 +259,16 @@ export function loadConfig(projectRoot: string): Config {
     return v === 'canonical' ? 'canonical' : 'mirror';
   })();
 
+  const instructionTargets =
+    parseInstructionTargetsEnv(process.env.CONTEXT_GRAPH_INSTRUCTION_TARGETS) ??
+    instructionTargetsFromConfigFile(fileConfig) ??
+    [...INSTRUCTION_TARGET_IDS];
+
+  const installAgents =
+    parseInstallAgentsEnv(process.env.CONTEXT_GRAPH_INSTALL_AGENTS) ??
+    installAgentsFromConfigFile(fileConfig) ??
+    false;
+
   return {
     provider: {
       provider: providerName,
@@ -248,7 +292,20 @@ export function loadConfig(projectRoot: string): Config {
     subsystemGrouping,
     maxFilesPerFolderSubsystem,
     subsystemLayout,
+    instructionTargets,
+    installAgents,
   };
+}
+
+/** Raw `.context-graph.json` object (for target prompt / merge writes). */
+export function readConfigFile(projectRoot: string): ConfigFile {
+  const configPath = path.join(projectRoot, '.context-graph.json');
+  if (!fs.existsSync(configPath)) return {};
+  try {
+    return JSON.parse(fs.readFileSync(configPath, 'utf8')) as ConfigFile;
+  } catch (e) {
+    throw new Error(`Invalid .context-graph.json: ${(e as Error).message}`);
+  }
 }
 
 export function initConfig(

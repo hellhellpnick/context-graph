@@ -2,14 +2,14 @@
 description: "Mirror — `src/cli/build-run.ts`"
 applyTo: "src/cli/build-run.ts"
 priority: "P1"
-last_updated: "2026-05-15"
+last_updated: "2026-05-18"
 ---
 
 ## When to Read
 - editing or refactoring `build-run.ts`
 
 ## Overview
-- `src/cli/build-run.ts` (123 lines · 3 top-level symbols) — Mirror — `src/cli/build-run.ts`
+- `src/cli/build-run.ts` (132 lines · 3 top-level symbols) — Mirror — `src/cli/build-run.ts`
 
 ## Graph
 ```mermaid
@@ -28,8 +28,8 @@ graph LR
 ```typescript
 // ── src/cli/build-run.ts ──
 export function resolveBuildStrategy( config: Config, opts: { /* ~22 lines */ }
-export interface RunGraphBuildOpts { strategy: BuildStrategy; effectiveHybridMax: number; quiet: boolean; jsonOutput: boolean; repair: RepairBuildPlanOptions; getSpinner: () => Ora | null; setSpinner: (spinner: Ora | null) => void; }
-export async function runGraphBuild( scan: ScanResult, config: Config, opts: RunGraphBuildOpts ): Promise<MultiPassResult> { /* ~74 lines */ }
+export interface RunGraphBuildOpts { strategy: BuildStrategy; effectiveHybridMax: number; quiet: boolean; jsonOutput: boolean; getSpinner: () => Ora | null; setSpinner: (spinner: Ora | null) => void; }
+export async function runGraphBuild( scan: ScanResult, config: Config, opts: RunGraphBuildOpts ): Promise<MultiPassResult> { /* ~84 lines */ }
 
 ```
 

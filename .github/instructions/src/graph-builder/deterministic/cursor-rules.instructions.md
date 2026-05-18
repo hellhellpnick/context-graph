@@ -2,20 +2,21 @@
 description: "Mirror — `src/graph-builder/deterministic/cursor-rules.ts`"
 applyTo: "src/graph-builder/deterministic/cursor-rules.ts"
 priority: "P1"
-last_updated: "2026-05-15"
+last_updated: "2026-05-18"
 ---
 
 ## When to Read
 - editing or refactoring `cursor-rules.ts`
 
 ## Overview
-- `src/graph-builder/deterministic/cursor-rules.ts` (132 lines · 5 top-level symbols) — Strip YAML frontmatter from subsystem instruction markdown.
+- `src/graph-builder/deterministic/cursor-rules.ts` (146 lines · 5 top-level symbols) — Mirror — `src/graph-builder/deterministic/cursor-rules.ts`
 
 ## Graph
 ```mermaid
 graph LR
   cursor_rules[cursor-rules]
   cursor_rules --> types[types]
+  cursor_rules --> instruction_targets[instruction-targets]
   cursor_rules --> writer[writer]
 ```
 
@@ -33,11 +34,12 @@ export function buildCursorRuleMdc( planItem: BuildPlanItem, instructionRelPath:
  * Emit one \`.cursor/rules/ctxgraph--<slug>.mdc\` per subsystem so Cursor auto-loads
  * instructions without asking the model to open files manually.
  */
-export function appendCursorRuleFiles(plan: BuildPlan, files: OutputFile[]): void { /* prompt template (~38 lines) */ }
+export function appendCursorRuleFiles( plan: BuildPlan, files: OutputFile[], instructionTargets: InstructionTargetId[] = [] ): void { /* prompt template (~48 lines) */ }
 
 ```
 
 ## Dependencies
 **Internal:**
 - `src/graph-builder/types`
+- `src/instruction-targets`
 - `src/writer`

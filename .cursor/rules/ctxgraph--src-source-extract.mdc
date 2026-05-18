@@ -8,7 +8,7 @@ alwaysApply: false
 - editing or refactoring `source-extract.ts`
 
 ## Overview
-- `src/source-extract.ts` (858 lines · 24 top-level symbols) — Shared helpers for Vue / PHP / Python / Go so scanner + deterministic graph use the same shapes.
+- `src/source-extract.ts` (1001 lines · 28 top-level symbols) — Shared helpers for Vue / PHP / Python / Go so scanner + deterministic graph use the same shapes.
 
 ## Graph
 ```mermaid
@@ -56,8 +56,19 @@ export function extractNuxtRuntimeBullets(script: string): string[] { /* prompt 
 export function extractDeterministicErrors(script: string, fileLabel?: string): string[] { /* prompt template (~30 lines) */ }
 /** Side effects for Danger Zone (browser, stores, network, events). */
 export function extractSideEffectBullets(script: string): string[] { /* prompt template (~48 lines) */ }
-/** Declarations useful for deterministic instruction graphs (not a full PHP parser). */
-export function extractPhpSymbolLines(php: string): string[] { /* ~35 lines */ }
+/** Declarations useful for counts / heuristics — no `use` / `namespace` (see `buildPhpRoutingSignatures`). */
+export function extractPhpSymbolLines(php: string): string[] { /* ~30 lines */ }
+/** Balanced `(...)` after `function name` — supports multiline Laravel DI lists. */
+export function extractPhpMethodParamNames(php: string, methodName: string): string[] { /* ~29 lines */ }
+/** JSON / array keys from `return response()->json([...])` (routing hint, not full payload). */
+export function extractPhpJsonResponseKeys(php: string): string[] { /* ~29 lines */ }
+/**
+ * Compact routing block for `.php` in deterministic instructions.
+ * No full file — class, DI method summary, response keys, import count.
+ */
+export function buildPhpRoutingSignatures(relPath: string, php: string): string[] { /* prompt template (~63 lines) */ }
+/** One-line index row for capped PHP folder bundles. */
+export function buildPhpOneLineSummary(relPath: string, php: string): string { /* ~16 lines */ }
 /** Top-level `use Foo\Bar;` / `use A, B;` — first segment only per clause. */
 export function extractPhpUseStatements(php: string): string[] { const out: string[] = []; const s = php.replace(/\r\n/g, '\n'); const re = /^\s*use\s+([^;]+);/gm; let m: RegExpExecArray | null; while ((m = re.exec(s)) !== null) { const …
 /** Top-level defs / classes (heuristic, not a full parser). */

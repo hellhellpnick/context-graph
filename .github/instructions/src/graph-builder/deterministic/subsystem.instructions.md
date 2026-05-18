@@ -2,14 +2,14 @@
 description: "Mirror — `src/graph-builder/deterministic/subsystem.ts`"
 applyTo: "src/graph-builder/deterministic/subsystem.ts"
 priority: "P1"
-last_updated: "2026-05-15"
+last_updated: "2026-05-18"
 ---
 
 ## When to Read
 - editing or refactoring `subsystem.ts`
 
 ## Overview
-- `src/graph-builder/deterministic/subsystem.ts` (298 lines · 1 top-level symbols) — Mirror — `src/graph-builder/deterministic/subsystem.ts`
+- `src/graph-builder/deterministic/subsystem.ts` (317 lines · 1 top-level symbols) — Mirror — `src/graph-builder/deterministic/subsystem.ts`
 
 ## Graph
 ```mermaid
@@ -29,7 +29,7 @@ graph LR
 
 ```typescript
 // ── src/graph-builder/deterministic/subsystem.ts ──
-export function buildDeterministicSubsystemFile( today: string, instructionPath: string, planItem: BuildPlanItem | undefined, scan: ScanResult, sourceFiles: string[] ): OutputFile { /* prompt template (~265 lines) */ }
+export function buildDeterministicSubsystemFile( today: string, instructionPath: string, planItem: BuildPlanItem | undefined, scan: ScanResult, sourceFiles: string[] ): OutputFile { /* prompt template (~284 lines) */ }
 
 ```
 

@@ -7,9 +7,9 @@ import {
   buildGraphDeterministic,
   buildGraphHybrid,
   buildGraphMultiPass,
+  resolveRepairOptions,
   type BuildPlan,
   type MultiPassResult,
-  type RepairBuildPlanOptions,
 } from '../graph-builder';
 import { formatCost } from './io';
 
@@ -41,7 +41,6 @@ export interface RunGraphBuildOpts {
   effectiveHybridMax: number;
   quiet: boolean;
   jsonOutput: boolean;
-  repair: RepairBuildPlanOptions;
   getSpinner: () => Ora | null;
   setSpinner: (spinner: Ora | null) => void;
 }
@@ -51,7 +50,8 @@ export async function runGraphBuild(
   config: Config,
   opts: RunGraphBuildOpts
 ): Promise<MultiPassResult> {
-  const { strategy, effectiveHybridMax, quiet, jsonOutput, repair, getSpinner, setSpinner } = opts;
+  const { strategy, effectiveHybridMax, quiet, jsonOutput, getSpinner, setSpinner } = opts;
+  const repair = resolveRepairOptions(scan, config);
   const needsLlm = strategy === 'llm' || strategy === 'hybrid';
 
   let resolvedPlan: BuildPlan | null = null;
@@ -105,7 +105,16 @@ export async function runGraphBuild(
             spinner2 = getSpinner();
           },
         })
-    : buildGraphDeterministic(scan, { repair });
+    : buildGraphDeterministic(scan, {
+        repair,
+        ...(config.contextDepth === 'slim' ? { slimRoot: true } : {}),
+        instructionTargets: config.instructionTargets,
+        projectMetadata: {
+          buildStrategy: config.buildStrategy,
+          instructionTargets: config.instructionTargets,
+          installAgents: config.installAgents,
+        },
+      });
 
   getSpinner()?.stop();
 

@@ -1,0 +1,72 @@
+---
+description: "Test — test/**"
+globs: test/**
+alwaysApply: false
+---
+
+## When to Read
+- editing or refactoring `priority.test.mjs`
+- editing or refactoring `project-root.test.mjs`
+- editing or refactoring `repair-stack.test.mjs`
+- editing or refactoring `root-slim.test.mjs`
+
+## Overview
+- `test/priority.test.mjs` (60 lines) — Mirror — `test/` (4 files, part 2/2)
+- `test/project-root.test.mjs` (44 lines) — Mirror — `test/` (4 files, part 2/2)
+- `test/repair-stack.test.mjs` (211 lines · 2 top-level symbols) — Mirror — `test/` (4 files, part 2/2)
+- `test/root-slim.test.mjs` (94 lines · 1 top-level symbols) — Mirror — `test/` (4 files, part 2/2)
+
+## Graph
+```mermaid
+graph LR
+  Test[Test]
+  Test --> root[root]
+  Test --> root_project[root-project]
+  Test --> root_slim[root-slim]
+  Test --> infer[infer]
+  Test --> priority[priority]
+  Test --> repair[repair]
+  Test --> stack_profile[stack-profile]
+  Test --> project_root[project-root]
+```
+
+## Signatures
+
+```typescript
+// ── test/priority.test.mjs ──
+// ── skeleton ──
+const fileCases = [ /* template ×13 */ ].join('\n');
+
+// ── test/repair-stack.test.mjs ──
+// ── skeleton ──
+function laravelScan() {
+  return { files: paths.map(path => ({ path, tier: path === 'composer.json' || path === 'artisan' ? 1 : 2, c…;
+}
+function nuxtMonorepoScan() {
+  return { files: paths.map(path => ({ path, tier: path.endsWith('package.json') || path.includes('nuxt.conf…;
+}
+
+// ── test/root-slim.test.mjs ──
+// ── skeleton ──
+function fakePlan(n) {
+  return { projectName: 'Big', projectDescription: 'Test app', techStack: ['PHP'], subsystems, };
+}
+
+```
+
+## Dependencies
+**Internal:**
+- `dist/graph-builder/deterministic/root`
+- `dist/graph-builder/deterministic/root-project`
+- `dist/graph-builder/deterministic/root-slim`
+- `dist/graph-builder/plan/infer`
+- `dist/graph-builder/plan/priority`
+- `dist/graph-builder/plan/repair`
+- `dist/graph-builder/plan/stack-profile`
+- `dist/project-root`
+
+## Danger Zone 🔴
+- **[fs]** filesystem I/O
+
+<!-- context-graph: generated from `.github/instructions/test/_bundle_p2.instructions.md` -->
+_Regenerate: `context-graph build --no-llm` · Do not hand-edit this rule._

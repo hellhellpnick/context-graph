@@ -1,29 +1,25 @@
 # Context Graph — Changelog
 
-## 2026-05-15 — Initial Build
+## 2026-05-18 — Initial Build
 
 Subsystems created:
-- `npmignore.instructions.md` — Module Entry: Mirror — `.npmignore`
-- `.cursor/rules/_bundle.instructions.md` — Rules: Mirror — `.cursor/rules/` (4 files, part 1/20)
-- `.cursor/rules/_bundle_p2.instructions.md` — Rules: Mirror — `.cursor/rules/` (4 files, part 2/20)
-- `.cursor/rules/_bundle_p3.instructions.md` — Rules: Mirror — `.cursor/rules/` (4 files, part 3/20)
-- `.cursor/rules/_bundle_p4.instructions.md` — Rules: Mirror — `.cursor/rules/` (2 files, part 4/20)
-- `.cursor/rules/ctxgraph--cursor-rules-bundle-p9.instructions.md` — Ctxgraph Cursor Rules Bundle P9: Mirror — `.cursor/rules/ctxgraph--cursor-rules-bundle-p9.mdc`
-- `.cursor/rules/_bundle_p6.instructions.md` — Rules: Mirror — `.cursor/rules/` (4 files, part 6/20)
-- `.cursor/rules/_bundle_p7.instructions.md` — Rules: Mirror — `.cursor/rules/` (4 files, part 7/20)
-- `.cursor/rules/_bundle_p8.instructions.md` — Rules: Mirror — `.cursor/rules/` (4 files, part 8/20)
-- `.cursor/rules/_bundle_p9.instructions.md` — Rules: Mirror — `.cursor/rules/` (4 files, part 9/20)
-- `.cursor/rules/_bundle_p10.instructions.md` — Rules: Mirror — `.cursor/rules/` (4 files, part 10/20)
-- `.cursor/rules/_bundle_p11.instructions.md` — Rules: Mirror — `.cursor/rules/` (4 files, part 11/20)
-- `.cursor/rules/_bundle_p12.instructions.md` — Rules: Mirror — `.cursor/rules/` (4 files, part 12/20)
-- `.cursor/rules/_bundle_p13.instructions.md` — Rules: Mirror — `.cursor/rules/` (4 files, part 13/20)
-- `.cursor/rules/_bundle_p14.instructions.md` — Rules: Mirror — `.cursor/rules/` (4 files, part 14/20)
-- `.cursor/rules/_bundle_p15.instructions.md` — Rules: Mirror — `.cursor/rules/` (4 files, part 15/20)
-- `.cursor/rules/_bundle_p16.instructions.md` — Rules: Mirror — `.cursor/rules/` (4 files, part 16/20)
-- `.cursor/rules/_bundle_p17.instructions.md` — Rules: Mirror — `.cursor/rules/` (4 files, part 17/20)
-- `.cursor/rules/_bundle_p18.instructions.md` — Rules: Mirror — `.cursor/rules/` (4 files, part 18/20)
-- `.cursor/rules/_bundle_p19.instructions.md` — Rules: Mirror — `.cursor/rules/` (4 files, part 19/20)
-- `.cursor/rules/_bundle_p20.instructions.md` — Rules: Mirror — `.cursor/rules/` (2 files, part 20/20)
+- `root/_bundle.instructions.md` — Root files: Mirror — `./` (2 files)
+- `.cursor/rules/_bundle.instructions.md` — Rules: Mirror — `.cursor/rules/` (4 files, part 1/16)
+- `.cursor/rules/_bundle_p2.instructions.md` — Rules: Mirror — `.cursor/rules/` (4 files, part 2/16)
+- `.cursor/rules/_bundle_p3.instructions.md` — Rules: Mirror — `.cursor/rules/` (4 files, part 3/16)
+- `.cursor/rules/_bundle_p4.instructions.md` — Rules: Mirror — `.cursor/rules/` (4 files, part 4/16)
+- `.cursor/rules/_bundle_p5.instructions.md` — Rules: Mirror — `.cursor/rules/` (4 files, part 5/16)
+- `.cursor/rules/_bundle_p6.instructions.md` — Rules: Mirror — `.cursor/rules/` (4 files, part 6/16)
+- `.cursor/rules/_bundle_p7.instructions.md` — Rules: Mirror — `.cursor/rules/` (4 files, part 7/16)
+- `.cursor/rules/_bundle_p8.instructions.md` — Rules: Mirror — `.cursor/rules/` (4 files, part 8/16)
+- `.cursor/rules/_bundle_p9.instructions.md` — Rules: Mirror — `.cursor/rules/` (4 files, part 9/16)
+- `.cursor/rules/_bundle_p10.instructions.md` — Rules: Mirror — `.cursor/rules/` (4 files, part 10/16)
+- `.cursor/rules/_bundle_p11.instructions.md` — Rules: Mirror — `.cursor/rules/` (4 files, part 11/16)
+- `.cursor/rules/_bundle_p12.instructions.md` — Rules: Mirror — `.cursor/rules/` (4 files, part 12/16)
+- `.cursor/rules/_bundle_p13.instructions.md` — Rules: Mirror — `.cursor/rules/` (4 files, part 13/16)
+- `.cursor/rules/_bundle_p14.instructions.md` — Rules: Mirror — `.cursor/rules/` (4 files, part 14/16)
+- `.cursor/rules/_bundle_p15.instructions.md` — Rules: Mirror — `.cursor/rules/` (4 files, part 15/16)
+- `.cursor/rules/_bundle_p16.instructions.md` — Rules: Mirror — `.cursor/rules/` (4 files, part 16/16)
 - `python/context_graph/_bundle.instructions.md` — Context Graph: Mirror — `python/context_graph/` (2 files)
 - `scripts/split-graph-builder.instructions.md` — Split Graph Builder: Mirror — `scripts/split-graph-builder.mjs`
 - `src/agents-catalog.instructions.md` — Agents Catalog: Mirror — `src/agents-catalog.ts`
@@ -34,6 +30,8 @@ Subsystems created:
 - `src/graph-builder.instructions.md` — Graph Builder: Mirror — `src/graph-builder.ts`
 - `src/hooks.instructions.md` — Hooks: Mirror — `src/hooks.ts`
 - `src/index.instructions.md` — Index: Mirror — `src/index.ts`
+- `src/instruction-targets.instructions.md` — Instruction Targets: Mirror — `src/instruction-targets.ts`
+- `src/project-graph.instructions.md` — Project Graph: Mirror — `src/project-graph.ts`
 - `src/project-root.instructions.md` — Project Root: Mirror — `src/project-root.ts`
 - `src/scanner.instructions.md` — Scanner: Mirror — `src/scanner.ts`
 - `src/source-extract.instructions.md` — Source Extract: Mirror — `src/source-extract.ts`
@@ -59,6 +57,8 @@ Subsystems created:
 - `src/graph-builder/types.instructions.md` — Types: Mirror — `src/graph-builder/types.ts`
 - `src/graph-builder/deterministic/cursor-rules.instructions.md` — Cursor Rules: Mirror — `src/graph-builder/deterministic/cursor-rules.ts`
 - `src/graph-builder/deterministic/metadata.instructions.md` — Metadata: Mirror — `src/graph-builder/deterministic/metadata.ts`
+- `src/graph-builder/deterministic/root-project.instructions.md` — Root Project: Mirror — `src/graph-builder/deterministic/root-project.ts`
+- `src/graph-builder/deterministic/root-slim.instructions.md` — Root Slim: Mirror — `src/graph-builder/deterministic/root-slim.ts`
 - `src/graph-builder/deterministic/root.instructions.md` — Root: Mirror — `src/graph-builder/deterministic/root.ts`
 - `src/graph-builder/deterministic/subsystem.instructions.md` — Subsystem: Mirror — `src/graph-builder/deterministic/subsystem.ts`
 - `src/graph-builder/extract/deps-graph.instructions.md` — Deps Graph: Mirror — `src/graph-builder/extract/deps-graph.ts`
@@ -75,11 +75,13 @@ Subsystems created:
 - `src/graph-builder/plan/parse.instructions.md` — Parse: Mirror — `src/graph-builder/plan/parse.ts`
 - `src/graph-builder/plan/priority.instructions.md` — Priority: Mirror — `src/graph-builder/plan/priority.ts`
 - `src/graph-builder/plan/repair.instructions.md` — Repair: Mirror — `src/graph-builder/plan/repair.ts`
+- `src/graph-builder/plan/stack-profile.instructions.md` — Stack Profile: Mirror — `src/graph-builder/plan/stack-profile.ts`
 - `src/providers/anthropic.instructions.md` — Anthropic: Mirror — `src/providers/anthropic.ts`
 - `src/providers/index.instructions.md` — Index: Mirror — `src/providers/index.ts`
 - `src/providers/openai.instructions.md` — Openai: Mirror — `src/providers/openai.ts`
 - `src/providers/types.instructions.md` — Types: Mirror — `src/providers/types.ts`
-- `test/_bundle.instructions.md` — Test: Mirror — `test/` (3 files)
+- `test/_bundle.instructions.md` — Test: Mirror — `test/` (4 files, part 1/2)
+- `test/_bundle_p2.instructions.md` — Test: Mirror — `test/` (4 files, part 2/2)
 
 ---
 _Auto-generated by context-graph._

@@ -7,7 +7,22 @@ export {
   MODEL_MAX_OUTPUT_TOKENS,
   providerAllowsMissingApiKey,
 } from './config';
-export type { Config, ContextDepth, SubsystemGrouping, SubsystemLayout } from './config';
+export type { Config, ContextDepth, SubsystemGrouping, SubsystemLayout, InstructionTargetId } from './config';
+export {
+  INSTRUCTION_TARGET_IDS,
+  INSTRUCTION_TARGET_LABELS,
+  hasConfiguredInstructionTargets,
+  hasConfiguredInstallAgents,
+  needsInstructionTargetSetup,
+  needsInstallAgentsSetup,
+  normalizeInstructionTargets,
+  parseInstallAgentsEnv,
+  resolveInstructionTargets,
+  resolveInstallAgents,
+  ensureDeterministicSetup,
+  persistDeterministicPreferences,
+  projectGraphExists,
+} from './config';
 
 export { scanProject, formatForLLM, classifyFile, scanForPromptDepth, GRAPH_CONTEXT_IGNORE_FILENAMES } from './scanner';
 export type { ScannedFile, ScanResult } from './scanner';
@@ -29,6 +44,7 @@ export {
   parseBuildPlan,
   repairBuildPlan,
   repairOptionsFromConfig,
+  resolveRepairOptions,
 } from './graph-builder';
 export type {
   BuildMode,

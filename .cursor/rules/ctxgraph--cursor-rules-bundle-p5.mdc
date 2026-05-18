@@ -11,10 +11,10 @@ alwaysApply: false
 - editing or refactoring `ctxgraph--src-cli.mdc`
 
 ## Overview
-- `.cursor/rules/ctxgraph--src-cli-io.mdc` (50 lines · 5 top-level symbols) — # When to Read
-- `.cursor/rules/ctxgraph--src-cli-program.mdc` (70 lines · 1 top-level symbols) — # When to Read
-- `.cursor/rules/ctxgraph--src-cli-version.mdc` (38 lines · 1 top-level symbols) — # When to Read
-- `.cursor/rules/ctxgraph--src-cli.mdc` (49 lines) — # When to Read
+- `.cursor/rules/ctxgraph--src-cli-io.mdc` (38 lines · 5 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--src-cli-program.mdc` (59 lines · 1 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--src-cli-version.mdc` (33 lines · 1 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--src-cli.mdc` (44 lines) — # When to Read
 
 ## Graph
 ```mermaid

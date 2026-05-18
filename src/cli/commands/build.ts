@@ -7,12 +7,14 @@ import {
   loadConfig,
   initConfig,
   initConfigInteractive,
+  readConfigFile,
   providerAllowsMissingApiKey,
+  ensureDeterministicSetup,
+  projectGraphExists,
   type Config,
   type SubsystemLayout,
 } from '../../config';
 import { scanProject } from '../../scanner';
-import { repairOptionsFromConfig } from '../../graph-builder';
 import {
   assertProjectRootExists,
   normalizeBuildDirArg,
@@ -148,6 +150,40 @@ export function registerBuildCommand(program: Command): void {
       });
 
       if (strategy === 'deterministic') {
+        const fileConfig = readConfigFile(projectRoot);
+        const graphExists = projectGraphExists(projectRoot);
+        const interactive = !quiet && !jsonOutput;
+
+        if (!graphExists && interactive) {
+          log(chalk.dim('No instruction graph yet — first build will create .github/instructions/'));
+        }
+
+        const setup = await ensureDeterministicSetup({
+          projectRoot,
+          fileConfig,
+          interactive,
+          graphExists,
+        });
+        config = {
+          ...config,
+          instructionTargets: setup.instructionTargets,
+          installAgents: setup.installAgents,
+          buildStrategy: 'deterministic',
+        };
+        if (interactive && setup.prompted) {
+          const agentsNote = setup.installAgents ? 'install agents' : 'skip agents';
+          log(
+            chalk.dim(
+              `Saved in .context-graph.json · targets: ${setup.instructionTargets.join(', ')} · ${agentsNote}`
+            )
+          );
+        } else if (interactive) {
+          log(
+            chalk.dim(
+              `AI targets: ${config.instructionTargets.join(', ')} · agents: ${config.installAgents ? 'yes' : 'no'}`
+            )
+          );
+        }
         log(chalk.dim(`Using deterministic build (from ${configSource})`));
       } else if (strategy === 'hybrid') {
         log(chalk.dim(`Using hybrid build (from ${configSource})`));
@@ -201,7 +237,6 @@ export function registerBuildCommand(program: Command): void {
           setSpinner: s => {
             spinner2 = s;
           },
-          repair: repairOptionsFromConfig(config),
         });
       } catch (e) {
         spinner2?.fail('LLM call failed');
@@ -241,12 +276,14 @@ export function registerBuildCommand(program: Command): void {
         }
       }
 
-      await installRecommendedAgents(scan, result.plan, projectRoot, {
-        quiet,
-        jsonOutput,
-        dryRun: opts.dryRun,
-        log,
-      });
+      if (config.installAgents) {
+        await installRecommendedAgents(scan, result.plan, projectRoot, {
+          quiet,
+          jsonOutput,
+          dryRun: opts.dryRun,
+          log,
+        });
+      }
 
       if (jsonOutput) {
         console.log(

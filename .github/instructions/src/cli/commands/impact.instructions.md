@@ -2,7 +2,7 @@
 description: "Mirror — `src/cli/commands/impact.ts`"
 applyTo: "src/cli/commands/impact.ts"
 priority: "P1"
-last_updated: "2026-05-15"
+last_updated: "2026-05-18"
 ---
 
 ## When to Read

@@ -2,14 +2,14 @@
 description: "Mirror — `src/graph-builder/index.ts`"
 applyTo: "src/graph-builder/index.ts"
 priority: "P0"
-last_updated: "2026-05-15"
+last_updated: "2026-05-18"
 ---
 
 ## When to Read
 - editing or refactoring `index.ts`
 
 ## Overview
-- `src/graph-builder/index.ts` (64 lines · 29 top-level symbols) — Graph builder — modular layout (was monolithic graph-builder.ts).
+- `src/graph-builder/index.ts` (70 lines · 30 top-level symbols) — Graph builder — modular layout (was monolithic graph-builder.ts).
 
 ## Graph
 ```mermaid
@@ -43,7 +43,8 @@ export { isBarrelFile } from './extract/imports'
 export { parseBuildPlan } from './plan/parse'
 export { buildPlanningContextLight, inferDefaultsFromScan } from './plan/infer'
 export { partitionInstructionChunks, humanAreaName, } from './plan/layout'
-export { repairBuildPlan, repairOptionsFromConfig, groupPathsIntoAutoSubsystems } from './plan/repair'
+export { repairBuildPlan, repairOptionsFromConfig, resolveRepairOptions, groupPathsIntoAutoSubsystems, } from './plan/repair'
+export { detectProjectStackProfile, shouldAutoFolderGrouping } from './plan/stack-profile'
 export { inferFilePriority, inferSubsystemPriority, maxPriority } from './plan/priority'
 export type { InstructionPriority } from './plan/priority'
 export { buildDeterministicCopilotInstructions, buildDeterministicChangelog, buildDeterministicCopilotIgnore, injectDeterministicRootFiles, } from './deterministic/root'
@@ -78,18 +79,4 @@ export { buildGraphMultiPass } from './build/multipass'
 - `src/graph-builder/deterministic/subsystem`
 - `src/graph-builder/discovery`
 - `src/graph-builder/extract/deps-graph`
-- `src/graph-builder/extract/exports`
-- `src/graph-builder/extract/imports`
-- `src/graph-builder/extract/misc`
-- `src/graph-builder/llm/notes`
-- `src/graph-builder/llm/validate`
-- `src/graph-builder/messages/planning`
-- `src/graph-builder/messages/root`
-- `src/graph-builder/messages/subsystem`
-- `src/graph-builder/plan/infer`
-- `src/graph-builder/plan/layout`
-- `src/graph-builder/plan/parse`
-- `src/graph-builder/plan/priority`
-- `src/graph-builder/plan/repair`
-- `src/graph-builder/prompt`
-- `src/graph-builder/types`
+- `… +16 more (open repo for full list)`

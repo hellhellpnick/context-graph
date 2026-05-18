@@ -1,15 +1,25 @@
-# Managed by context-graph — paths excluded from Copilot context
-node_modules/
-dist/
-build/
-coverage/
-.nyc_output/
-__pycache__/
-.venv/
-venv/
-.git/
-*.lock
-package-lock.json
-*.min.js
-*.min.css
-*.map
+# Managed by context-graph — scan exclusions (gitignore syntax; ** = any depth)
+# For project-specific paths use .graph-context-ignore (does not overwrite this file).
+
+**/node_modules/
+**/dist/
+**/build/
+**/coverage/
+**/.nyc_output/
+**/__pycache__/
+**/.venv/
+**/venv/
+**/.git/
+**/vendor/
+**/.next/
+**/.nuxt/
+**/.output/
+**/.turbo/
+**/out/
+**/*.lock
+**/package-lock.json
+**/yarn.lock
+**/pnpm-lock.yaml
+**/*.min.js
+**/*.min.css
+**/*.map

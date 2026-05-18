@@ -8,7 +8,7 @@ alwaysApply: false
 - editing or refactoring `io.ts`
 
 ## Overview
-- `src/cli/io.ts` (63 lines · 5 top-level symbols) — Pre-push hook only: avoid enquirer (Node 20+ can throw ERR_USE_AFTER_CLOSE on confirm).
+- `src/cli/io.ts` (63 lines · 5 top-level symbols) — Mirror — `src/cli/io.ts`
 
 ## Graph
 ```mermaid

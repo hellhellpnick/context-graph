@@ -1,6 +1,10 @@
 import path from 'path';
 import type { Config } from '../../config';
 import type { ScanResult } from '../../scanner';
+import {
+  detectProjectStackProfile,
+  shouldAutoFolderGrouping,
+} from './stack-profile';
 import type { BuildPlan, BuildPlanItem, RepairBuildPlanOptions } from '../types';
 import {
   INSTRUCTION_EXCLUDE_RE,
@@ -126,9 +130,17 @@ export function groupPathsIntoAutoSubsystems(
       ? folderMax
       : MAX_SOURCE_FILES_PER_AUTO_SUBSYSTEM_DEFAULT;
 
-    const chunks: string[][] = SPLIT_DIRS.has(topDir)
-      ? list.map(p => [p])
-      : partitionInstructionChunks(list, scan, maxBundle);
+    const chunks: string[][] = byFolder
+      ? (() => {
+          const out: string[][] = [];
+          for (let i = 0; i < list.length; i += maxBundle) {
+            out.push(list.slice(i, i + maxBundle));
+          }
+          return out.length > 0 ? out : [];
+        })()
+      : SPLIT_DIRS.has(topDir)
+        ? list.map(p => [p])
+        : partitionInstructionChunks(list, scan, maxBundle);
 
     const totalParts = chunks.length || 1;
 
@@ -258,4 +270,16 @@ export function repairOptionsFromConfig(config: Config): RepairBuildPlanOptions 
     maxFilesPerFolderSubsystem: config.maxFilesPerFolderSubsystem,
     subsystemLayout: config.subsystemLayout,
   };
+}
+
+/** Config + scan heuristics (Laravel → by-folder, fewer 1-file-per-controller graphs). */
+export function resolveRepairOptions(scan: ScanResult, config: Config): RepairBuildPlanOptions {
+  const base = repairOptionsFromConfig(config);
+  const profile = detectProjectStackProfile(scan);
+  if (
+    shouldAutoFolderGrouping(scan, profile, base.subsystemGrouping ?? 'default')
+  ) {
+    return { ...base, subsystemGrouping: 'by-folder' };
+  }
+  return base;
 }

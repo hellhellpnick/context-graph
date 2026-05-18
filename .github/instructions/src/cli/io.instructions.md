@@ -2,14 +2,14 @@
 description: "Mirror — `src/cli/io.ts`"
 applyTo: "src/cli/io.ts"
 priority: "P1"
-last_updated: "2026-05-15"
+last_updated: "2026-05-18"
 ---
 
 ## When to Read
 - editing or refactoring `io.ts`
 
 ## Overview
-- `src/cli/io.ts` (63 lines · 5 top-level symbols) — Pre-push hook only: avoid enquirer (Node 20+ can throw ERR_USE_AFTER_CLOSE on confirm).
+- `src/cli/io.ts` (63 lines · 5 top-level symbols) — Mirror — `src/cli/io.ts`
 
 ## Graph
 ```mermaid

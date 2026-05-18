@@ -1,5 +1,9 @@
 import type { BuildPlan, BuildPlanItem } from '../types';
 import type { OutputFile } from '../../writer';
+import {
+  isInstructionTargetEnabled,
+  type InstructionTargetId,
+} from '../../instruction-targets';
 
 const RULE_PREFIX = 'ctxgraph--';
 const MAX_RULE_BODY_CHARS = 12_000;
@@ -91,7 +95,17 @@ Do not edit \`ctxgraph--*\` by hand — changes are overwritten on the next buil
  * Emit one \`.cursor/rules/ctxgraph--<slug>.mdc\` per subsystem so Cursor auto-loads
  * instructions without asking the model to open files manually.
  */
-export function appendCursorRuleFiles(plan: BuildPlan, files: OutputFile[]): void {
+export function appendCursorRuleFiles(
+  plan: BuildPlan,
+  files: OutputFile[],
+  instructionTargets: InstructionTargetId[] = []
+): void {
+  if (
+    instructionTargets.length > 0 &&
+    !isInstructionTargetEnabled(instructionTargets, 'cursor')
+  ) {
+    return;
+  }
   const writtenRulePaths: string[] = [];
 
   for (const s of plan.subsystems) {

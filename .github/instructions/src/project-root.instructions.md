@@ -2,14 +2,14 @@
 description: "Mirror — `src/project-root.ts`"
 applyTo: "src/project-root.ts"
 priority: "P1"
-last_updated: "2026-05-15"
+last_updated: "2026-05-18"
 ---
 
 ## When to Read
 - editing or refactoring `project-root.ts`
 
 ## Overview
-- `src/project-root.ts` (108 lines · 7 top-level symbols) — Git work tree root, or null if `cwd` is not inside a Git repository.
+- `src/project-root.ts` (108 lines · 7 top-level symbols) — Mirror — `src/project-root.ts`
 
 ## Graph
 ```mermaid

@@ -2,14 +2,14 @@
 description: "Mirror — `src/writer.ts`"
 applyTo: "src/writer.ts"
 priority: "P0"
-last_updated: "2026-05-15"
+last_updated: "2026-05-18"
 ---
 
 ## When to Read
 - editing or refactoring `writer.ts`
 
 ## Overview
-- `src/writer.ts` (191 lines · 4 top-level symbols) — Parse LLM response with multiple fallback strategies for different output formats.
+- `src/writer.ts` (191 lines · 4 top-level symbols) — Mirror — `src/writer.ts`
 
 ## Graph
 ```mermaid

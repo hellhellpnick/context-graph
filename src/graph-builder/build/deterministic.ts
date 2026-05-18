@@ -1,6 +1,7 @@
 import type { ScanResult } from '../../scanner';
 import type { OutputFile } from '../../writer';
 import type { LLMUsage } from '../../providers/types';
+import type { InstructionTargetId } from '../../instruction-targets';
 import type { DeterministicBuildOptions, MultiPassResult } from '../types';
 import { repairBuildPlan } from '../plan/repair';
 import { appendCursorRuleFiles } from '../deterministic/cursor-rules';
@@ -28,8 +29,18 @@ export function buildGraphDeterministic(
     );
   }
 
-  injectDeterministicRootFiles(today, scan, plan, files);
-  appendCursorRuleFiles(plan, files);
+  const instructionTargets = opts.instructionTargets ?? [];
+  injectDeterministicRootFiles(
+    today,
+    scan,
+    plan,
+    files,
+    undefined,
+    opts.slimRoot === true ? { slimRoot: true } : undefined,
+    instructionTargets,
+    opts.projectMetadata
+  );
+  appendCursorRuleFiles(plan, files, instructionTargets);
 
   // Passes=1 to indicate "one deterministic run"; usage/cost are zero.
   const usage: LLMUsage = { inputTokens: 0, outputTokens: 0 };

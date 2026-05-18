@@ -5,7 +5,7 @@ import {
   compactTsExportLine,
   isPromptTemplateBody,
   isExecutableModulePath,
-} from '../dist/source-extract.js';
+} from '../dist/source-extract/index.js';
 import {
   extractFilePurpose,
   isWeakFilePurpose,

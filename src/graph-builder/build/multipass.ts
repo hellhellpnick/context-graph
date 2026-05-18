@@ -7,7 +7,7 @@ import type { OutputFile } from '../../writer';
 import { createProvider } from '../../providers';
 import { parseOutputFiles } from '../../writer';
 import { parseBuildPlan } from '../plan/parse';
-import { repairBuildPlan, repairOptionsFromConfig } from '../plan/repair';
+import { repairBuildPlan, resolveRepairOptions } from '../plan/repair';
 import { appendCursorRuleFiles } from '../deterministic/cursor-rules';
 import { injectDeterministicRootFiles } from '../deterministic/root';
 import { buildDeterministicSubsystemFile } from '../deterministic/subsystem';
@@ -52,7 +52,11 @@ export async function buildGraphMultiPass(
   const costPlan = estimateCost(config.provider.model, planResp.usage);
   if (costPlan !== null) totalCost += costPlan;
 
-  const plan = repairBuildPlan(scanFull, parseBuildPlan(planResp.content), repairOptionsFromConfig(config));
+  const plan = repairBuildPlan(
+    scanFull,
+    parseBuildPlan(planResp.content),
+    resolveRepairOptions(scanFull, config)
+  );
   onPlanReady?.(plan);
 
   // Total expected passes: plan(0) + root(1) + one per subsystem (after coverage repair)
@@ -62,9 +66,13 @@ export async function buildGraphMultiPass(
   onPassComplete?.(passes, totalExpected, 'planning', [], costPlan);
 
   // ── Pass 1: root files ─────────────────────────────────────────────────
-  const pass1Msg = buildRootPassMessage(today, scanPrompt, plan, scanFull, {
-    slimRoot: config.contextDepth === 'slim',
-  });
+  const pass1Msg = buildRootPassMessage(
+    today,
+    scanPrompt,
+    plan,
+    scanFull,
+    config.contextDepth === 'slim' ? { slimRoot: true } : undefined
+  );
   const pass1 = await provider.complete(systemPrompt, [{ role: 'user', content: pass1Msg }]);
   passes++;
   totalInput += pass1.usage.inputTokens;
@@ -74,7 +82,15 @@ export async function buildGraphMultiPass(
 
   const pass1Files = parseOutputFiles(pass1.content);
   const llmCopilot = pass1Files.find(f => f.path.endsWith('copilot-instructions.md'))?.content;
-  injectDeterministicRootFiles(today, scanFull, plan, pass1Files, llmCopilot);
+  injectDeterministicRootFiles(
+    today,
+    scanFull,
+    plan,
+    pass1Files,
+    llmCopilot,
+    config.contextDepth === 'slim' ? { slimRoot: true } : undefined,
+    config.instructionTargets
+  );
   allFiles.push(...pass1Files);
   onPassComplete?.(passes, totalExpected, 'root files', pass1Files, cost1);
 
@@ -172,7 +188,7 @@ export async function buildGraphMultiPass(
     onPassComplete?.(passes, totalExpected, statusLabel, passFiles, lastCost);
   }
 
-  appendCursorRuleFiles(plan, allFiles);
+  appendCursorRuleFiles(plan, allFiles, config.instructionTargets);
 
   return {
     files: allFiles,

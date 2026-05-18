@@ -2,14 +2,14 @@
 description: "Mirror — `src/graph-builder/prompt.ts`"
 applyTo: "src/graph-builder/prompt.ts"
 priority: "P2"
-last_updated: "2026-05-15"
+last_updated: "2026-05-18"
 ---
 
 ## When to Read
 - editing or refactoring `prompt.ts`
 
 ## Overview
-- `src/graph-builder/prompt.ts` (47 lines · 4 top-level symbols) — Node / Python / Rust / PHP env access heuristics for Danger Zone + mermaid. — **LLM prompt builder** (routing only; edit templates in repo)
+- `src/graph-builder/prompt.ts` (47 lines · 4 top-level symbols) — Mirror — `src/graph-builder/prompt.ts` — **LLM prompt builder** (routing only; edit templates in repo)
 
 ## Graph
 ```mermaid

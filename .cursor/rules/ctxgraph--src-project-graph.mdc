@@ -1,0 +1,35 @@
+---
+description: "Project Graph — src/project-graph.ts"
+globs: src/project-graph.ts
+alwaysApply: false
+---
+
+## When to Read
+- editing or refactoring `project-graph.ts`
+
+## Overview
+- `src/project-graph.ts` (15 lines · 1 top-level symbols) — Mirror — `src/project-graph.ts`
+
+## Graph
+```mermaid
+graph LR
+  project_graph[project-graph]
+```
+
+## Signatures
+
+```typescript
+// ── src/project-graph.ts ──
+/** True when a prior context-graph build left core files under `.github/instructions/`. */
+export function projectGraphExists(projectRoot: string): boolean { return GRAPH_MARKER_PATHS.some(rel => fs.existsSync(path.join(projectRoot, rel))); }
+
+```
+
+## Dependencies
+- No dependencies detected
+
+## Danger Zone 🔴
+- **[fs]** filesystem I/O
+
+<!-- context-graph: generated from `.github/instructions/src/project-graph.instructions.md` -->
+_Regenerate: `context-graph build --no-llm` · Do not hand-edit this rule._

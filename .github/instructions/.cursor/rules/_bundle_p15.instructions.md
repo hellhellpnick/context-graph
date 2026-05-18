@@ -1,54 +1,66 @@
 ---
-description: "Mirror — `.cursor/rules/` (4 files, part 15/20)"
+description: "Mirror — `.cursor/rules/` (4 files, part 15/16)"
 applyTo: ".cursor/rules/**"
 priority: "P2"
-last_updated: "2026-05-15"
+last_updated: "2026-05-18"
 ---
 
 ## When to Read
-- editing or refactoring `ctxgraph--src-graph-builder-messages-planning.mdc`
-- editing or refactoring `ctxgraph--src-graph-builder-messages-root.mdc`
-- editing or refactoring `ctxgraph--src-graph-builder-messages-subsystem.mdc`
-- editing or refactoring `ctxgraph--src-graph-builder-plan-infer.mdc`
+- editing or refactoring `ctxgraph--src-providers-index.mdc`
+- editing or refactoring `ctxgraph--src-providers-openai.mdc`
+- editing or refactoring `ctxgraph--src-providers-types.mdc`
+- editing or refactoring `ctxgraph--src-scanner.mdc`
 
 ## Overview
-- `.cursor/rules/ctxgraph--src-graph-builder-messages-planning.mdc` (37 lines · 1 top-level symbols) — # When to Read
-- `.cursor/rules/ctxgraph--src-graph-builder-messages-root.mdc` (42 lines · 1 top-level symbols) — # When to Read
-- `.cursor/rules/ctxgraph--src-graph-builder-messages-subsystem.mdc` (43 lines · 3 top-level symbols) — # When to Read
-- `.cursor/rules/ctxgraph--src-graph-builder-plan-infer.mdc` (39 lines · 5 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--src-providers-index.mdc` (41 lines · 2 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--src-providers-openai.mdc` (36 lines · 1 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--src-providers-types.mdc` (35 lines · 5 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--src-scanner.mdc` (53 lines · 7 top-level symbols) — # When to Read
 
 ## Graph
 ```mermaid
 graph LR
   Rules[Rules]
+  Rules --> node[""]
 ```
 
 ## Signatures
 
 ```typescript
-// ── .cursor/rules/ctxgraph--src-graph-builder-messages-planning.mdc ──
-// ── src/graph-builder/messages/planning.ts ──
-export function buildPlanningPassMessage(scan: ScanResult): string { /* prompt template (~65 lines) */ }
+// ── .cursor/rules/ctxgraph--src-providers-index.mdc ──
+// ── src/providers/index.ts ──
+export function createProvider(config: ProviderConfig): LLMProvider { switch (config.provider) { case 'openai': case 'openai-compat': case 'ollama': return new OpenAIProvider(config); case 'anthropic': return new AnthropicProvider(config…
+export type { LLMProvider, LLMMessage, LLMUsage, LLMResponse, ProviderConfig } from './types'
 
-// ── .cursor/rules/ctxgraph--src-graph-builder-messages-root.mdc ──
-// ── src/graph-builder/messages/root.ts ──
-export function buildRootPassMessage( today: string, scanPrompt: ScanResult, plan: BuildPlan | undefined, scanFull: ScanResult, opts?: { /* prompt template (~116 lines) */ }
+// ── .cursor/rules/ctxgraph--src-providers-openai.mdc ──
+// ── src/providers/openai.ts ──
+export class OpenAIProvider implements LLMProvider { /* ~44 lines */ }
 
-// ── .cursor/rules/ctxgraph--src-graph-builder-messages-subsystem.mdc ──
-// ── src/graph-builder/messages/subsystem.ts ──
-export function buildFocusedContext(scan: ScanResult, sourceFiles: string[], subsystemName: string): string { /* ~21 lines */ }
-export function buildSubsystemPassMessage( today: string, subsystemPath: string, rootGraphContent: string, scanPrompt: ScanResult, scanFull: ScanResult, sourceFiles: string[], planItem?: BuildPlanI… { /* prompt template (~96 lines) */ }
-export function buildUserMessage(mode: BuildMode, scan: ScanResult, opts: BuildOptions): string { /* prompt template (~37 lines) */ }
+// ── .cursor/rules/ctxgraph--src-providers-types.mdc ──
+// ── src/providers/types.ts ──
+export interface LLMMessage { role: 'user' | 'assistant'; content: string; }
+export interface LLMUsage { inputTokens: number; outputTokens: number; }
+export interface LLMResponse { content: string; usage: LLMUsage; }
+export interface LLMProvider { complete(systemPrompt: string, messages: LLMMessage[]): Promise<LLMResponse>; }
+export interface ProviderConfig { provider: 'openai' | 'anthropic' | 'openai-compat' | 'ollama'; model: string; apiKeyEnv: string; baseUrl?: string; maxTokens?: number; }
 
-// ── .cursor/rules/ctxgraph--src-graph-builder-plan-infer.mdc ──
-// ── src/graph-builder/plan/infer.ts ──
-export function buildPlanningContextLight(scan: ScanResult): string { /* ~23 lines */ }
-export function readPackageJson(scan: ScanResult): Record<string, unknown> | null { const f = scan.files.find(x => x.path === 'package.json' && x.content); if (!f) return null; try { return JSON.parse(f.content) as Record<string, unknown…
-export function readGoModModule(scan: ScanResult): string | null { const f = scan.files.find(x => x.path === 'go.mod' && x.content); if (!f) return null; const m = f.content.match(/^module\s+(\S+)/m); return m ? m[1].trim() : null; }
-export function readComposerJson(scan: ScanResult): Record<string, unknown> | null { const f = scan.files.find(x => x.path === 'composer.json' && x.content); if (!f) return null; try { return JSON.parse(f.content) as Record<string, unkno…
-export function inferDefaultsFromScan(scan: ScanResult): Pick<BuildPlan, 'projectName' | 'projectDescription' | 'techStack' | 'buildCommand' | 'testCommand'> { /* ~63 lines */ }
+// ── .cursor/rules/ctxgraph--src-scanner.mdc ──
+// ── src/scanner.ts ──
+/** Root files with gitignore-style rules, scanned after `.gitignore` / `.copilotignore`. */
+export const GRAPH_CONTEXT_IGNORE_FILENAMES = ['.graph-context-ignore', '.context-graph-ignore'] as const;
+export interface ScannedFile { path: string; tier: 0 | 1 | 2 | 3; content: string; lines: number; truncated: boolean; }
+export interface ScanResult { tree: string; files: ScannedFile[]; tokenEstimate: number; fileCount: number; skippedCount: number; }
+export function classifyFile(relPath: string): 0 | 1 | 2 | 3 { const normalized = relPath.replace(/\\/g, '/'); const parts = normalized.split('/'); const name = parts[parts.length - 1]; if (parts.some(p => TIER3_DIRS.has(p))) return 3; i…
+export async function scanProject( projectRoot: string, maxFiles = 200, maxInputTokens = 80000, options?: { /* ~126 lines */ }
+export function formatForLLM(scan: ScanResult): string { /* prompt template (~52 lines) */ }
+/**
+ * Returns a shallow copy of the scan with long file bodies truncated for LLM prompts.
+ * Tier 0–2 only; Tier 3 unchanged. Does not replace full scan for `repairBuildPlan` / `buildMetadataJson`.
+ */
+export function scanForPromptDepth(scan: ScanResult, depth: 'full' | 'slim'): ScanResult { /* ~20 lines */ }
 
 ```
 
 ## Dependencies
-- No dependencies detected
+**External:**
+- ``

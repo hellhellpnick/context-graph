@@ -39,9 +39,17 @@ export function inferFilePriority(
   if (/(?:^|\/)app\/.*\/(page|layout|route)\.(vue|tsx|jsx|ts|js)$/i.test(norm)) return 'P0';
   if (/(?:^|\/)layouts?\//i.test(norm) && /\.(vue|tsx|jsx)$/i.test(norm)) return 'P1';
 
-  // State & data fetching
-  if (isComposableLikePath(norm)) return 'P0';
-  if (/(?:^|\/)composables?\//i.test(norm)) return 'P0';
+  // Frontend mocks / specs — below Laravel API
+  if (/(?:^|\/)__mocks__\//i.test(norm)) return 'P2';
+  if (/(?:^|\/)__tests__\//i.test(norm) && /\.(ts|js|vue)$/i.test(norm)) return 'P2';
+
+  // State & data fetching (pages stay P0; composables P1 — avoids slim-root noise)
+  if (isComposableLikePath(norm)) return 'P1';
+  if (/(?:^|\/)composables?\//i.test(norm)) return 'P1';
+  if (/(?:^|\/)resources\/assets\//i.test(norm) && /\.(vue|ts|js)$/i.test(norm)) {
+    if (/(?:^|\/)__mocks__|\.spec\.|\.test\./i.test(norm)) return 'P2';
+    return 'P1';
+  }
   if (/(?:^|\/)stores?\//i.test(norm)) return 'P1';
   if (/(?:^|\/)middleware\//i.test(norm)) return 'P1';
   if (/(?:^|\/)plugins?\//i.test(norm) && /\.(ts|js|mjs)$/i.test(norm)) return 'P1';
@@ -60,12 +68,34 @@ export function inferFilePriority(
   if (/^src\/providers\//i.test(norm)) return 'P1';
   if (/^src\/(hooks|agents|scanner)\./i.test(norm)) return 'P1';
 
-  // API / server
+  // Laravel / PHP backend (before generic `/api/` — avoids matching `Controllers/API/`)
+  if (/(?:^|\/)app\/Http\/Controllers\/API\//i.test(norm)) return 'P0';
+  if (/(?:^|\/)app\/Http\/Controllers\//i.test(norm)) return 'P1';
+  if (/(?:^|\/)app\/Http\/Requests\//i.test(norm)) return 'P1';
+  if (/(?:^|\/)app\/Http\/Middleware\//i.test(norm)) return 'P1';
+  if (/(?:^|\/)app\/Services\//i.test(norm)) return 'P1';
+  if (/(?:^|\/)app\/Models\//i.test(norm)) return 'P1';
+  if (/(?:^|\/)app\/Ai\//i.test(norm)) return 'P1';
+  if (/(?:^|\/)routes\//i.test(norm) && /\.php$/i.test(norm)) return 'P1';
+  if (/(?:^|\/)app\/Console\//i.test(norm)) return 'P1';
+  if (/(?:^|\/)app\/Providers\//i.test(norm)) return 'P1';
+  if (/(?:^|\/)config\//i.test(norm) && /\.php$/i.test(norm)) return 'P1';
+  if (/(?:^|\/)database\/(?:migrations|seeders|factories)\//i.test(norm)) return 'P2';
+
+  // API / server (after Laravel — do not match `.../Controllers/API/...`)
   if (/(?:^|\/)server\/(?:api|routes|middleware)/i.test(norm)) return 'P1';
-  if (/(?:^|\/)api\//i.test(norm) && /\.(ts|js|py|go|php)$/i.test(norm)) return 'P1';
+  if (
+    /(?:^|\/)api\//i.test(norm) &&
+    /\.(ts|js|py|go|php)$/i.test(norm) &&
+    !/\/Controllers\/API\//i.test(norm)
+  ) {
+    return 'P1';
+  }
 
   // PHP / Python entry-ish
   if (/^public\/index\.php$/i.test(norm)) return 'P0';
+  if (/^routes\/(?:web|api|console)/i.test(norm) && /\.php$/i.test(norm)) return 'P1';
+  if (/^artisan$/i.test(norm)) return 'P1';
   if (/^(manage|wsgi|asgi)\.py$/i.test(base)) return 'P0';
 
   // Vue / UI

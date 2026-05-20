@@ -2,7 +2,7 @@
 description: "Mirror — `src/graph-builder/resolve-symbol.ts`"
 applyTo: "src/graph-builder/resolve-symbol.ts"
 priority: "P1"
-last_updated: "2026-05-19"
+last_updated: "2026-05-20"
 ---
 
 ## When to Read

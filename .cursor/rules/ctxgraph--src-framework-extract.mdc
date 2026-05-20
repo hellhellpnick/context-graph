@@ -8,7 +8,7 @@ alwaysApply: false
 - editing or refactoring `framework-extract.ts`
 
 ## Overview
-- `src/framework-extract.ts` (582 lines · 10 top-level symbols) — Framework-aware deterministic extraction (no LLM).
+- `src/framework-extract.ts` (749 lines · 10 top-level symbols) — Framework-aware deterministic extraction (no LLM).
 
 ## Graph
 ```mermaid
@@ -22,15 +22,15 @@ graph LR
 
 ```typescript
 // ── src/framework-extract.ts ──
-export type FrameworkId = | 'nuxt' | 'vue' | 'react' | 'next' | 'angular' | 'python' | 'php' | 'csharp';
+export { extractCSharpSymbolLines } from './source-extract'
+export type FrameworkId = | 'nuxt' | 'vue' | 'react' | 'next' | 'angular' | 'python' | 'php' | 'csharp' | 'rust' | 'java' | 'kotlin' | 'ruby';
 /** Detect stacks present in a file (path + content). */
-export function detectFrameworks(relPath: string, content: string): FrameworkId[] { /* ~40 lines */ }
-export function extractCSharpSymbolLines(cs: string): string[] { /* ~23 lines */ }
-export function extractRuntimeSection( relPath: string, content: string ): { /* ~39 lines */ }
-export function extractDeterministicErrorsForFile( relPath: string, content: string, fileLabel?: string ): string[] { /* ~24 lines */ }
-export function extractSideEffectsForFile(relPath: string, content: string): string[] { /* ~21 lines */ }
+export function detectFrameworks(relPath: string, content: string): FrameworkId[] { /* ~44 lines */ }
+export function extractRuntimeSection( relPath: string, content: string ): { /* ~49 lines */ }
+export function extractDeterministicErrorsForFile( relPath: string, content: string, fileLabel?: string ): string[] { /* ~29 lines */ }
+export function extractSideEffectsForFile(relPath: string, content: string): string[] { /* ~26 lines */ }
 /** Extra split-score boosts per detected stack. */
-export function frameworkSplitScoreBoost(relPath: string, content: string): number { /* ~33 lines */ }
+export function frameworkSplitScoreBoost(relPath: string, content: string): number { /* ~45 lines */ }
 /** Import buckets for Dependencies section. */
 export function classifyFrameworkImports(deps: string[]): { /* ~25 lines */ }
 /** Split score including all framework heuristics. */

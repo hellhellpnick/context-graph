@@ -114,6 +114,10 @@ export function inferTechStackFromScan(
   const go = countSourceExt(scan, '.go');
   const py = countSourceExt(scan, '.py');
   const rs = countSourceExt(scan, '.rs');
+  const cs = countSourceExt(scan, '.cs');
+  const java = countSourceExt(scan, '.java');
+  const kt = countSourceExt(scan, '.kt');
+  const rb = countSourceExt(scan, '.rb');
   const pkg = readPackageJson(scan);
 
   if (profile.laravel) {
@@ -142,6 +146,10 @@ export function inferTechStackFromScan(
   if (go >= MIN_LANG_FILES) stack.push('Go');
   if (py >= MIN_LANG_FILES) stack.push('Python');
   if (rs >= MIN_LANG_FILES) stack.push('Rust');
+  if (cs >= MIN_LANG_FILES) stack.push('C#');
+  if (java >= MIN_LANG_FILES) stack.push('Java');
+  if (kt >= MIN_LANG_FILES) stack.push('Kotlin');
+  if (rb >= MIN_LANG_FILES) stack.push('Ruby');
   if (stack.length === 0) stack.push('Unknown');
   return stack;
 }

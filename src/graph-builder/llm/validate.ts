@@ -5,9 +5,13 @@ import type { BuildPlanItem } from '../types';
 import type { OutputFile } from '../../writer';
 import { OUTPUT_FORMAT_INSTRUCTION } from '../constants';
 import {
+  extractCSharpSymbolLines,
   extractGoSymbolLines,
+  extractJavaKotlinSymbolLines,
   extractPhpSymbolLines,
   extractPythonSymbolLines,
+  extractRubySymbolLines,
+  extractRustSymbolLines,
   extractVuePropKeys,
   scriptOrSelfForAnalysis,
 } from '../../source-extract';
@@ -121,6 +125,34 @@ export function llmContentMatchesRealExports(
         if (m) realNames.push(m[1]);
         const ty = line.match(/^type\s+(\w+)\s+/);
         if (ty) realNames.push(ty[1]);
+      }
+    }
+    if (/\.cs$/i.test(sf)) {
+      for (const line of extractCSharpSymbolLines(scanned.content)) {
+        const cls = line.match(/(?:class|interface|record|struct|enum)\s+(\w+)/i);
+        if (cls) realNames.push(cls[1]);
+      }
+    }
+    if (/\.rs$/i.test(sf)) {
+      for (const line of extractRustSymbolLines(scanned.content)) {
+        const fn = line.match(/^fn\s+(\w+)/);
+        if (fn) realNames.push(fn[1]);
+        const ty = line.match(/^(?:pub\s+)?(?:struct|enum|trait)\s+(\w+)/);
+        if (ty) realNames.push(ty[1]);
+      }
+    }
+    if (/\.(java|kt)$/i.test(sf)) {
+      for (const line of extractJavaKotlinSymbolLines(scanned.content)) {
+        const cls = line.match(/(?:class|interface|record|enum)\s+(\w+)/i);
+        if (cls) realNames.push(cls[1]);
+      }
+    }
+    if (/\.rb$/i.test(sf)) {
+      for (const line of extractRubySymbolLines(scanned.content)) {
+        const cls = line.match(/^(?:class|module)\s+(\w+)/);
+        if (cls) realNames.push(cls[1]);
+        const defm = line.match(/^def\s+(?:self\.)?(\w+)/);
+        if (defm) realNames.push(defm[1]);
       }
     }
     if (/\.vue$/i.test(sf)) {

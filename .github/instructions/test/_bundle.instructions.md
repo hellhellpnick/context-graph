@@ -1,33 +1,29 @@
 ---
-description: "Mirror — `test/` (4 files, part 1/3)"
+description: "Mirror — `test/` (4 files, part 1/4)"
 applyTo: "test/**"
 priority: "P2"
-last_updated: "2026-05-19"
+last_updated: "2026-05-20"
 ---
 
 ## When to Read
 - editing or refactoring `copilotignore.test.mjs`
+- editing or refactoring `csharp-extract.test.mjs`
 - editing or refactoring `extract.test.mjs`
-- editing or refactoring `instruction-targets.test.mjs`
-- editing or refactoring `php-extract.test.mjs`
+- editing or refactoring `go-extract.test.mjs`
 
 ## Overview
-- `test/copilotignore.test.mjs` (38 lines) — Mirror — `test/` (4 files, part 1/3)
-- `test/extract.test.mjs` (87 lines · 2 top-level symbols) — Mirror — `test/` (4 files, part 1/3)
-- `test/instruction-targets.test.mjs` (158 lines) — Mirror — `test/` (4 files, part 1/3)
-- `test/php-extract.test.mjs` (128 lines) — Mirror — `test/` (4 files, part 1/3)
+- `test/copilotignore.test.mjs` (38 lines) — Mirror — `test/` (4 files, part 1/4)
+- `test/csharp-extract.test.mjs` (41 lines) — Mirror — `test/` (4 files, part 1/4)
+- `test/extract.test.mjs` (87 lines · 2 top-level symbols) — Mirror — `test/` (4 files, part 1/4)
+- `test/go-extract.test.mjs` (48 lines) — Mirror — `test/` (4 files, part 1/4)
 
 ## Graph
 ```mermaid
 graph LR
   Test[Test]
-  Test --> config[config]
   Test --> root[root]
-  Test --> exports[exports]
   Test --> misc[misc]
   Test --> priority[priority]
-  Test --> instruction_targets[instruction-targets]
-  Test --> project_graph[project-graph]
   Test --> index[index]
   Test --> typescript["typescript"]
 ```
@@ -35,6 +31,10 @@ graph LR
 ## Signatures
 
 ```typescript
+// ── test/csharp-extract.test.mjs ──
+// ── skeleton ──
+const SAMPLE = `using System; using static System.Console; global using MyApp.Models; namespace MyApp.Controllers; [ApiController] [Route("api/[controller]")] public class ItemsController : Controlle…
+
 // ── test/extract.test.mjs ──
 /** Targets barrels only — not file purpose. */
 export function extractReExportTargets() {}`;
@@ -42,9 +42,9 @@ export function extractReExportTargets() {}`;
  */
 export function foo() {}`;
 
-// ── test/php-extract.test.mjs ──
+// ── test/go-extract.test.mjs ──
 // ── skeleton ──
-const SAMPLE = `<?php namespace App\\Http\\Controllers\\API; use App\\Enums\\Acl\\Permission; use App\\Http\\Controllers\\Controller; use App\\Repositories\\PlaylistRepository; class FetchInitialData…
+const SAMPLE = `package api import ( "fmt" alias "example.com/lib" ) type Reader interface { Read([]byte) (int, error) } type Server struct { Host string } func (s *Server) Listen() error { return fm…
 
 
 // CLI commands:
@@ -53,13 +53,9 @@ const SAMPLE = `<?php namespace App\\Http\\Controllers\\API; use App\\Enums\\Acl
 
 ## Dependencies
 **Internal:**
-- `dist/config`
 - `dist/graph-builder/deterministic/root`
-- `dist/graph-builder/extract/exports`
 - `dist/graph-builder/extract/misc`
 - `dist/graph-builder/plan/priority`
-- `dist/instruction-targets`
-- `dist/project-graph`
 - `dist/source-extract/index`
 
 **External:**

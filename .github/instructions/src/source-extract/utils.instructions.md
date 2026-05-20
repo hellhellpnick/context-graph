@@ -2,7 +2,7 @@
 description: "Mirror — `src/source-extract/utils.ts`"
 applyTo: "src/source-extract/utils.ts"
 priority: "P2"
-last_updated: "2026-05-19"
+last_updated: "2026-05-20"
 ---
 
 ## When to Read

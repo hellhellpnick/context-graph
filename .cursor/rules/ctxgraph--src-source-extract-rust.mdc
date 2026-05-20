@@ -1,0 +1,33 @@
+---
+description: "Rust — src/source-extract/rust.ts"
+globs: src/source-extract/rust.ts
+alwaysApply: false
+---
+
+## When to Read
+- editing or refactoring `rust.ts`
+
+## Overview
+- `src/source-extract/rust.ts` (44 lines · 2 top-level symbols) — Rust symbol and import extraction.
+
+## Graph
+```mermaid
+graph LR
+  rust[rust]
+```
+
+## Signatures
+
+```typescript
+// ── src/source-extract/rust.ts ──
+/** Rust symbol and import extraction. */
+export function extractRustImports(rs: string): string[] { /* ~17 lines */ }
+export function extractRustSymbolLines(rs: string): string[] { /* ~23 lines */ }
+
+```
+
+## Dependencies
+- No dependencies detected
+
+<!-- context-graph: generated from `.github/instructions/src/source-extract/rust.instructions.md` -->
+_Regenerate: `context-graph build --no-llm` · Do not hand-edit this rule._

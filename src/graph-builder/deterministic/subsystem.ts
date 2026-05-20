@@ -20,8 +20,11 @@ import { isBarrelFile } from '../extract/imports';
 import {
   extractCSharpSymbolLines,
   extractGoSymbolLines,
+  extractJavaKotlinSymbolLines,
   extractPhpSymbolLines,
   extractPythonSymbolLines,
+  extractRubySymbolLines,
+  extractRustSymbolLines,
   extractVueSymbolLines,
   scriptOrSelfForAnalysis,
 } from '../../source-extract';
@@ -91,6 +94,9 @@ export function buildDeterministicSubsystemFile(
       if (/\.py$/i.test(sf)) return extractPythonSymbolLines(scanned.content).length;
       if (/\.go$/i.test(sf)) return extractGoSymbolLines(scanned.content).length;
       if (/\.cs$/i.test(sf)) return extractCSharpSymbolLines(scanned.content).length;
+      if (/\.rs$/i.test(sf)) return extractRustSymbolLines(scanned.content).length;
+      if (/\.(java|kt)$/i.test(sf)) return extractJavaKotlinSymbolLines(scanned.content).length;
+      if (/\.rb$/i.test(sf)) return extractRubySymbolLines(scanned.content).length;
       const { body } = scriptOrSelfForAnalysis(sf, scanned.content);
       if (/\.vue$/i.test(sf)) {
         const vueSyms = extractVueSymbolLines(body).length;
@@ -239,6 +245,10 @@ export function buildDeterministicSubsystemFile(
   const allPy = sourceFiles.every(p => /\.py$/i.test(p));
   const allGo = sourceFiles.every(p => /\.go$/i.test(p));
   const allCs = sourceFiles.every(p => /\.cs$/i.test(p));
+  const allRs = sourceFiles.every(p => /\.rs$/i.test(p));
+  const allJava = sourceFiles.every(p => /\.java$/i.test(p));
+  const allKt = sourceFiles.every(p => /\.kt$/i.test(p));
+  const allRb = sourceFiles.every(p => /\.rb$/i.test(p));
   const hasJsx = sourceFiles.some(p => /\.(tsx|jsx)$/i.test(p));
   const sigFence = allPhp
     ? 'php'
@@ -248,9 +258,17 @@ export function buildDeterministicSubsystemFile(
         ? 'go'
         : allCs
           ? 'csharp'
-          : hasVue || hasJsx
-            ? 'javascript'
-            : 'typescript';
+          : allRs
+            ? 'rust'
+            : allJava
+              ? 'java'
+              : allKt
+                ? 'kotlin'
+                : allRb
+                  ? 'ruby'
+                  : hasVue || hasJsx
+                    ? 'javascript'
+                    : 'typescript';
 
   const content = [
     '---',

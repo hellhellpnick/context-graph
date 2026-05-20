@@ -2,7 +2,7 @@
 description: "Mirror — `src/cli/build-run.ts`"
 applyTo: "src/cli/build-run.ts"
 priority: "P1"
-last_updated: "2026-05-19"
+last_updated: "2026-05-20"
 ---
 
 ## When to Read

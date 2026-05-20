@@ -23,7 +23,11 @@ export type FrameworkId =
   | 'angular'
   | 'python'
   | 'php'
-  | 'csharp';
+  | 'csharp'
+  | 'rust'
+  | 'java'
+  | 'kotlin'
+  | 'ruby';
 
 function dedupeLines(lines: string[], max = 32): string[] {
   const out: string[] = [];
@@ -76,6 +80,10 @@ export function detectFrameworks(relPath: string, content: string): FrameworkId[
   if (/\.py$/i.test(norm)) found.add('python');
   if (/\.php$/i.test(norm)) found.add('php');
   if (/\.cs$/i.test(norm)) found.add('csharp');
+  if (/\.rs$/i.test(norm)) found.add('rust');
+  if (/\.java$/i.test(norm)) found.add('java');
+  if (/\.kt$/i.test(norm)) found.add('kotlin');
+  if (/\.rb$/i.test(norm)) found.add('ruby');
 
   return [...found];
 }
@@ -90,6 +98,10 @@ function runtimeTitle(frameworks: FrameworkId[]): string {
     python: 'Python',
     php: 'PHP',
     csharp: 'C#',
+    rust: 'Rust',
+    java: 'Java',
+    kotlin: 'Kotlin',
+    ruby: 'Ruby',
   };
   if (frameworks.length === 0) return 'Runtime';
   return `Runtime (${frameworks.map(f => labels[f]).join(' / ')})`;
@@ -313,6 +325,150 @@ function extractCSharpRuntimeBullets(cs: string): string[] {
   return out;
 }
 
+// ── Rust ───────────────────────────────────────────────────────────────────
+
+function extractRustRuntimeBullets(rs: string, relPath: string): string[] {
+  const out: string[] = [];
+  const push = (s: string) => out.push(s);
+  if (/#\[derive\s*\(\s*.*Handler/i.test(rs) || /#\[get\s*\(|#\[post\s*\(/i.test(rs)) {
+    push('Axum / Actix route handler');
+  }
+  if (/\basync\s+fn\b/.test(rs) && /tokio|async_std/.test(rs)) push('async runtime (`tokio`)');
+  if (/\bSqlxPool\b|\.query\s*<|diesel::/.test(rs)) push('database access');
+  if (/\/api\/|\/routes\//i.test(relPath)) push('HTTP API module path');
+  return out;
+}
+
+function extractRustErrors(rs: string, fileLabel?: string): string[] {
+  const out: string[] = [];
+  const suffix = fileLabel ? ` (\`${fileLabel}\`)` : '';
+  const seen = new Set<string>();
+  const push = (line: string) => {
+    if (seen.has(line)) return;
+    seen.add(line);
+    out.push(line);
+  };
+  for (const m of rs.matchAll(/panic!\s*\(\s*"([^"]{4,120})"/g)) {
+    push(`- \`panic!\`: "${m[1]}"${suffix}`);
+  }
+  if (/\bResult\s*<.*>\s*\{/.test(rs) || /\.map_err\s*\(/.test(rs)) {
+    push(`- \`Result\` error propagation${suffix}`);
+  }
+  return out;
+}
+
+function extractRustSideEffects(rs: string): string[] {
+  const out: string[] = [];
+  const seen = new Set<string>();
+  const push = (tag: string, detail: string) => {
+    const line = `- **[${tag}]** ${detail}`;
+    if (seen.has(line)) return;
+    seen.add(line);
+    out.push(line);
+  };
+  if (/\bstd::env::var\b|dotenv::/.test(rs)) push('env', 'environment variables');
+  if (/\breqwest::|hyper::|TcpStream/.test(rs)) push('network', 'HTTP / TCP');
+  if (/\bstd::fs::|tokio::fs::/.test(rs)) push('fs', 'filesystem I/O');
+  if (/\bsqlx::|diesel::/.test(rs)) push('db', 'database');
+  return out;
+}
+
+// ── Java / Kotlin ──────────────────────────────────────────────────────────
+
+function extractJavaKotlinRuntimeBullets(src: string, relPath: string): string[] {
+  const out: string[] = [];
+  const push = (s: string) => out.push(s);
+  if (/@RestController|@Controller\b/.test(src)) push('Spring MVC / REST controller');
+  for (const m of src.matchAll(/@(Get|Post|Put|Delete|Patch|Request)Mapping(?:\([^)]*\))?/gi)) {
+    push(`HTTP ${m[1].toUpperCase()} mapping`);
+  }
+  if (/\bJpaRepository\b|@Entity\b/.test(src)) push('JPA / Hibernate entity');
+  if (/fun\s+\w+.*:\s*ResponseEntity/.test(src)) push('Kotlin `ResponseEntity` API');
+  if (/\/controllers?\//i.test(relPath)) push('controller package path');
+  return out;
+}
+
+function extractJavaKotlinErrors(src: string, fileLabel?: string): string[] {
+  const out: string[] = [];
+  const suffix = fileLabel ? ` (\`${fileLabel}\`)` : '';
+  const seen = new Set<string>();
+  const push = (line: string) => {
+    if (seen.has(line)) return;
+    seen.add(line);
+    out.push(line);
+  };
+  for (const m of src.matchAll(/throw\s+new\s+(\w+)\s*\(\s*"([^"]{4,120})"/g)) {
+    push(`- \`${m[1]}\`: "${m[2]}"${suffix}`);
+  }
+  if (/\bResponseEntity\.notFound|HttpStatus\.NOT_FOUND/.test(src)) {
+    push(`- 404 Not Found${suffix}`);
+  }
+  return out;
+}
+
+function extractJavaKotlinSideEffects(src: string): string[] {
+  const out: string[] = [];
+  const seen = new Set<string>();
+  const push = (tag: string, detail: string) => {
+    const line = `- **[${tag}]** ${detail}`;
+    if (seen.has(line)) return;
+    seen.add(line);
+    out.push(line);
+  };
+  if (/@Value\s*\(|Environment\.getProperty/.test(src)) push('config', 'Spring configuration');
+  if (/\bRestTemplate\b|WebClient|HttpClient/.test(src)) push('network', 'HTTP client');
+  if (/\bFiles\.|FileInputStream|Path\.of/.test(src)) push('fs', 'filesystem I/O');
+  if (/@Autowired.*Repository|EntityManager/.test(src)) push('db', 'database');
+  return out;
+}
+
+// ── Ruby / Rails ───────────────────────────────────────────────────────────
+
+function extractRubyRuntimeBullets(rb: string, relPath: string): string[] {
+  const out: string[] = [];
+  const push = (s: string) => out.push(s);
+  if (/< ApplicationController/.test(rb)) push('Rails controller');
+  if (/\bresources\s+:\w+|get\s+['"]/.test(rb)) push('Rails routes DSL');
+  if (/\bActiveRecord::|belongs_to|has_many/.test(rb)) push('ActiveRecord model');
+  if (/\/app\/controllers\//i.test(relPath)) push('Rails `app/controllers` path');
+  if (/\/config\/routes\.rb$/i.test(relPath)) push('Rails routes file');
+  return out;
+}
+
+function extractRubyErrors(rb: string, fileLabel?: string): string[] {
+  const out: string[] = [];
+  const suffix = fileLabel ? ` (\`${fileLabel}\`)` : '';
+  const seen = new Set<string>();
+  const push = (line: string) => {
+    if (seen.has(line)) return;
+    seen.add(line);
+    out.push(line);
+  };
+  for (const m of rb.matchAll(/raise\s+(\w+(?:Error)?)\s*,\s*['"]([^'"]{4,120})['"]/g)) {
+    push(`- \`${m[1]}\`: "${m[2]}"${suffix}`);
+  }
+  if (/render\s+json:.*status:\s*:not_found|head\s+:not_found/.test(rb)) {
+    push(`- 404 Not Found${suffix}`);
+  }
+  return out;
+}
+
+function extractRubySideEffects(rb: string): string[] {
+  const out: string[] = [];
+  const seen = new Set<string>();
+  const push = (tag: string, detail: string) => {
+    const line = `- **[${tag}]** ${detail}`;
+    if (seen.has(line)) return;
+    seen.add(line);
+    out.push(line);
+  };
+  if (/ENV\[['"]/.test(rb)) push('env', 'ENV[]');
+  if (/Net::HTTP|Faraday|HTTParty/.test(rb)) push('network', 'HTTP client');
+  if (/File\.|IO\.read|FileUtils/.test(rb)) push('fs', 'filesystem I/O');
+  if (/ActiveRecord::|\.find_by|\.save!/.test(rb)) push('db', 'ActiveRecord');
+  return out;
+}
+
 function extractCSharpErrors(cs: string, fileLabel?: string): string[] {
   const out: string[] = [];
   const suffix = fileLabel ? ` (\`${fileLabel}\`)` : '';
@@ -431,6 +587,16 @@ export function extractRuntimeSection(
       case 'csharp':
         bullets.push(...extractCSharpRuntimeBullets(content));
         break;
+      case 'rust':
+        bullets.push(...extractRustRuntimeBullets(content, relPath));
+        break;
+      case 'java':
+      case 'kotlin':
+        bullets.push(...extractJavaKotlinRuntimeBullets(content, relPath));
+        break;
+      case 'ruby':
+        bullets.push(...extractRubyRuntimeBullets(content, relPath));
+        break;
     }
   }
 
@@ -449,6 +615,11 @@ export function extractDeterministicErrorsForFile(
   if (frameworks.includes('python')) out.push(...extractPythonErrors(content, fileLabel));
   if (frameworks.includes('php')) out.push(...extractPhpErrors(content, fileLabel));
   if (frameworks.includes('csharp')) out.push(...extractCSharpErrors(content, fileLabel));
+  if (frameworks.includes('rust')) out.push(...extractRustErrors(content, fileLabel));
+  if (frameworks.includes('java') || frameworks.includes('kotlin')) {
+    out.push(...extractJavaKotlinErrors(content, fileLabel));
+  }
+  if (frameworks.includes('ruby')) out.push(...extractRubyErrors(content, fileLabel));
 
   const jsLike = frameworks.some(f =>
     ['nuxt', 'vue', 'react', 'next', 'angular'].includes(f)
@@ -470,6 +641,11 @@ export function extractSideEffectsForFile(relPath: string, content: string): str
   if (frameworks.includes('python')) out.push(...extractPythonSideEffects(content));
   if (frameworks.includes('php')) out.push(...extractPhpSideEffects(content));
   if (frameworks.includes('csharp')) out.push(...extractCSharpSideEffects(content));
+  if (frameworks.includes('rust')) out.push(...extractRustSideEffects(content));
+  if (frameworks.includes('java') || frameworks.includes('kotlin')) {
+    out.push(...extractJavaKotlinSideEffects(content));
+  }
+  if (frameworks.includes('ruby')) out.push(...extractRubySideEffects(content));
 
   const jsLike = frameworks.some(f =>
     ['nuxt', 'vue', 'react', 'next', 'angular'].includes(f)
@@ -514,6 +690,18 @@ export function frameworkSplitScoreBoost(relPath: string, content: string): numb
   if (frameworks.includes('csharp')) {
     if (/\[Http(Get|Post)/i.test(body)) score += 12;
     if (/\bDbContext\b/.test(body)) score += 8;
+  }
+  if (frameworks.includes('rust')) {
+    if (/#\[(get|post)\s*\(/i.test(body)) score += 12;
+    if (/\basync\s+fn\b/.test(body)) score += 6;
+  }
+  if (frameworks.includes('java') || frameworks.includes('kotlin')) {
+    if (/@(Get|Post)Mapping/i.test(body)) score += 12;
+    if (/@Entity\b/.test(body)) score += 8;
+  }
+  if (frameworks.includes('ruby')) {
+    if (/< ApplicationController/.test(body)) score += 12;
+    if (/\bActiveRecord::/.test(body)) score += 8;
   }
 
   return score;

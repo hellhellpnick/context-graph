@@ -146,6 +146,7 @@ tests/**
 | `review [dir]` | Отчёт LLM без перезаписи |
 | `impact <file> [dir]` | LLM: что затронет изменение файла |
 | `hook-check [dir]` | Вызов из git pre-push |
+| `resolve <query> [dir]` | Путь к `*.instructions.md` по имени символа (`--json`) |
 
 ### Флаги `build`
 
@@ -233,7 +234,9 @@ tests/**
 | **2** | Код — **поверхность** (~30 строк; больше для composables, Vue script, `.py`/`.go`) |
 | **3** | Пропуск — `node_modules`, `vendor`, locks, картинки, minified |
 
-В режиме `--no-llm` для **Python** (`.py`), **Go** (`.go`) и **C#** (`.cs`) строятся signatures и подсказки по импортам/`using` без LLM; для C# дополнительно — runtime-эвристики ASP.NET (контроллеры, HTTP, EF Core).
+В режиме `--no-llm` для **Python**, **Go**, **C#**, **Rust**, **Java/Kotlin** и **Ruby** строятся signatures и подсказки по импортам без LLM; для стеков — runtime-эвристики (ASP.NET, Axum/Spring, Rails и т.д.).
+
+Поиск символа без grep: `npx context-graph resolve LinkTag` (читает `.github/instructions/symbol-index.md`).
 
 ## Программный API
 

@@ -2,14 +2,14 @@
 description: "Mirror — `src/graph-builder/llm/validate.ts`"
 applyTo: "src/graph-builder/llm/validate.ts"
 priority: "P1"
-last_updated: "2026-05-19"
+last_updated: "2026-05-20"
 ---
 
 ## When to Read
 - editing or refactoring `validate.ts`
 
 ## Overview
-- `src/graph-builder/llm/validate.ts` (171 lines · 6 top-level symbols) — Mirror — `src/graph-builder/llm/validate.ts`
+- `src/graph-builder/llm/validate.ts` (203 lines · 6 top-level symbols) — Mirror — `src/graph-builder/llm/validate.ts`
 
 ## Graph
 ```mermaid
@@ -32,7 +32,7 @@ export function insertAfterHeading(md: string, heading: string, insert: string):
 export function subsystemOutputLooksOk(files: OutputFile[], instructionPath: string): boolean { const norm = instructionPath.replace(/\\/g, '/'); const base = path.posix.basename(norm); return files.some(f => { const fp = f.path.replace(…
 /** Sanitize mermaid code blocks: strip lines with common LLM syntax errors. */
 export function sanitizeMermaidBlocks(content: string): string { /* ~22 lines */ }
-export function llmContentMatchesRealExports( llmContent: string, scan: ScanResult, sourceFiles: string[] ): boolean { /* ~49 lines */ }
+export function llmContentMatchesRealExports( llmContent: string, scan: ScanResult, sourceFiles: string[] ): boolean { /* ~77 lines */ }
 /** Second-chance prompt when local models skip <<<EOF>>> or add prose. */
 export function buildSubsystemRepairMessage(today: string, instructionPath: string, planItem?: BuildPlanItem): string { /* prompt template (~33 lines) */ }
 

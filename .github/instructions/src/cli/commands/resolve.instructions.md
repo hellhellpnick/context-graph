@@ -2,7 +2,7 @@
 description: "Mirror — `src/cli/commands/resolve.ts`"
 applyTo: "src/cli/commands/resolve.ts"
 priority: "P1"
-last_updated: "2026-05-19"
+last_updated: "2026-05-20"
 ---
 
 ## When to Read

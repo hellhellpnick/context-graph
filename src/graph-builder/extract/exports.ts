@@ -7,8 +7,11 @@ import {
 } from '../constants';
 import {
   extractGoSymbolLines,
+  extractJavaKotlinSymbolLines,
   extractPhpSymbolLines,
   extractPythonSymbolLines,
+  extractRubySymbolLines,
+  extractRustSymbolLines,
   compactTsExportLine,
   buildPhpOneLineSummary,
   buildPhpRoutingSignatures,
@@ -173,6 +176,36 @@ export function extractExports(scan: ScanResult, sourceFiles: string[]): string 
       fileExports.push(...extractGoSymbolLines(body));
     }
 
+    if (fileExports.length === 0 && /\.rs$/i.test(f.path)) {
+      const { bullets: runtime } = extractRuntimeSection(f.path, f.content);
+      fileExports.push('// Rust module');
+      if (runtime.length > 0) {
+        fileExports.push('// runtime:');
+        for (const r of runtime) fileExports.push(`// - ${r}`);
+      }
+      fileExports.push(...extractRustSymbolLines(body));
+    }
+
+    if (fileExports.length === 0 && /\.(java|kt)$/i.test(f.path)) {
+      const { bullets: runtime } = extractRuntimeSection(f.path, f.content);
+      fileExports.push(`// ${/\.kt$/i.test(f.path) ? 'Kotlin' : 'Java'} module`);
+      if (runtime.length > 0) {
+        fileExports.push('// runtime:');
+        for (const r of runtime) fileExports.push(`// - ${r}`);
+      }
+      fileExports.push(...extractJavaKotlinSymbolLines(body));
+    }
+
+    if (fileExports.length === 0 && /\.rb$/i.test(f.path)) {
+      const { bullets: runtime } = extractRuntimeSection(f.path, f.content);
+      fileExports.push('// Ruby module');
+      if (runtime.length > 0) {
+        fileExports.push('// runtime:');
+        for (const r of runtime) fileExports.push(`// - ${r}`);
+      }
+      fileExports.push(...extractRubySymbolLines(body));
+    }
+
     if (fileExports.length === 0 && /\.vue$/i.test(f.path)) {
       fileExports.push(...buildVueRoutingSignatures(f.path, f.content));
     }
@@ -284,7 +317,7 @@ export function shouldIncludeDeterministicSource(
   if (!exportBlock.trim() || /no exports/i.test(exportBlock)) return true;
   if (exportBlock.length < 100) return true;
   if (/routing summary/i.test(exportBlock) && exportBlock.length >= 180) return false;
-  if (sourceFiles.some(p => /\.(py|go|cs)$/i.test(p)) && exportBlock.length < 180) return true;
+  if (sourceFiles.some(p => /\.(py|go|cs|rs|java|kt|rb)$/i.test(p)) && exportBlock.length < 180) return true;
   if (sourceFiles.every(p => isMessageOrPromptPath(p))) return false;
 
   for (const sf of sourceFiles) {
@@ -313,7 +346,23 @@ export function buildDeterministicSourceSection(scan: ScanResult, sourceFiles: s
     const { body, virtualPath } = scriptOrSelfForAnalysis(sf, scanned.content);
     const ext = path.posix.extname(sf).toLowerCase();
     const fence =
-      ext === '.py' ? 'python' : ext === '.go' ? 'go' : ext === '.php' ? 'php' : 'typescript';
+      ext === '.py'
+        ? 'python'
+        : ext === '.go'
+          ? 'go'
+          : ext === '.php'
+            ? 'php'
+            : ext === '.rs'
+              ? 'rust'
+              : ext === '.cs'
+                ? 'csharp'
+                : ext === '.java'
+                  ? 'java'
+                  : ext === '.kt'
+                    ? 'kotlin'
+                    : ext === '.rb'
+                      ? 'ruby'
+                      : 'typescript';
 
     if (/\.(ts|tsx|js|jsx|mjs|cjs)$/i.test(sf) && body.trim()) {
       const skeleton = extractScriptSkeleton(body, virtualPath);

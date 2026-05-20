@@ -1,0 +1,54 @@
+---
+description: "Mirror — `test/` (4 files, part 4/4)"
+applyTo: "test/**"
+priority: "P2"
+last_updated: "2026-05-20"
+---
+
+## When to Read
+- editing or refactoring `root-slim.test.mjs`
+- editing or refactoring `routing-mandate.test.mjs`
+- editing or refactoring `ruby-extract.test.mjs`
+- editing or refactoring `rust-extract.test.mjs`
+
+## Overview
+- `test/root-slim.test.mjs` (94 lines · 1 top-level symbols) — Mirror — `test/` (4 files, part 4/4)
+- `test/routing-mandate.test.mjs` (32 lines) — Mirror — `test/` (4 files, part 4/4)
+- `test/ruby-extract.test.mjs` (44 lines) — Mirror — `test/` (4 files, part 4/4)
+- `test/rust-extract.test.mjs` (44 lines) — Mirror — `test/` (4 files, part 4/4)
+
+## Graph
+```mermaid
+graph LR
+  Test[Test]
+  Test --> root[root]
+  Test --> root_slim[root-slim]
+  Test --> routing_mandate[routing-mandate]
+  Test --> index[index]
+```
+
+## Signatures
+
+```typescript
+// ── test/root-slim.test.mjs ──
+// ── skeleton ──
+function fakePlan(n) {
+  return { projectName: 'Big', projectDescription: 'Test app', techStack: ['PHP'], subsystems, };
+}
+
+// ── test/ruby-extract.test.mjs ──
+// ── skeleton ──
+const SAMPLE = `require 'rails' require_relative './models/user' class UsersController < ApplicationController def index render json: User.all end def show head :not_found unless @user end end module…
+
+// ── test/rust-extract.test.mjs ──
+// ── skeleton ──
+const SAMPLE = `use std::io; use axum::{Router, routing::get}; mod handlers; pub struct AppState { db: String, } pub async fn health() -> &'static str { "ok" } #[get("/api")] async fn list_items() ->…
+
+```
+
+## Dependencies
+**Internal:**
+- `dist/graph-builder/deterministic/root`
+- `dist/graph-builder/deterministic/root-slim`
+- `dist/graph-builder/deterministic/routing-mandate`
+- `dist/source-extract/index`

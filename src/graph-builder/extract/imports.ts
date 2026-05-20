@@ -5,8 +5,11 @@ import { scriptOrSelfForAnalysis } from '../../source-extract';
 import {
   extractCSharpImports,
   extractGoImports,
+  extractJavaKotlinImports,
   extractPhpUseStatements,
   extractPythonImports,
+  extractRubyImports,
+  extractRustImports,
 } from '../../source-extract';
 
 export function extractImports(scan: ScanResult, sourceFiles: string[]): string[] {
@@ -89,6 +92,15 @@ export function extractImports(scan: ScanResult, sourceFiles: string[]): string[
       continue;
     } else if (/\.cs$/i.test(f.path)) {
       for (const ns of extractCSharpImports(body)) deps.add(ns);
+      continue;
+    } else if (/\.rs$/i.test(f.path)) {
+      for (const p of extractRustImports(body)) deps.add(p);
+      continue;
+    } else if (/\.(java|kt)$/i.test(f.path)) {
+      for (const p of extractJavaKotlinImports(body)) deps.add(p);
+      continue;
+    } else if (/\.rb$/i.test(f.path)) {
+      for (const p of extractRubyImports(body)) deps.add(p);
       continue;
     }
 

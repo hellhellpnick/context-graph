@@ -147,6 +147,7 @@ Do **not** hand-edit `ctxgraph--*` — regenerate with `build`.
 | `review [dir]` | LLM quality report (no writes) |
 | `impact <file> [dir]` | LLM: blast radius of changing a file |
 | `hook-check [dir]` | Used by git pre-push hook |
+| `resolve <query> [dir]` | Path to `*.instructions.md` for a symbol name (`--json`) |
 
 ### `build` flags
 
@@ -228,7 +229,9 @@ Do **not** hand-edit `ctxgraph--*` — regenerate with `build`.
 | **2** | Source — **surface** (default ~30 lines; more for composables, Vue `<script>`, `.py`/`.go`) |
 | **3** | Skipped — `node_modules`, `vendor`, locks, images, minified assets |
 
-Exports/imports for deterministic mode use regex + TypeScript parser where applicable. **Python** (`.py`), **Go** (`.go`), and **C#** (`.cs`) get symbol lines and import/`using` hints in subsystem instructions without LLM; C# also gets ASP.NET runtime bullets (controllers, HTTP verbs, EF Core) when detected.
+Exports/imports for deterministic mode use regex + TypeScript parser where applicable. **Python** (`.py`), **Go** (`.go`), **C#** (`.cs`), **Rust** (`.rs`), **Java/Kotlin** (`.java`, `.kt`), and **Ruby** (`.rb`) get symbol lines and import hints in subsystem instructions without LLM; stack-specific runtime bullets (ASP.NET, Axum/Spring, Rails, etc.) apply when detected.
+
+Symbol lookup without grep: `npx context-graph resolve LinkTag` (reads `.github/instructions/symbol-index.md`).
 
 ## Programmatic API
 

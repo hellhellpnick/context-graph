@@ -1,0 +1,83 @@
+---
+description: "Rules — .cursor/rules/**"
+globs: .cursor/rules/**
+alwaysApply: false
+---
+
+## When to Read
+- editing or refactoring `ctxgraph--src-source-extract-index.mdc`
+- editing or refactoring `ctxgraph--src-source-extract-instruction-score.mdc`
+- editing or refactoring `ctxgraph--src-source-extract-nuxt-runtime.mdc`
+- editing or refactoring `ctxgraph--src-source-extract-paths.mdc`
+
+## Overview
+- `.cursor/rules/ctxgraph--src-source-extract-index.mdc` (60 lines · 9 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--src-source-extract-instruction-score.mdc` (39 lines · 2 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--src-source-extract-nuxt-runtime.mdc` (44 lines · 3 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--src-source-extract-paths.mdc` (36 lines · 3 top-level symbols) — # When to Read
+
+## Graph
+```mermaid
+graph LR
+  Rules[Rules]
+  Rules --> node[""]
+  Rules --> ENV{{"env / config"}}
+```
+
+## Signatures
+
+```typescript
+// ── .cursor/rules/ctxgraph--src-source-extract-index.mdc ──
+// ── src/source-extract/index.ts ──
+/**
+ * Shared helpers for Vue / PHP / Python / Go — scanner + deterministic graph.
+ * @module source-extract
+ */
+export { isMessageOrPromptPath, isExecutableModulePath, isComposableLikePath } from './paths'
+export { isPromptTemplateBody, compactTsExportLine } from './ts-prompt'
+export { extractScriptSkeleton } from './ts-skeleton'
+export { instructionSplitScore, INSTRUCTION_OWN_FILE_SCORE_THRESHOLD, } from './instruction-score'
+export { extractVueScriptCombined, scriptOrSelfForAnalysis, extractVuePropKeys, extractVueSymbolLines, extractVueTemplateBrief, buildVueRoutingSignatures, extractVueComputedBranches, } from './vue-sfc'
+export { extractNuxtRuntimeBullets, extractDeterministicErrors, extractSideEffectBullets, } from './nuxt-runtime'
+export { extractPhpSymbolLines, extractPhpMethodParamNames, extractPhpJsonResponseKeys, buildPhpRoutingSignatures, buildPhpOneLineSummary, extractPhpUseStatements, } from './php'
+export { extractPythonSymbolLines, extractPythonImports } from './python'
+export { extractGoImports, extractGoSymbolLines } from './go'
+
+// ── .cursor/rules/ctxgraph--src-source-extract-instruction-score.mdc ──
+// ── src/source-extract/instruction-score.ts ──
+/** Score for auto split: one instruction file per “heavy” module (no LLM). */
+export function instructionSplitScore(relPath: string, content: string, lines?: number): number { /* ~39 lines */ }
+export const INSTRUCTION_OWN_FILE_SCORE_THRESHOLD = 42;
+
+// ── .cursor/rules/ctxgraph--src-source-extract-nuxt-runtime.mdc ──
+// ── src/source-extract/nuxt-runtime.ts ──
+/** Nuxt / Vue script runtime hints (no LLM). */
+export function extractNuxtRuntimeBullets(script: string): string[] { /* prompt template (~34 lines) */ }
+/** Errors / HTTP failures without LLM (Nuxt createError + classic throws). */
+export function extractDeterministicErrors(script: string, fileLabel?: string): string[] { /* prompt template (~30 lines) */ }
+/** Side effects for Danger Zone (browser, stores, network, events). */
+export function extractSideEffectBullets(script: string): string[] { /* prompt template (~48 lines) */ }
+
+// ── .cursor/rules/ctxgraph--src-source-extract-paths.mdc ──
+// ── src/source-extract/paths.ts ──
+/** Prompt/message modules: prefer bundle + compact instructions (deterministic routing). */
+export function isMessageOrPromptPath(relPath: string): boolean { const norm = relPath.replace(/\\/g, '/'); return ( /(?:^|\/)(?:messages|prompts?)\//i.test(norm) || /graph-create-agent/i.test(norm) || /\/(?:prompt|messages)\./i.test(nor…
+/** CLI / command registration — collapse as executable, not LLM prompt template. */
+export function isExecutableModulePath(relPath: string): boolean { const norm = relPath.replace(/\\/g, '/'); return ( /(?:^|\/)cli(?:\/|\.)/i.test(norm) || /(?:^|\/)commands?\//i.test(norm) || /(?:^|\/)hooks\.ts$/i.test(norm) ); }
+/** `dev/composables/foo.ts`, `src/composables/bar.js`, etc. */
+export function isComposableLikePath(relPath: string): boolean { return /(?:^|\/)composables\/[^/]+\.(?:[mc]?[jt]sx?|jsx?)$/i.test(relPath.replace(/\\/g, '/')); }
+
+```
+
+## Dependencies
+**External:**
+- ``
+
+## Danger Zone 🔴
+- **[env]** getenv('${m[1]}')
+- **[env]** env('${m[1]}')
+- **[events]** `useNuxtApp()` — global `$event` / `$listen` bus
+- **[config]** runtime config / `import.meta.env`
+
+<!-- context-graph: generated from `.github/instructions/.cursor/rules/_bundle_p17.instructions.md` -->
+_Regenerate: `context-graph build --no-llm` · Do not hand-edit this rule._

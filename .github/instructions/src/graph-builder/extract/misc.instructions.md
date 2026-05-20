@@ -2,7 +2,7 @@
 description: "Mirror — `src/graph-builder/extract/misc.ts`"
 applyTo: "src/graph-builder/extract/misc.ts"
 priority: "P1"
-last_updated: "2026-05-19"
+last_updated: "2026-05-20"
 ---
 
 ## When to Read

@@ -34,3 +34,6 @@ export {
 export { extractPythonSymbolLines, extractPythonImports } from './python';
 export { extractGoImports, extractGoSymbolLines } from './go';
 export { extractCSharpSymbolLines, extractCSharpImports } from './csharp';
+export { extractRustImports, extractRustSymbolLines } from './rust';
+export { extractJavaKotlinImports, extractJavaKotlinSymbolLines } from './java-kotlin';
+export { extractRubyImports, extractRubySymbolLines } from './ruby';

@@ -2,7 +2,7 @@
 description: "Mirror — `python/context_graph/` (2 files)"
 applyTo: "python/context_graph/**"
 priority: "P2"
-last_updated: "2026-05-19"
+last_updated: "2026-05-20"
 ---
 
 ## When to Read

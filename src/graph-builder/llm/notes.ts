@@ -2,9 +2,13 @@ import ts from 'typescript';
 import type { Config } from '../../config';
 import type { ScanResult } from '../../scanner';
 import {
+  extractCSharpSymbolLines,
   extractGoSymbolLines,
+  extractJavaKotlinSymbolLines,
   extractPhpSymbolLines,
   extractPythonSymbolLines,
+  extractRubySymbolLines,
+  extractRustSymbolLines,
   extractVuePropKeys,
   scriptOrSelfForAnalysis,
 } from '../../source-extract';
@@ -142,7 +146,15 @@ export function buildSnippetForFiles(scan: ScanResult, sourceFiles: string[], ma
           ? extractPythonSymbolLines(f.content).join('\n\n')
           : /\.go$/i.test(sf)
             ? extractGoSymbolLines(f.content).join('\n\n')
-            : pickLinesFallback(f.content).join('\n');
+            : /\.cs$/i.test(sf)
+              ? extractCSharpSymbolLines(f.content).join('\n\n')
+              : /\.rs$/i.test(sf)
+                ? extractRustSymbolLines(f.content).join('\n\n')
+                : /\.(java|kt)$/i.test(sf)
+                  ? extractJavaKotlinSymbolLines(f.content).join('\n\n')
+                  : /\.rb$/i.test(sf)
+                    ? extractRubySymbolLines(f.content).join('\n\n')
+                    : pickLinesFallback(f.content).join('\n');
 
     const chunk = `\n// ── ${sf} ──\n` + picked;
     if (chunk.length > budget) break;
@@ -218,6 +230,44 @@ export function extractExportNamesForNotes(scan: ScanResult, sourceFiles: string
         if (!line.startsWith('func ')) continue;
         const m = line.match(/^func(?:\s+\([^)]+\))?\s+(\w+)\s*\(/);
         if (m) out.add(m[1]);
+      }
+      continue;
+    }
+
+    if (/\.cs$/i.test(sfPath)) {
+      for (const line of extractCSharpSymbolLines(f.content)) {
+        const cls = line.match(/(?:class|interface|record|struct|enum)\s+(\w+)/i);
+        if (cls) out.add(cls[1]);
+      }
+      continue;
+    }
+
+    if (/\.rs$/i.test(sfPath)) {
+      for (const line of extractRustSymbolLines(f.content)) {
+        const fn = line.match(/^fn\s+(\w+)/);
+        if (fn) out.add(fn[1]);
+        const ty = line.match(/^(?:pub\s+)?(?:struct|enum|trait)\s+(\w+)/);
+        if (ty) out.add(ty[1]);
+      }
+      continue;
+    }
+
+    if (/\.(java|kt)$/i.test(sfPath)) {
+      for (const line of extractJavaKotlinSymbolLines(f.content)) {
+        const cls = line.match(/(?:class|interface|record|enum)\s+(\w+)/i);
+        if (cls) out.add(cls[1]);
+        const fn = line.match(/(?:fun|void|public|private|protected)\s+(\w+)\s*\(/);
+        if (fn) out.add(fn[1]);
+      }
+      continue;
+    }
+
+    if (/\.rb$/i.test(sfPath)) {
+      for (const line of extractRubySymbolLines(f.content)) {
+        const cls = line.match(/^(?:class|module)\s+(\w+)/);
+        if (cls) out.add(cls[1]);
+        const defm = line.match(/^def\s+(?:self\.)?(\w+)/);
+        if (defm) out.add(defm[1]);
       }
       continue;
     }

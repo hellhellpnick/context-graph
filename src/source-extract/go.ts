@@ -64,7 +64,9 @@ export function extractGoSymbolLines(go: string): string[] {
     const line = rawLine.split('//')[0].trim();
     if (!line) continue;
     if (/^package\s+\w+/.test(line)) push(line);
-    else if (/^func\s+/.test(line)) push(line);
+    else if (/^func\s+\([^)]*\)\s+\w+/.test(line)) push(line.split('{')[0].trim());
+    else if (/^func\s+/.test(line)) push(line.split('{')[0].trim());
+    else if (/^type\s+\w+\s+interface\b/.test(line)) push(line.split('{')[0].trim());
     else if (/^type\s+\w+/.test(line)) push(line.split('{')[0].trim());
     else if (/^(const|var)\s+/.test(line) && !line.includes('{')) push(line);
   }

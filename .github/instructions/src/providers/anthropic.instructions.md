@@ -2,7 +2,7 @@
 description: "Mirror — `src/providers/anthropic.ts`"
 applyTo: "src/providers/anthropic.ts"
 priority: "P1"
-last_updated: "2026-05-18"
+last_updated: "2026-05-19"
 ---
 
 ## When to Read

@@ -2,7 +2,7 @@
 description: "Mirror — `scripts/split-graph-builder.mjs`"
 applyTo: "scripts/split-graph-builder.mjs"
 priority: "P1"
-last_updated: "2026-05-18"
+last_updated: "2026-05-19"
 ---
 
 ## When to Read

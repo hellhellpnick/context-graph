@@ -2,14 +2,14 @@
 description: "Mirror — `src/cli/program.ts`"
 applyTo: "src/cli/program.ts"
 priority: "P1"
-last_updated: "2026-05-18"
+last_updated: "2026-05-19"
 ---
 
 ## When to Read
 - editing or refactoring `program.ts`
 
 ## Overview
-- `src/cli/program.ts` (25 lines · 1 top-level symbols) — Mirror — `src/cli/program.ts`
+- `src/cli/program.ts` (27 lines · 1 top-level symbols) — Mirror — `src/cli/program.ts`
 
 ## Graph
 ```mermaid
@@ -20,9 +20,9 @@ graph LR
   program --> build[build]
   program --> hook_check[hook-check]
   program --> impact[impact]
+  program --> resolve[resolve]
   program --> review[review]
   program --> validate[validate]
-  program --> version[version]
   program --> commander["commander"]
 ```
 
@@ -49,6 +49,7 @@ const program = new Command()
 - `src/cli/commands/build`
 - `src/cli/commands/hook-check`
 - `src/cli/commands/impact`
+- `src/cli/commands/resolve`
 - `src/cli/commands/review`
 - `src/cli/commands/validate`
 - `src/cli/version`

@@ -33,3 +33,4 @@ export {
 } from './php';
 export { extractPythonSymbolLines, extractPythonImports } from './python';
 export { extractGoImports, extractGoSymbolLines } from './go';
+export { extractCSharpSymbolLines, extractCSharpImports } from './csharp';

@@ -233,6 +233,8 @@ tests/**
 | **2** | Код — **поверхность** (~30 строк; больше для composables, Vue script, `.py`/`.go`) |
 | **3** | Пропуск — `node_modules`, `vendor`, locks, картинки, minified |
 
+В режиме `--no-llm` для **Python** (`.py`), **Go** (`.go`) и **C#** (`.cs`) строятся signatures и подсказки по импортам/`using` без LLM; для C# дополнительно — runtime-эвристики ASP.NET (контроллеры, HTTP, EF Core).
+
 ## Программный API
 
 ```ts

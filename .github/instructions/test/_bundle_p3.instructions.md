@@ -1,0 +1,40 @@
+---
+description: "Mirror — `test/` (2 files, part 3/3)"
+applyTo: "test/**"
+priority: "P2"
+last_updated: "2026-05-19"
+---
+
+## When to Read
+- editing or refactoring `root-slim.test.mjs`
+- editing or refactoring `routing-mandate.test.mjs`
+
+## Overview
+- `test/root-slim.test.mjs` (94 lines · 1 top-level symbols) — Mirror — `test/` (2 files, part 3/3)
+- `test/routing-mandate.test.mjs` (32 lines) — Mirror — `test/` (2 files, part 3/3)
+
+## Graph
+```mermaid
+graph LR
+  Test[Test]
+  Test --> root[root]
+  Test --> root_slim[root-slim]
+  Test --> routing_mandate[routing-mandate]
+```
+
+## Signatures
+
+```typescript
+// ── test/root-slim.test.mjs ──
+// ── skeleton ──
+function fakePlan(n) {
+  return { projectName: 'Big', projectDescription: 'Test app', techStack: ['PHP'], subsystems, };
+}
+
+```
+
+## Dependencies
+**Internal:**
+- `dist/graph-builder/deterministic/root`
+- `dist/graph-builder/deterministic/root-slim`
+- `dist/graph-builder/deterministic/routing-mandate`

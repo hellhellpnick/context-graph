@@ -1,0 +1,43 @@
+---
+description: "Mirror — `src/source-extract/ts-prompt.ts`"
+applyTo: "src/source-extract/ts-prompt.ts"
+priority: "P2"
+last_updated: "2026-05-19"
+---
+
+## When to Read
+- editing or refactoring `ts-prompt.ts`
+
+## Overview
+- `src/source-extract/ts-prompt.ts` (49 lines · 2 top-level symbols) — Mirror — `src/source-extract/ts-prompt.ts`
+
+## Graph
+```mermaid
+graph LR
+  ts_prompt[ts-prompt]
+  ts_prompt --> paths[paths]
+  ts_prompt --> utils[utils]
+  ts_prompt --> typescript["typescript"]
+```
+
+## Signatures
+
+```typescript
+// ── src/source-extract/ts-prompt.ts ──
+/** Large string templates embedded in TS (LLM pass messages, not runtime logic). */
+export function isPromptTemplateBody(text: string, filePath?: string): boolean { /* prompt template (~11 lines) */ }
+/** One-line export for instruction graphs (collapse prompt bodies). */
+export function compactTsExportLine(sf: ts.SourceFile, node: ts.Node, filePath?: string): string { /* ~18 lines */ }
+
+```
+
+## Dependencies
+**Internal:**
+- `src/source-extract/paths`
+- `src/source-extract/utils`
+
+**External:**
+- `typescript`
+
+## Danger Zone 🔴
+- **[fs]** filesystem I/O

@@ -2,7 +2,7 @@
 description: "Mirror — `src/graph-builder/messages/planning.ts`"
 applyTo: "src/graph-builder/messages/planning.ts"
 priority: "P2"
-last_updated: "2026-05-18"
+last_updated: "2026-05-19"
 ---
 
 ## When to Read

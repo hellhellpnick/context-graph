@@ -1,18 +1,20 @@
-# context-graph — AI routing entrypoint
+# context-graph — Codex supplement
 
-This repo maintains a generated instruction graph under `.github/instructions/`.
+**MUST** read `AGENTS.md` at repo root first — Codex loads it before every run.
 
-Response style (ALWAYS):
-- Ultra-compact (caveman). No greetings. No filler.
-- Prefer bullets. Each bullet <= 18 words.
-- If unsure, say "unknown" instead of guessing.
+Before grep, glob search, list_dir, or exploring the repo:
 
-Subsystem context (automatic in Cursor):
-- `.cursor/rules/ctxgraph--*.mdc` — attached when you edit files matching `globs` (from `applyTo`).
+1. **LOCK** the file you will edit.
+2. **MUST** open `.github/instructions/symbol-index.md` (name) or `.github/instructions/context-graph-path-index.md` (full path).
+3. **MUST** open the matching `.github/instructions/**/*.instructions.md` (`applyTo` MUST match).
+4. **MUST** read it — Signatures, Dependencies, Graph — before other source files.
+5. **ONLY THEN** open repo sources cited in that instruction.
 
-Manual routing (Copilot / Claude / other):
-- `.github/instructions/copilot-instructions.md`
-- `.github/instructions/context-graph-path-index.md`
-- Match `.instructions.md` by `applyTo`; prefer higher `priority` (P0>P1>P2).
+**BLOCKING:** Skip steps 2–4 → stop. Do NOT infer architecture from root entrypoints alone.
+**Authority:** Subsystem `*.instructions.md` override guesses. Root files = routing hubs only.
 
-Instructions are authoritative over guesses.
+### OpenAI Codex
+
+- **Primary:** `AGENTS.md` at repo root (Codex concatenates from git root → cwd).
+- **This file:** `.codex/context-graph.md` — supplemental; `AGENTS.md` wins if both exist.
+- Codex reads instruction files **before** work — do not skip path-index step.

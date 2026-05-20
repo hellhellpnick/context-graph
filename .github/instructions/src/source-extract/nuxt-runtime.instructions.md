@@ -1,0 +1,42 @@
+---
+description: "Mirror — `src/source-extract/nuxt-runtime.ts`"
+applyTo: "src/source-extract/nuxt-runtime.ts"
+priority: "P2"
+last_updated: "2026-05-19"
+---
+
+## When to Read
+- editing or refactoring `nuxt-runtime.ts`
+
+## Overview
+- `src/source-extract/nuxt-runtime.ts` (119 lines · 3 top-level symbols) — Nuxt / Vue script runtime hints (no LLM).
+
+## Graph
+```mermaid
+graph LR
+  nuxt_runtime[nuxt-runtime]
+```
+
+## Signatures
+
+```typescript
+// ── src/source-extract/nuxt-runtime.ts ──
+/** Nuxt / Vue script runtime hints (no LLM). */
+export function extractNuxtRuntimeBullets(script: string): string[] { /* prompt template (~34 lines) */ }
+/** Errors / HTTP failures without LLM (Nuxt createError + classic throws). */
+export function extractDeterministicErrors(script: string, fileLabel?: string): string[] { /* prompt template (~30 lines) */ }
+/** Side effects for Danger Zone (browser, stores, network, events). */
+export function extractSideEffectBullets(script: string): string[] { /* prompt template (~48 lines) */ }
+
+```
+
+## Dependencies
+- No dependencies detected
+
+## Danger Zone 🔴
+- **[env]** getenv('${m[1]}')
+- **[env]** env('${m[1]}')
+- **[network]** `useAsyncPageData` — store/API fetch; check `error` ref
+- **[events]** `useNuxtApp()` — global `$event` / `$listen` bus
+- **[config]** runtime config / `import.meta.env`
+- **[fs]** filesystem I/O

@@ -1,8 +1,8 @@
 ---
-description: "Mirror — `test/` (4 files, part 1/2)"
+description: "Mirror — `test/` (4 files, part 1/3)"
 applyTo: "test/**"
 priority: "P2"
-last_updated: "2026-05-18"
+last_updated: "2026-05-19"
 ---
 
 ## When to Read
@@ -12,10 +12,10 @@ last_updated: "2026-05-18"
 - editing or refactoring `php-extract.test.mjs`
 
 ## Overview
-- `test/copilotignore.test.mjs` (38 lines) — Mirror — `test/` (4 files, part 1/2)
-- `test/extract.test.mjs` (87 lines · 2 top-level symbols) — Mirror — `test/` (4 files, part 1/2)
-- `test/instruction-targets.test.mjs` (158 lines) — Mirror — `test/` (4 files, part 1/2)
-- `test/php-extract.test.mjs` (128 lines) — Mirror — `test/` (4 files, part 1/2)
+- `test/copilotignore.test.mjs` (38 lines) — Mirror — `test/` (4 files, part 1/3)
+- `test/extract.test.mjs` (87 lines · 2 top-level symbols) — Mirror — `test/` (4 files, part 1/3)
+- `test/instruction-targets.test.mjs` (158 lines) — Mirror — `test/` (4 files, part 1/3)
+- `test/php-extract.test.mjs` (128 lines) — Mirror — `test/` (4 files, part 1/3)
 
 ## Graph
 ```mermaid
@@ -28,7 +28,7 @@ graph LR
   Test --> priority[priority]
   Test --> instruction_targets[instruction-targets]
   Test --> project_graph[project-graph]
-  Test --> source_extract[source-extract]
+  Test --> index[index]
   Test --> typescript["typescript"]
 ```
 
@@ -60,7 +60,7 @@ const SAMPLE = `<?php namespace App\\Http\\Controllers\\API; use App\\Enums\\Acl
 - `dist/graph-builder/plan/priority`
 - `dist/instruction-targets`
 - `dist/project-graph`
-- `dist/source-extract`
+- `dist/source-extract/index`
 
 **External:**
 - `typescript`

@@ -18,6 +18,7 @@ import {
 } from '../extract/misc';
 import { isBarrelFile } from '../extract/imports';
 import {
+  extractCSharpSymbolLines,
   extractGoSymbolLines,
   extractPhpSymbolLines,
   extractPythonSymbolLines,
@@ -89,6 +90,7 @@ export function buildDeterministicSubsystemFile(
       if (/\.php$/i.test(sf)) return extractPhpSymbolLines(scanned.content).length;
       if (/\.py$/i.test(sf)) return extractPythonSymbolLines(scanned.content).length;
       if (/\.go$/i.test(sf)) return extractGoSymbolLines(scanned.content).length;
+      if (/\.cs$/i.test(sf)) return extractCSharpSymbolLines(scanned.content).length;
       const { body } = scriptOrSelfForAnalysis(sf, scanned.content);
       if (/\.vue$/i.test(sf)) {
         const vueSyms = extractVueSymbolLines(body).length;

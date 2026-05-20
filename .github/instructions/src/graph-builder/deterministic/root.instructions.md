@@ -2,14 +2,14 @@
 description: "Mirror — `src/graph-builder/deterministic/root.ts`"
 applyTo: "src/graph-builder/deterministic/root.ts"
 priority: "P1"
-last_updated: "2026-05-18"
+last_updated: "2026-05-19"
 ---
 
 ## When to Read
 - editing or refactoring `root.ts`
 
 ## Overview
-- `src/graph-builder/deterministic/root.ts` (397 lines · 5 top-level symbols) — Mirror — `src/graph-builder/deterministic/root.ts`
+- `src/graph-builder/deterministic/root.ts` (410 lines · 5 top-level symbols) — Mirror — `src/graph-builder/deterministic/root.ts`
 
 ## Graph
 ```mermaid
@@ -19,10 +19,10 @@ graph LR
   root --> metadata[metadata]
   root --> root_project[root-project]
   root --> root_slim[root-slim]
+  root --> routing_mandate[routing-mandate]
   root --> deps_graph[deps-graph]
   root --> misc[misc]
   root --> validate[validate]
-  root --> prompt[prompt]
 ```
 
 ## Signatures
@@ -34,7 +34,7 @@ export function buildDeterministicCopilotInstructions( today: string, scan: Scan
 export function buildDeterministicChangelog(today: string, plan: BuildPlan): string { const lines = [ `# Context Graph — Changelog`, ``, `## ${today} — Initial Build`, ``, `Subsystems created:`, ...plan.subsystems.map(s => `- \`${s.file}…
 /** Standard scan-exclusion hints — never infer top-level dirs from nested lockfiles. */
 export function buildDeterministicCopilotIgnore(_scan?: ScanResult): string { return [ '# Managed by context-graph — scan exclusions (gitignore syntax; ** = any depth)', '# For project-specific paths use .graph-context-ignore (does not o…
-export function injectDeterministicRootFiles( today: string, scan: ScanResult, plan: BuildPlan, files: OutputFile[], llmCopilotContent?: string, rootOpts?: CopilotRootOptions, instructionTargets: I… { /* prompt template (~185 lines) */ }
+export function injectDeterministicRootFiles( today: string, scan: ScanResult, plan: BuildPlan, files: OutputFile[], llmCopilotContent?: string, rootOpts?: CopilotRootOptions, instructionTargets: I… { /* prompt template (~190 lines) */ }
 
 ```
 
@@ -44,11 +44,12 @@ export function injectDeterministicRootFiles( today: string, scan: ScanResult, p
 - `src/graph-builder/deterministic/metadata`
 - `src/graph-builder/deterministic/root-project`
 - `src/graph-builder/deterministic/root-slim`
+- `src/graph-builder/deterministic/routing-mandate`
 - `src/graph-builder/extract/deps-graph`
 - `src/graph-builder/extract/misc`
 - `src/graph-builder/llm/validate`
 - `src/graph-builder/prompt`
+- `src/graph-builder/resolve-symbol`
 - `src/graph-builder/types`
 - `src/instruction-targets`
-- `src/scanner`
-- `src/writer`
+- `… +2 more (open repo for full list)`

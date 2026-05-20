@@ -2,7 +2,7 @@
 description: "Mirror — `src/writer.ts`"
 applyTo: "src/writer.ts"
 priority: "P0"
-last_updated: "2026-05-18"
+last_updated: "2026-05-19"
 ---
 
 ## When to Read

@@ -3,6 +3,7 @@ import ts from 'typescript';
 import type { ScanResult } from '../../scanner';
 import { scriptOrSelfForAnalysis } from '../../source-extract';
 import {
+  extractCSharpImports,
   extractGoImports,
   extractPhpUseStatements,
   extractPythonImports,
@@ -85,6 +86,9 @@ export function extractImports(scan: ScanResult, sourceFiles: string[]): string[
       continue;
     } else if (/\.go$/i.test(f.path)) {
       for (const p of extractGoImports(body)) addDep(p, f.path);
+      continue;
+    } else if (/\.cs$/i.test(f.path)) {
+      for (const ns of extractCSharpImports(body)) deps.add(ns);
       continue;
     }
 

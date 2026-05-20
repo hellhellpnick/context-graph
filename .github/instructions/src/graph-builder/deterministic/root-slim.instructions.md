@@ -2,7 +2,7 @@
 description: "Mirror — `src/graph-builder/deterministic/root-slim.ts`"
 applyTo: "src/graph-builder/deterministic/root-slim.ts"
 priority: "P1"
-last_updated: "2026-05-18"
+last_updated: "2026-05-19"
 ---
 
 ## When to Read

@@ -1,0 +1,33 @@
+---
+description: "Utils — src/source-extract/utils.ts"
+globs: src/source-extract/utils.ts
+alwaysApply: false
+---
+
+## When to Read
+- editing or refactoring `utils.ts`
+
+## Overview
+- `src/source-extract/utils.ts` (8 lines · 2 top-level symbols) — Shared limits for deterministic extractors.
+
+## Graph
+```mermaid
+graph LR
+  utils[utils]
+```
+
+## Signatures
+
+```typescript
+// ── src/source-extract/utils.ts ──
+/** Shared limits for deterministic extractors. */
+export const SKELETON_MAX_CHARS = 4200;
+export function truncateSkeleton(s: string, max = 280): string { const t = s.replace(/\s+/g, ' ').trim(); return t.length > max ? `${t.slice(0, max - 1)}…` : t; }
+
+```
+
+## Dependencies
+- No dependencies detected
+
+<!-- context-graph: generated from `.github/instructions/src/source-extract/utils.instructions.md` -->
+_Regenerate: `context-graph build --no-llm` · Do not hand-edit this rule._

@@ -2,14 +2,14 @@
 description: "Mirror — `src/graph-builder/deterministic/metadata.ts`"
 applyTo: "src/graph-builder/deterministic/metadata.ts"
 priority: "P1"
-last_updated: "2026-05-18"
+last_updated: "2026-05-19"
 ---
 
 ## When to Read
 - editing or refactoring `metadata.ts`
 
 ## Overview
-- `src/graph-builder/deterministic/metadata.ts` (135 lines · 4 top-level symbols) — Mirror — `src/graph-builder/deterministic/metadata.ts`
+- `src/graph-builder/deterministic/metadata.ts` (136 lines · 4 top-level symbols) — Mirror — `src/graph-builder/deterministic/metadata.ts`
 
 ## Graph
 ```mermaid
@@ -29,7 +29,7 @@ export function buildMetadataJson( today: string, scan: ScanResult, plan?: Build
 /** Flat table: every instruction path ↔ applyTo ↔ sources (for LLMs and search). */
 export function buildContextGraphPathIndexMd(today: string, plan: BuildPlan): string { /* prompt template (~20 lines) */ }
 /** Build index.md content from plan subsystems — no LLM guessing */
-export function buildIndexMd(today: string, plan?: BuildPlan): string { /* prompt template (~42 lines) */ }
+export function buildIndexMd(today: string, plan?: BuildPlan): string { /* prompt template (~43 lines) */ }
 
 ```
 

@@ -1,25 +1,9 @@
 # Context Graph — Changelog
 
-## 2026-05-18 — Initial Build
+## 2026-05-19 — Initial Build
 
 Subsystems created:
 - `root/_bundle.instructions.md` — Root files: Mirror — `./` (2 files)
-- `.cursor/rules/_bundle.instructions.md` — Rules: Mirror — `.cursor/rules/` (4 files, part 1/16)
-- `.cursor/rules/_bundle_p2.instructions.md` — Rules: Mirror — `.cursor/rules/` (4 files, part 2/16)
-- `.cursor/rules/_bundle_p3.instructions.md` — Rules: Mirror — `.cursor/rules/` (4 files, part 3/16)
-- `.cursor/rules/_bundle_p4.instructions.md` — Rules: Mirror — `.cursor/rules/` (4 files, part 4/16)
-- `.cursor/rules/_bundle_p5.instructions.md` — Rules: Mirror — `.cursor/rules/` (4 files, part 5/16)
-- `.cursor/rules/_bundle_p6.instructions.md` — Rules: Mirror — `.cursor/rules/` (4 files, part 6/16)
-- `.cursor/rules/_bundle_p7.instructions.md` — Rules: Mirror — `.cursor/rules/` (4 files, part 7/16)
-- `.cursor/rules/_bundle_p8.instructions.md` — Rules: Mirror — `.cursor/rules/` (4 files, part 8/16)
-- `.cursor/rules/_bundle_p9.instructions.md` — Rules: Mirror — `.cursor/rules/` (4 files, part 9/16)
-- `.cursor/rules/_bundle_p10.instructions.md` — Rules: Mirror — `.cursor/rules/` (4 files, part 10/16)
-- `.cursor/rules/_bundle_p11.instructions.md` — Rules: Mirror — `.cursor/rules/` (4 files, part 11/16)
-- `.cursor/rules/_bundle_p12.instructions.md` — Rules: Mirror — `.cursor/rules/` (4 files, part 12/16)
-- `.cursor/rules/_bundle_p13.instructions.md` — Rules: Mirror — `.cursor/rules/` (4 files, part 13/16)
-- `.cursor/rules/_bundle_p14.instructions.md` — Rules: Mirror — `.cursor/rules/` (4 files, part 14/16)
-- `.cursor/rules/_bundle_p15.instructions.md` — Rules: Mirror — `.cursor/rules/` (4 files, part 15/16)
-- `.cursor/rules/_bundle_p16.instructions.md` — Rules: Mirror — `.cursor/rules/` (4 files, part 16/16)
 - `python/context_graph/_bundle.instructions.md` — Context Graph: Mirror — `python/context_graph/` (2 files)
 - `scripts/split-graph-builder.instructions.md` — Split Graph Builder: Mirror — `scripts/split-graph-builder.mjs`
 - `src/agents-catalog.instructions.md` — Agents Catalog: Mirror — `src/agents-catalog.ts`
@@ -34,7 +18,6 @@ Subsystems created:
 - `src/project-graph.instructions.md` — Project Graph: Mirror — `src/project-graph.ts`
 - `src/project-root.instructions.md` — Project Root: Mirror — `src/project-root.ts`
 - `src/scanner.instructions.md` — Scanner: Mirror — `src/scanner.ts`
-- `src/source-extract.instructions.md` — Source Extract: Mirror — `src/source-extract.ts`
 - `src/writer.instructions.md` — Writer: Mirror — `src/writer.ts`
 - `src/cli/agents-install.instructions.md` — Agents Install: Mirror — `src/cli/agents-install.ts`
 - `src/cli/build-run.instructions.md` — Build Run: Mirror — `src/cli/build-run.ts`
@@ -47,6 +30,7 @@ Subsystems created:
 - `src/cli/commands/build.instructions.md` — Build: Mirror — `src/cli/commands/build.ts`
 - `src/cli/commands/hook-check.instructions.md` — Hook Check: Mirror — `src/cli/commands/hook-check.ts`
 - `src/cli/commands/impact.instructions.md` — Impact: Mirror — `src/cli/commands/impact.ts`
+- `src/cli/commands/resolve.instructions.md` — Resolve: Mirror — `src/cli/commands/resolve.ts`
 - `src/cli/commands/review.instructions.md` — Review: Mirror — `src/cli/commands/review.ts`
 - `src/cli/commands/validate.instructions.md` — Validate: Mirror — `src/cli/commands/validate.ts`
 - `src/graph-builder/constants.instructions.md` — Constants: Mirror — `src/graph-builder/constants.ts`
@@ -54,12 +38,14 @@ Subsystems created:
 - `src/graph-builder/discovery.instructions.md` — Discovery: Mirror — `src/graph-builder/discovery.ts`
 - `src/graph-builder/index.instructions.md` — Index: Mirror — `src/graph-builder/index.ts`
 - `src/graph-builder/prompt.instructions.md` — Prompt: Mirror — `src/graph-builder/prompt.ts`
+- `src/graph-builder/resolve-symbol.instructions.md` — Resolve Symbol: Mirror — `src/graph-builder/resolve-symbol.ts`
 - `src/graph-builder/types.instructions.md` — Types: Mirror — `src/graph-builder/types.ts`
 - `src/graph-builder/deterministic/cursor-rules.instructions.md` — Cursor Rules: Mirror — `src/graph-builder/deterministic/cursor-rules.ts`
 - `src/graph-builder/deterministic/metadata.instructions.md` — Metadata: Mirror — `src/graph-builder/deterministic/metadata.ts`
 - `src/graph-builder/deterministic/root-project.instructions.md` — Root Project: Mirror — `src/graph-builder/deterministic/root-project.ts`
 - `src/graph-builder/deterministic/root-slim.instructions.md` — Root Slim: Mirror — `src/graph-builder/deterministic/root-slim.ts`
 - `src/graph-builder/deterministic/root.instructions.md` — Root: Mirror — `src/graph-builder/deterministic/root.ts`
+- `src/graph-builder/deterministic/routing-mandate.instructions.md` — Routing Mandate: Mirror — `src/graph-builder/deterministic/routing-mandate.ts`
 - `src/graph-builder/deterministic/subsystem.instructions.md` — Subsystem: Mirror — `src/graph-builder/deterministic/subsystem.ts`
 - `src/graph-builder/extract/deps-graph.instructions.md` — Deps Graph: Mirror — `src/graph-builder/extract/deps-graph.ts`
 - `src/graph-builder/extract/exports.instructions.md` — Exports: Mirror — `src/graph-builder/extract/exports.ts`
@@ -80,8 +66,20 @@ Subsystems created:
 - `src/providers/index.instructions.md` — Index: Mirror — `src/providers/index.ts`
 - `src/providers/openai.instructions.md` — Openai: Mirror — `src/providers/openai.ts`
 - `src/providers/types.instructions.md` — Types: Mirror — `src/providers/types.ts`
-- `test/_bundle.instructions.md` — Test: Mirror — `test/` (4 files, part 1/2)
-- `test/_bundle_p2.instructions.md` — Test: Mirror — `test/` (4 files, part 2/2)
+- `src/source-extract/go.instructions.md` — Go: Mirror — `src/source-extract/go.ts`
+- `src/source-extract/index.instructions.md` — Index: Mirror — `src/source-extract/index.ts`
+- `src/source-extract/instruction-score.instructions.md` — Instruction Score: Mirror — `src/source-extract/instruction-score.ts`
+- `src/source-extract/nuxt-runtime.instructions.md` — Nuxt Runtime: Mirror — `src/source-extract/nuxt-runtime.ts`
+- `src/source-extract/paths.instructions.md` — Paths: Mirror — `src/source-extract/paths.ts`
+- `src/source-extract/php.instructions.md` — Php: Mirror — `src/source-extract/php.ts`
+- `src/source-extract/python.instructions.md` — Python: Mirror — `src/source-extract/python.ts`
+- `src/source-extract/ts-prompt.instructions.md` — Ts Prompt: Mirror — `src/source-extract/ts-prompt.ts`
+- `src/source-extract/ts-skeleton.instructions.md` — Ts Skeleton: Mirror — `src/source-extract/ts-skeleton.ts`
+- `src/source-extract/utils.instructions.md` — Utils: Mirror — `src/source-extract/utils.ts`
+- `src/source-extract/vue-sfc.instructions.md` — Vue Sfc: Mirror — `src/source-extract/vue-sfc.ts`
+- `test/_bundle.instructions.md` — Test: Mirror — `test/` (4 files, part 1/3)
+- `test/_bundle_p2.instructions.md` — Test: Mirror — `test/` (4 files, part 2/3)
+- `test/_bundle_p3.instructions.md` — Test: Mirror — `test/` (2 files, part 3/3)
 
 ---
 _Auto-generated by context-graph._

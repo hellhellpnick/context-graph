@@ -228,7 +228,7 @@ Do **not** hand-edit `ctxgraph--*` — regenerate with `build`.
 | **2** | Source — **surface** (default ~30 lines; more for composables, Vue `<script>`, `.py`/`.go`) |
 | **3** | Skipped — `node_modules`, `vendor`, locks, images, minified assets |
 
-Exports/imports for deterministic mode use regex + TypeScript parser where applicable.
+Exports/imports for deterministic mode use regex + TypeScript parser where applicable. **Python** (`.py`), **Go** (`.go`), and **C#** (`.cs`) get symbol lines and import/`using` hints in subsystem instructions without LLM; C# also gets ASP.NET runtime bullets (controllers, HTTP verbs, EF Core) when detected.
 
 ## Programmatic API
 

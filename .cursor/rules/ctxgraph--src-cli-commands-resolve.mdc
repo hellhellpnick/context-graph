@@ -1,0 +1,48 @@
+---
+description: "Resolve — src/cli/commands/resolve.ts"
+globs: src/cli/commands/resolve.ts
+alwaysApply: false
+---
+
+## When to Read
+- editing or refactoring `resolve.ts`
+
+## Overview
+- `src/cli/commands/resolve.ts` (46 lines · 1 top-level symbols) — Mirror — `src/cli/commands/resolve.ts`
+
+## Graph
+```mermaid
+graph LR
+  resolve[resolve]
+  resolve --> io[io]
+  resolve --> resolve_symbol[resolve-symbol]
+  resolve --> project_graph[project-graph]
+  resolve --> project_root[project-root]
+  resolve --> chalk["chalk"]
+  resolve --> commander["commander"]
+```
+
+## Signatures
+
+```typescript
+// ── src/cli/commands/resolve.ts ──
+export function registerResolveCommand(program: Command): void { /* ~38 lines */ }
+
+
+// CLI commands:
+//   resolve
+```
+
+## Dependencies
+**Internal:**
+- `src/cli/io`
+- `src/graph-builder/resolve-symbol`
+- `src/project-graph`
+- `src/project-root`
+
+**External:**
+- `chalk`
+- `commander`
+
+<!-- context-graph: generated from `.github/instructions/src/cli/commands/resolve.instructions.md` -->
+_Regenerate: `context-graph build --no-llm` · Do not hand-edit this rule._

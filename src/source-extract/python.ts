@@ -16,6 +16,7 @@ export function extractPythonSymbolLines(py: string): string[] {
     if (!line) continue;
     if (/^(async\s+)?def\s+\w+\s*\(/.test(line)) push(line);
     else if (/^class\s+\w+/.test(line)) push(line.split(':')[0].trim());
+    else if (/^@\w+(?:\.\w+)+\s*\(/.test(line) && line.length < 120) push(line);
     else if (/^@\w+/.test(line) && line.length < 120) push(line);
   }
 

@@ -1,6 +1,6 @@
 {
 	"name": "@hellpnick/context-graph",
-	"version": "0.3.0",
+	"version": "0.3.1",
 	"description": "Auto-generate AI context graphs for any codebase. One command, zero config.",
 	"bin": {
 		"context-graph": "dist/cli.js"
@@ -9,7 +9,9 @@
 	"types": "./dist/index.d.ts",
 	"files": [
 		"dist/",
-		"prompts/"
+		"prompts/",
+		"README.md",
+		"README.ru.md"
 	],
 	"scripts": {
 		"build": "node -e \"const fs=require('fs');fs.mkdirSync('prompts',{recursive:true});fs.copyFileSync('graph-create-agent.md','prompts/graph-create-agent.md')\" && tsc",

@@ -8,17 +8,24 @@ alwaysApply: true
 
 This repo maintains a generated instruction graph under `.github/instructions/`.
 
+## MANDATORY routing (BLOCKING)
+
+**MUST** follow attached `ctxgraph--*` rule when `globs` match the file you edit.
+If none attached: **MUST** complete path-index → subsystem `*.instructions.md` (steps in `AGENTS.md`) before broad repo search.
+
+
 Response style (ALWAYS):
 - Ultra-compact (caveman). No greetings. No filler.
-- Prefer bullets. Each bullet <= 18 words.
+- Use bullets. Each bullet <= 18 words.
 - If unsure, say "unknown" instead of guessing.
 
-Subsystem context (automatic in Cursor):
-- `.cursor/rules/ctxgraph--*.mdc` — attached when you edit files matching `globs` (from `applyTo`).
+Subsystem context (Cursor auto-attach):
+- `.cursor/rules/ctxgraph--*.mdc` — attached for files matching `globs` (`applyTo`).
 
-Manual routing (Copilot / Claude / other):
-- `.github/instructions/copilot-instructions.md`
-- `.github/instructions/context-graph-path-index.md`
-- Match `.instructions.md` by `applyTo`; prefer higher `priority` (P0>P1>P2).
+Manual routing (MANDATORY — Copilot / Claude / other):
+- **MUST** read `.github/instructions/copilot-instructions.md` (routing hub).
+- **MUST** use `.github/instructions/context-graph-path-index.md` to resolve `applyTo`.
+- **MUST** open matching `.instructions.md` before broad repo search.
+- If several match: **MUST** use higher `priority` (P0 > P1 > P2).
 
 Instructions are authoritative over guesses.

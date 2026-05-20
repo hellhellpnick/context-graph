@@ -24,8 +24,10 @@ import {
   scriptOrSelfForAnalysis,
 } from '../../source-extract';
 import {
-  detectFrameworks,
   extractCSharpSymbolLines,
+} from '../../source-extract';
+import {
+  detectFrameworks,
   extractRuntimeSection,
 } from '../../framework-extract';
 

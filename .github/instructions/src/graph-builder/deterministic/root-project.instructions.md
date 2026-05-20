@@ -2,20 +2,21 @@
 description: "Mirror — `src/graph-builder/deterministic/root-project.ts`"
 applyTo: "src/graph-builder/deterministic/root-project.ts"
 priority: "P1"
-last_updated: "2026-05-18"
+last_updated: "2026-05-19"
 ---
 
 ## When to Read
 - editing or refactoring `root-project.ts`
 
 ## Overview
-- `src/graph-builder/deterministic/root-project.ts` (263 lines · 6 top-level symbols) — Mirror — `src/graph-builder/deterministic/root-project.ts`
+- `src/graph-builder/deterministic/root-project.ts` (267 lines · 6 top-level symbols) — Mirror — `src/graph-builder/deterministic/root-project.ts`
 
 ## Graph
 ```mermaid
 graph LR
   root_project[root-project]
   root_project --> root_slim[root-slim]
+  root_project --> routing_mandate[routing-mandate]
   root_project --> stack_profile[stack-profile]
   root_project --> types[types]
   root_project --> scanner[scanner]
@@ -25,7 +26,7 @@ graph LR
 
 ```typescript
 // ── src/graph-builder/deterministic/root-project.ts ──
-export function buildHowToUseGraphSection( plan: BuildPlan, profile: ProjectStackProfile ): string[] { /* prompt template (~25 lines) */ }
+export function buildHowToUseGraphSection( plan: BuildPlan, profile: ProjectStackProfile ): string[] { /* prompt template (~28 lines) */ }
 export function buildCodeZonesSection(plan: BuildPlan, profile: ProjectStackProfile): string[] { /* prompt template (~53 lines) */ }
 export function buildProjectDataFlowSection( scan: ScanResult, profile: ProjectStackProfile ): string[] { /* prompt template (~62 lines) */ }
 export interface NavZonePick { zone: string; subsystem: BuildPlanItem; }
@@ -38,6 +39,7 @@ export function getProjectStackProfile(scan: ScanResult): ProjectStackProfile { 
 ## Dependencies
 **Internal:**
 - `src/graph-builder/deterministic/root-slim`
+- `src/graph-builder/deterministic/routing-mandate`
 - `src/graph-builder/plan/stack-profile`
 - `src/graph-builder/types`
 - `src/scanner`

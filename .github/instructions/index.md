@@ -1,28 +1,9 @@
 # Context Graph — Instruction Index
 
-_Generated: 2026-05-18_
+_Generated: 2026-05-19_
 
-**Full path ↔ applyTo list:** [context-graph-path-index.md](context-graph-path-index.md)
-
-## .cursor
-| File | Source Files | Priority | Area | Description |
-|------|-------------|----------|------|-------------|
-| [.cursor/rules/_bundle_p10.instructions.md](.cursor/rules/_bundle_p10.instructions.md) | `.cursor/rules/ctxgraph--src-graph-builder-llm-notes.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-llm-validate.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-messages-planning.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-messages-root.mdc` | P2 | Rules | Mirror — `.cursor/rules/` (4 files, part 10/16) |
-| [.cursor/rules/_bundle_p11.instructions.md](.cursor/rules/_bundle_p11.instructions.md) | `.cursor/rules/ctxgraph--src-graph-builder-messages-subsystem.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-plan-infer.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-plan-layout.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-plan-parse.mdc` | P2 | Rules | Mirror — `.cursor/rules/` (4 files, part 11/16) |
-| [.cursor/rules/_bundle_p12.instructions.md](.cursor/rules/_bundle_p12.instructions.md) | `.cursor/rules/ctxgraph--src-graph-builder-plan-priority.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-plan-repair.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-plan-stack-profile.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-prompt.mdc` | P2 | Rules | Mirror — `.cursor/rules/` (4 files, part 12/16) |
-| [.cursor/rules/_bundle_p13.instructions.md](.cursor/rules/_bundle_p13.instructions.md) | `.cursor/rules/ctxgraph--src-graph-builder-types.mdc`, `.cursor/rules/ctxgraph--src-graph-builder.mdc`, `.cursor/rules/ctxgraph--src-hooks.mdc`, `.cursor/rules/ctxgraph--src-index.mdc` | P2 | Rules | Mirror — `.cursor/rules/` (4 files, part 13/16) |
-| [.cursor/rules/_bundle_p14.instructions.md](.cursor/rules/_bundle_p14.instructions.md) | `.cursor/rules/ctxgraph--src-instruction-targets.mdc`, `.cursor/rules/ctxgraph--src-project-graph.mdc`, `.cursor/rules/ctxgraph--src-project-root.mdc`, `.cursor/rules/ctxgraph--src-providers-anthropic.mdc` | P2 | Rules | Mirror — `.cursor/rules/` (4 files, part 14/16) |
-| [.cursor/rules/_bundle_p15.instructions.md](.cursor/rules/_bundle_p15.instructions.md) | `.cursor/rules/ctxgraph--src-providers-index.mdc`, `.cursor/rules/ctxgraph--src-providers-openai.mdc`, `.cursor/rules/ctxgraph--src-providers-types.mdc`, `.cursor/rules/ctxgraph--src-scanner.mdc` | P2 | Rules | Mirror — `.cursor/rules/` (4 files, part 15/16) |
-| [.cursor/rules/_bundle_p16.instructions.md](.cursor/rules/_bundle_p16.instructions.md) | `.cursor/rules/ctxgraph--src-source-extract.mdc`, `.cursor/rules/ctxgraph--src-writer.mdc`, `.cursor/rules/ctxgraph--test-bundle-p2.mdc`, `.cursor/rules/ctxgraph--test-bundle.mdc` | P2 | Rules | Mirror — `.cursor/rules/` (4 files, part 16/16) |
-| [.cursor/rules/_bundle_p2.instructions.md](.cursor/rules/_bundle_p2.instructions.md) | `.cursor/rules/ctxgraph--src-agents-catalog.mdc`, `.cursor/rules/ctxgraph--src-agents.mdc`, `.cursor/rules/ctxgraph--src-cli-agents-install.mdc`, `.cursor/rules/ctxgraph--src-cli-build-run.mdc` | P2 | Rules | Mirror — `.cursor/rules/` (4 files, part 2/16) |
-| [.cursor/rules/_bundle_p3.instructions.md](.cursor/rules/_bundle_p3.instructions.md) | `.cursor/rules/ctxgraph--src-cli-commands-actualize.mdc`, `.cursor/rules/ctxgraph--src-cli-commands-agents.mdc`, `.cursor/rules/ctxgraph--src-cli-commands-build.mdc`, `.cursor/rules/ctxgraph--src-cli-commands-hook-check.mdc` | P2 | Rules | Mirror — `.cursor/rules/` (4 files, part 3/16) |
-| [.cursor/rules/_bundle_p4.instructions.md](.cursor/rules/_bundle_p4.instructions.md) | `.cursor/rules/ctxgraph--src-cli-commands-impact.mdc`, `.cursor/rules/ctxgraph--src-cli-commands-review.mdc`, `.cursor/rules/ctxgraph--src-cli-commands-validate.mdc`, `.cursor/rules/ctxgraph--src-cli-index.mdc` | P2 | Rules | Mirror — `.cursor/rules/` (4 files, part 4/16) |
-| [.cursor/rules/_bundle_p5.instructions.md](.cursor/rules/_bundle_p5.instructions.md) | `.cursor/rules/ctxgraph--src-cli-io.mdc`, `.cursor/rules/ctxgraph--src-cli-program.mdc`, `.cursor/rules/ctxgraph--src-cli-version.mdc`, `.cursor/rules/ctxgraph--src-cli.mdc` | P2 | Rules | Mirror — `.cursor/rules/` (4 files, part 5/16) |
-| [.cursor/rules/_bundle_p6.instructions.md](.cursor/rules/_bundle_p6.instructions.md) | `.cursor/rules/ctxgraph--src-config.mdc`, `.cursor/rules/ctxgraph--src-framework-extract.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-constants.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-cost.mdc` | P2 | Rules | Mirror — `.cursor/rules/` (4 files, part 6/16) |
-| [.cursor/rules/_bundle_p7.instructions.md](.cursor/rules/_bundle_p7.instructions.md) | `.cursor/rules/ctxgraph--src-graph-builder-deterministic-cursor-rules.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-deterministic-metadata.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-deterministic-root-project.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-deterministic-root-slim.mdc` | P2 | Rules | Mirror — `.cursor/rules/` (4 files, part 7/16) |
-| [.cursor/rules/_bundle_p8.instructions.md](.cursor/rules/_bundle_p8.instructions.md) | `.cursor/rules/ctxgraph--src-graph-builder-deterministic-root.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-deterministic-subsystem.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-discovery.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-extract-deps-graph.mdc` | P2 | Rules | Mirror — `.cursor/rules/` (4 files, part 8/16) |
-| [.cursor/rules/_bundle_p9.instructions.md](.cursor/rules/_bundle_p9.instructions.md) | `.cursor/rules/ctxgraph--src-graph-builder-extract-exports.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-extract-imports.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-extract-misc.mdc`, `.cursor/rules/ctxgraph--src-graph-builder-index.mdc` | P2 | Rules | Mirror — `.cursor/rules/` (4 files, part 9/16) |
-| [.cursor/rules/_bundle.instructions.md](.cursor/rules/_bundle.instructions.md) | `.cursor/rules/context-graph.mdc`, `.cursor/rules/ctxgraph--python-context-graph-bundle.mdc`, `.cursor/rules/ctxgraph--root-bundle.mdc`, `.cursor/rules/ctxgraph--scripts-split-graph-builder.mdc` | P2 | Rules | Mirror — `.cursor/rules/` (4 files, part 1/16) |
+**Name lookup (LinkTag, useSeo, …):** [symbol-index.md](symbol-index.md)
+**Full path ↔ applyTo:** [context-graph-path-index.md](context-graph-path-index.md)
 
 ## Python
 | File | Source Files | Priority | Area | Description |
@@ -52,6 +33,7 @@ _Generated: 2026-05-18_
 | [src/cli/commands/build.instructions.md](src/cli/commands/build.instructions.md) | `src/cli/commands/build.ts` | P1 | Build | Mirror — `src/cli/commands/build.ts` |
 | [src/cli/commands/hook-check.instructions.md](src/cli/commands/hook-check.instructions.md) | `src/cli/commands/hook-check.ts` | P1 | Hook Check | Mirror — `src/cli/commands/hook-check.ts` |
 | [src/cli/commands/impact.instructions.md](src/cli/commands/impact.instructions.md) | `src/cli/commands/impact.ts` | P1 | Impact | Mirror — `src/cli/commands/impact.ts` |
+| [src/cli/commands/resolve.instructions.md](src/cli/commands/resolve.instructions.md) | `src/cli/commands/resolve.ts` | P1 | Resolve | Mirror — `src/cli/commands/resolve.ts` |
 | [src/cli/commands/review.instructions.md](src/cli/commands/review.instructions.md) | `src/cli/commands/review.ts` | P1 | Review | Mirror — `src/cli/commands/review.ts` |
 | [src/cli/commands/validate.instructions.md](src/cli/commands/validate.instructions.md) | `src/cli/commands/validate.ts` | P1 | Validate | Mirror — `src/cli/commands/validate.ts` |
 | [src/cli/index.instructions.md](src/cli/index.instructions.md) | `src/cli/index.ts` | P0 | Index | Mirror — `src/cli/index.ts` |
@@ -68,6 +50,7 @@ _Generated: 2026-05-18_
 | [src/graph-builder/deterministic/root-project.instructions.md](src/graph-builder/deterministic/root-project.instructions.md) | `src/graph-builder/deterministic/root-project.ts` | P1 | Root Project | Mirror — `src/graph-builder/deterministic/root-project.ts` |
 | [src/graph-builder/deterministic/root-slim.instructions.md](src/graph-builder/deterministic/root-slim.instructions.md) | `src/graph-builder/deterministic/root-slim.ts` | P1 | Root Slim | Mirror — `src/graph-builder/deterministic/root-slim.ts` |
 | [src/graph-builder/deterministic/root.instructions.md](src/graph-builder/deterministic/root.instructions.md) | `src/graph-builder/deterministic/root.ts` | P1 | Root | Mirror — `src/graph-builder/deterministic/root.ts` |
+| [src/graph-builder/deterministic/routing-mandate.instructions.md](src/graph-builder/deterministic/routing-mandate.instructions.md) | `src/graph-builder/deterministic/routing-mandate.ts` | P1 | Routing Mandate | Mirror — `src/graph-builder/deterministic/routing-mandate.ts` |
 | [src/graph-builder/deterministic/subsystem.instructions.md](src/graph-builder/deterministic/subsystem.instructions.md) | `src/graph-builder/deterministic/subsystem.ts` | P1 | Subsystem | Mirror — `src/graph-builder/deterministic/subsystem.ts` |
 | [src/graph-builder/discovery.instructions.md](src/graph-builder/discovery.instructions.md) | `src/graph-builder/discovery.ts` | P1 | Discovery | Mirror — `src/graph-builder/discovery.ts` |
 | [src/graph-builder/extract/deps-graph.instructions.md](src/graph-builder/extract/deps-graph.instructions.md) | `src/graph-builder/extract/deps-graph.ts` | P1 | Deps Graph | Mirror — `src/graph-builder/extract/deps-graph.ts` |
@@ -87,6 +70,7 @@ _Generated: 2026-05-18_
 | [src/graph-builder/plan/repair.instructions.md](src/graph-builder/plan/repair.instructions.md) | `src/graph-builder/plan/repair.ts` | P1 | Repair | Mirror — `src/graph-builder/plan/repair.ts` |
 | [src/graph-builder/plan/stack-profile.instructions.md](src/graph-builder/plan/stack-profile.instructions.md) | `src/graph-builder/plan/stack-profile.ts` | P1 | Stack Profile | Mirror — `src/graph-builder/plan/stack-profile.ts` |
 | [src/graph-builder/prompt.instructions.md](src/graph-builder/prompt.instructions.md) | `src/graph-builder/prompt.ts` | P2 | Prompt | Mirror — `src/graph-builder/prompt.ts` |
+| [src/graph-builder/resolve-symbol.instructions.md](src/graph-builder/resolve-symbol.instructions.md) | `src/graph-builder/resolve-symbol.ts` | P1 | Resolve Symbol | Mirror — `src/graph-builder/resolve-symbol.ts` |
 | [src/graph-builder/types.instructions.md](src/graph-builder/types.instructions.md) | `src/graph-builder/types.ts` | P1 | Types | Mirror — `src/graph-builder/types.ts` |
 | [src/hooks.instructions.md](src/hooks.instructions.md) | `src/hooks.ts` | P1 | Hooks | Mirror — `src/hooks.ts` |
 | [src/index.instructions.md](src/index.instructions.md) | `src/index.ts` | P0 | Index | Mirror — `src/index.ts` |
@@ -98,14 +82,25 @@ _Generated: 2026-05-18_
 | [src/providers/openai.instructions.md](src/providers/openai.instructions.md) | `src/providers/openai.ts` | P1 | Openai | Mirror — `src/providers/openai.ts` |
 | [src/providers/types.instructions.md](src/providers/types.instructions.md) | `src/providers/types.ts` | P1 | Types | Mirror — `src/providers/types.ts` |
 | [src/scanner.instructions.md](src/scanner.instructions.md) | `src/scanner.ts` | P0 | Scanner | Mirror — `src/scanner.ts` |
-| [src/source-extract.instructions.md](src/source-extract.instructions.md) | `src/source-extract.ts` | P1 | Source Extract | Mirror — `src/source-extract.ts` |
+| [src/source-extract/go.instructions.md](src/source-extract/go.instructions.md) | `src/source-extract/go.ts` | P2 | Go | Mirror — `src/source-extract/go.ts` |
+| [src/source-extract/index.instructions.md](src/source-extract/index.instructions.md) | `src/source-extract/index.ts` | P0 | Index | Mirror — `src/source-extract/index.ts` |
+| [src/source-extract/instruction-score.instructions.md](src/source-extract/instruction-score.instructions.md) | `src/source-extract/instruction-score.ts` | P2 | Instruction Score | Mirror — `src/source-extract/instruction-score.ts` |
+| [src/source-extract/nuxt-runtime.instructions.md](src/source-extract/nuxt-runtime.instructions.md) | `src/source-extract/nuxt-runtime.ts` | P2 | Nuxt Runtime | Mirror — `src/source-extract/nuxt-runtime.ts` |
+| [src/source-extract/paths.instructions.md](src/source-extract/paths.instructions.md) | `src/source-extract/paths.ts` | P2 | Paths | Mirror — `src/source-extract/paths.ts` |
+| [src/source-extract/php.instructions.md](src/source-extract/php.instructions.md) | `src/source-extract/php.ts` | P2 | Php | Mirror — `src/source-extract/php.ts` |
+| [src/source-extract/python.instructions.md](src/source-extract/python.instructions.md) | `src/source-extract/python.ts` | P2 | Python | Mirror — `src/source-extract/python.ts` |
+| [src/source-extract/ts-prompt.instructions.md](src/source-extract/ts-prompt.instructions.md) | `src/source-extract/ts-prompt.ts` | P2 | Ts Prompt | Mirror — `src/source-extract/ts-prompt.ts` |
+| [src/source-extract/ts-skeleton.instructions.md](src/source-extract/ts-skeleton.instructions.md) | `src/source-extract/ts-skeleton.ts` | P2 | Ts Skeleton | Mirror — `src/source-extract/ts-skeleton.ts` |
+| [src/source-extract/utils.instructions.md](src/source-extract/utils.instructions.md) | `src/source-extract/utils.ts` | P2 | Utils | Mirror — `src/source-extract/utils.ts` |
+| [src/source-extract/vue-sfc.instructions.md](src/source-extract/vue-sfc.instructions.md) | `src/source-extract/vue-sfc.ts` | P2 | Vue Sfc | Mirror — `src/source-extract/vue-sfc.ts` |
 | [src/writer.instructions.md](src/writer.instructions.md) | `src/writer.ts` | P0 | Writer | Mirror — `src/writer.ts` |
 
 ## Test
 | File | Source Files | Priority | Area | Description |
 |------|-------------|----------|------|-------------|
-| [test/_bundle_p2.instructions.md](test/_bundle_p2.instructions.md) | `test/priority.test.mjs`, `test/project-root.test.mjs`, `test/repair-stack.test.mjs`, `test/root-slim.test.mjs` | P2 | Test | Mirror — `test/` (4 files, part 2/2) |
-| [test/_bundle.instructions.md](test/_bundle.instructions.md) | `test/copilotignore.test.mjs`, `test/extract.test.mjs`, `test/instruction-targets.test.mjs`, `test/php-extract.test.mjs` | P2 | Test | Mirror — `test/` (4 files, part 1/2) |
+| [test/_bundle_p2.instructions.md](test/_bundle_p2.instructions.md) | `test/priority.test.mjs`, `test/project-root.test.mjs`, `test/repair-stack.test.mjs`, `test/resolve-symbol.test.mjs` | P2 | Test | Mirror — `test/` (4 files, part 2/3) |
+| [test/_bundle_p3.instructions.md](test/_bundle_p3.instructions.md) | `test/root-slim.test.mjs`, `test/routing-mandate.test.mjs` | P2 | Test | Mirror — `test/` (2 files, part 3/3) |
+| [test/_bundle.instructions.md](test/_bundle.instructions.md) | `test/copilotignore.test.mjs`, `test/extract.test.mjs`, `test/instruction-targets.test.mjs`, `test/php-extract.test.mjs` | P2 | Test | Mirror — `test/` (4 files, part 1/3) |
 
 ## Quick Navigation
 - **Danger Zones**: see `copilot-instructions.md § Danger Zones`

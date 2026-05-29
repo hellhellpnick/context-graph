@@ -1,5 +1,18 @@
 /** C# symbol and import extraction. */
 
+const TYPE_DECL =
+  /^(?:(?:public|internal|private|protected)\s+)*(?:partial\s+|sealed\s+|static\s+|abstract\s+)*(?:class|interface|record|struct|enum)\s+\w+/;
+
+/** Method/ctor; access modifier optional (defaults internal). `{` may be on next line. */
+const MEMBER_SIG =
+  /^(?:(?:public|private|protected|internal)\s+)?(?:(?:async|static|virtual|override|sealed|new|extern|partial)\s+)*(?:[\w.<>\[\],\s?]+\s+)(\w+)\s*\([^;]*\)\s*(?:=>|\{)?\s*$/;
+
+const CONST_FIELD =
+  /^(?:public|private|protected|internal)\s+(?:const|static readonly)\s+[\w.<>\[\],\s?]+\s+(\w+)\s*=/;
+
+const CONTROL_FLOW =
+  /^(?:if|while|for|switch|catch|else|return|lock|foreach|try|fixed|checked|unchecked)\b/;
+
 export function extractCSharpSymbolLines(cs: string): string[] {
   const out: string[] = [];
   const seen = new Set<string>();
@@ -12,16 +25,34 @@ export function extractCSharpSymbolLines(cs: string): string[] {
 
   for (const rawLine of cs.replace(/\r\n/g, '\n').split('\n')) {
     const t = rawLine.trim();
-    if (!t || t.startsWith('//')) continue;
-    const cls = t.match(
-      /^(?:public|internal|private|protected)?\s*(?:partial\s+)?(?:class|interface|record|struct|enum)\s+(\w+)/
-    );
-    if (cls) {
+    if (!t || t.startsWith('//') || t.startsWith('#')) continue;
+    if (CONTROL_FLOW.test(t)) continue;
+    if (/^using\s+(?!static)[\w.]+\s*;/.test(t)) continue;
+
+    if (TYPE_DECL.test(t)) {
+      push(t.split('{')[0].split(':')[0].trim());
+      continue;
+    }
+
+    if (/\[(HttpGet|HttpPost|HttpPut|HttpDelete|Route)/i.test(t)) push(t);
+
+    if (CONST_FIELD.test(t)) {
+      push(t.split('=')[0].trim());
+      continue;
+    }
+
+    if (MEMBER_SIG.test(t)) {
       push(t.split('{')[0].trim());
       continue;
     }
-    if (/\[(HttpGet|HttpPost|HttpPut|HttpDelete|Route)/i.test(t)) push(t);
-    if (/^(?:public|private|protected|internal).*\(.*\)\s*(?:=>|{)/.test(t)) push(t.split('{')[0].trim());
+
+    // legacy: single-line method with opening brace on same line
+    if (
+      /^(?:(?:public|private|protected|internal)\s+)?.*\(.*\)\s*(?:=>|{)/.test(t) &&
+      !CONTROL_FLOW.test(t)
+    ) {
+      push(t.split('{')[0].trim());
+    }
   }
   return out.slice(0, 120);
 }

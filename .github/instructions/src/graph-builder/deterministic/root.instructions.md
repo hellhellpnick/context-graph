@@ -2,14 +2,14 @@
 description: "Mirror — `src/graph-builder/deterministic/root.ts`"
 applyTo: "src/graph-builder/deterministic/root.ts"
 priority: "P1"
-last_updated: "2026-05-20"
+last_updated: "2026-05-29"
 ---
 
 ## When to Read
 - editing or refactoring `root.ts`
 
 ## Overview
-- `src/graph-builder/deterministic/root.ts` (410 lines · 5 top-level symbols) — Mirror — `src/graph-builder/deterministic/root.ts`
+- `src/graph-builder/deterministic/root.ts` (384 lines · 5 top-level symbols) — Mirror — `src/graph-builder/deterministic/root.ts`
 
 ## Graph
 ```mermaid
@@ -34,7 +34,7 @@ export function buildDeterministicCopilotInstructions( today: string, scan: Scan
 export function buildDeterministicChangelog(today: string, plan: BuildPlan): string { const lines = [ `# Context Graph — Changelog`, ``, `## ${today} — Initial Build`, ``, `Subsystems created:`, ...plan.subsystems.map(s => `- \`${s.file}…
 /** Standard scan-exclusion hints — never infer top-level dirs from nested lockfiles. */
 export function buildDeterministicCopilotIgnore(_scan?: ScanResult): string { return [ '# Managed by context-graph — scan exclusions (gitignore syntax; ** = any depth)', '# For project-specific paths use .graph-context-ignore (does not o…
-export function injectDeterministicRootFiles( today: string, scan: ScanResult, plan: BuildPlan, files: OutputFile[], llmCopilotContent?: string, rootOpts?: CopilotRootOptions, instructionTargets: I… { /* prompt template (~190 lines) */ }
+export function injectDeterministicRootFiles( today: string, scan: ScanResult, plan: BuildPlan, files: OutputFile[], llmCopilotContent?: string, rootOpts?: CopilotRootOptions, instructionTargets: I… { /* prompt template (~164 lines) */ }
 
 ```
 

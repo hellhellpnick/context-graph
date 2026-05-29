@@ -8,7 +8,7 @@ alwaysApply: false
 - editing or refactoring `agents.ts`
 
 ## Overview
-- `src/agents.ts` (298 lines · 5 top-level symbols) — Mirror — `src/agents.ts`
+- `src/agents.ts` (308 lines · 5 top-level symbols) — Mirror — `src/agents.ts`
 
 ## Graph
 ```mermaid

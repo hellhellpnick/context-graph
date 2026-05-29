@@ -2,20 +2,22 @@
 description: "Mirror — `src/cli/commands/validate.ts`"
 applyTo: "src/cli/commands/validate.ts"
 priority: "P1"
-last_updated: "2026-05-20"
+last_updated: "2026-05-29"
 ---
 
 ## When to Read
 - editing or refactoring `validate.ts`
 
 ## Overview
-- `src/cli/commands/validate.ts` (52 lines · 1 top-level symbols) — Mirror — `src/cli/commands/validate.ts`
+- `src/cli/commands/validate.ts` (75 lines · 1 top-level symbols) — Mirror — `src/cli/commands/validate.ts`
 
 ## Graph
 ```mermaid
 graph LR
   validate[validate]
   validate --> io[io]
+  validate --> config[config]
+  validate --> routing_entrypoints[routing-entrypoints]
   validate --> hooks[hooks]
   validate --> project_root[project-root]
   validate --> chalk["chalk"]
@@ -26,7 +28,7 @@ graph LR
 
 ```typescript
 // ── src/cli/commands/validate.ts ──
-export function registerValidateCommand(program: Command): void { /* ~43 lines */ }
+export function registerValidateCommand(program: Command): void { /* ~64 lines */ }
 
 
 // CLI commands:
@@ -36,6 +38,8 @@ export function registerValidateCommand(program: Command): void { /* ~43 lines *
 ## Dependencies
 **Internal:**
 - `src/cli/io`
+- `src/config`
+- `src/graph-builder/deterministic/routing-entrypoints`
 - `src/hooks`
 - `src/project-root`
 

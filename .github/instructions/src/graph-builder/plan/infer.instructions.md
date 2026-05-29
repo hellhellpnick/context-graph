@@ -2,7 +2,7 @@
 description: "Mirror — `src/graph-builder/plan/infer.ts`"
 applyTo: "src/graph-builder/plan/infer.ts"
 priority: "P1"
-last_updated: "2026-05-20"
+last_updated: "2026-05-29"
 ---
 
 ## When to Read

@@ -1,0 +1,76 @@
+---
+description: "Mirror — `.cursor/rules/` (4 files, part 29/39)"
+applyTo: ".cursor/rules/**"
+priority: "P2"
+last_updated: "2026-05-29"
+---
+
+## When to Read
+- editing or refactoring `ctxgraph--src-graph-builder-plan-infer.mdc`
+- editing or refactoring `ctxgraph--src-graph-builder-plan-layout.mdc`
+- editing or refactoring `ctxgraph--src-graph-builder-plan-parse.mdc`
+- editing or refactoring `ctxgraph--src-graph-builder-plan-priority.mdc`
+
+## Overview
+- `.cursor/rules/ctxgraph--src-graph-builder-plan-infer.mdc` (46 lines · 8 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--src-graph-builder-plan-layout.mdc` (49 lines · 8 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--src-graph-builder-plan-parse.mdc` (33 lines · 1 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--src-graph-builder-plan-priority.mdc` (44 lines · 4 top-level symbols) — # When to Read
+
+## Graph
+```mermaid
+graph LR
+  Rules[Rules]
+```
+
+## Signatures
+
+```typescript
+// ── .cursor/rules/ctxgraph--src-graph-builder-plan-infer.mdc ──
+// ── src/graph-builder/plan/infer.ts ──
+export function buildPlanningContextLight(scan: ScanResult): string { /* ~29 lines */ }
+export function readPackageJsonAt( scan: ScanResult, relPath: string ): Record<string, unknown> | null { const f = scan.files.find(x => x.path === relPath && x.content); if (!f) return null; try { return JSON.parse(f.content) as Record<s…
+export function readPackageJson(scan: ScanResult): Record<string, unknown> | null { return readPackageJsonAt(scan, resolvePrimaryPackagePath(scan)); }
+export function readGoModModule(scan: ScanResult): string | null { const f = scan.files.find(x => x.path === 'go.mod' && x.content); if (!f) return null; const m = f.content.match(/^module\s+(\S+)/m); return m ? m[1].trim() : null; }
+export function readComposerJson(scan: ScanResult): Record<string, unknown> | null { const f = scan.files.find(x => x.path === 'composer.json' && x.content); if (!f) return null; try { return JSON.parse(f.content) as Record<string, unkno…
+/** Which `package.json` drives build/test labels (nested Nuxt monorepos). */
+export function resolvePrimaryPackagePath(scan: ScanResult): string { const nuxtConfig = findNuxtConfigPath(scan); if (nuxtConfig) { const dir = path.posix.dirname(nuxtConfig.replace(/\\/g, '/')); const nested = dir === '.' ? 'package.js…
+/** Human stack line — avoids listing Go/Python/TS from a few stray scripts. */
+export function inferTechStackFromScan( scan: ScanResult, profile: ProjectStackProfile ): string[] { /* ~53 lines */ }
+export function inferDefaultsFromScan(scan: ScanResult): Pick<BuildPlan, 'projectName' | 'projectDescription' | 'techStack' | 'buildCommand' | 'testCommand'> { /* ~76 lines */ }
+
+// ── .cursor/rules/ctxgraph--src-graph-builder-plan-layout.mdc ──
+// ── src/graph-builder/plan/layout.ts ──
+export function humanAreaName(segment: string): string { let name = segment .replace(/\.[^.]+$/, '') // strip extension .replace(/^__(.+)__$/, '$1') // __init__ → init .replace(/[-_]+/g, ' ') // delimiters → spaces .trim(); if (!name || …
+export function shortHash(s: string): string { return crypto.createHash('sha1').update(s, 'utf8').digest('hex').slice(0, 10); }
+/** Copilot prompts expect several concrete use cases; pad short auto-generated lists. */
+export function padUseCases(cases: string[]): string[] { const out = [...cases]; const pad = 'navigating this subsystem from the instruction index'; while (out.length < 4) out.push(pad); return out.slice(0, 6); }
+export function autoInstructionStem(dir: string, files: string[], partIndex: number): string { /* ~12 lines */ }
+export function mirrorInstructionSafeSegment(name: string): string { return name.replace(/[^a-zA-Z0-9._-]+/g, '_').replace(/^\.+/, '') || 'x'; }
+/** Instruction `.md` path under `.github/instructions/` mirroring source layout. */
+export function mirrorInstructionRelPath( dir: string, chunk: string[], partIndex: number, totalParts: number, usedInstructionRelPaths: Set<string> ): string { /* prompt template (~44 lines) */ }
+/** Stable instruction path for by-folder grouping (avoids collisions across dirs). */
+export function folderInstructionRelPath( dir: string, partIndex: number, totalParts: number, chunk: string[], usedInstructionRelPaths: Set<string> ): string { /* ~23 lines */ }
+export function partitionInstructionChunks( list: string[], scan: ScanResult, maxBundle: number ): string[][] { /* ~31 lines */ }
+
+// ── .cursor/rules/ctxgraph--src-graph-builder-plan-parse.mdc ──
+// ── src/graph-builder/plan/parse.ts ──
+export function parseBuildPlan(raw: string): BuildPlan | null { /* ~16 lines */ }
+
+// ── .cursor/rules/ctxgraph--src-graph-builder-plan-priority.mdc ──
+// ── src/graph-builder/plan/priority.ts ──
+export type InstructionPriority = 'P0' | 'P1' | 'P2';
+/** Higher urgency wins (P0 > P1 > P2). */
+export function maxPriority(a: InstructionPriority, b: InstructionPriority): InstructionPriority { return RANK[a] <= RANK[b] ? a : b; }
+/**
+ * Heuristic priority for a single source file (deterministic / metadata).
+ * Aligns with planning prompt: P0 entry & critical paths, P1 frequent, P2 leaf/rare.
+ */
+export function inferFilePriority( relPath: string, opts?: { /* ~102 lines */ }
+/** Subsystem priority = most urgent file in the chunk (mirror bundle or folder group). */
+export function inferSubsystemPriority(sourceFiles: string[], scan?: ScanResult): InstructionPriority { /* ~28 lines */ }
+
+```
+
+## Dependencies
+- No dependencies detected

@@ -1,8 +1,8 @@
 ---
-description: "Mirror — `test/` (4 files, part 1/4)"
+description: "Mirror — `test/` (4 files, part 1/5)"
 applyTo: "test/**"
 priority: "P2"
-last_updated: "2026-05-20"
+last_updated: "2026-05-29"
 ---
 
 ## When to Read
@@ -12,10 +12,10 @@ last_updated: "2026-05-20"
 - editing or refactoring `go-extract.test.mjs`
 
 ## Overview
-- `test/copilotignore.test.mjs` (38 lines) — Mirror — `test/` (4 files, part 1/4)
-- `test/csharp-extract.test.mjs` (41 lines) — Mirror — `test/` (4 files, part 1/4)
-- `test/extract.test.mjs` (87 lines · 2 top-level symbols) — Mirror — `test/` (4 files, part 1/4)
-- `test/go-extract.test.mjs` (48 lines) — Mirror — `test/` (4 files, part 1/4)
+- `test/copilotignore.test.mjs` (38 lines) — Mirror — `test/` (4 files, part 1/5)
+- `test/csharp-extract.test.mjs` (102 lines) — Mirror — `test/` (4 files, part 1/5)
+- `test/extract.test.mjs` (87 lines · 2 top-level symbols) — Mirror — `test/` (4 files, part 1/5)
+- `test/go-extract.test.mjs` (48 lines) — Mirror — `test/` (4 files, part 1/5)
 
 ## Graph
 ```mermaid
@@ -34,6 +34,8 @@ graph LR
 // ── test/csharp-extract.test.mjs ──
 // ── skeleton ──
 const SAMPLE = `using System; using static System.Console; global using MyApp.Models; namespace MyApp.Controllers; [ApiController] [Route("api/[controller]")] public class ItemsController : Controlle…
+const WINUI_MAIN_WINDOW = `namespace AutoDarkModeApp; public sealed partial class MainWindow : Window { public MainWindow() { ApplySystemThemeToCaptionButtons(); } private void NavViewTitleBar_BackRe…
+const SHELL_PROGRAM = `#region copyright // license header #endregion namespace AutoDarkModeComms; class Program { public const string QuitShell = "QuitShell"; static void Main(string[] args) { } pub…
 
 // ── test/extract.test.mjs ──
 /** Targets barrels only — not file purpose. */

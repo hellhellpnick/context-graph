@@ -159,7 +159,7 @@ export function buildAgentEntryWithTool(title: string, tool: AgentEntryTool): st
   ];
 }
 
-/** Cursor always-on router rule body (no frontmatter). */
+/** Short router blurb (legacy / embedded refs). */
 export function buildCursorRouterMandate(): string[] {
   return [
     `## MANDATORY routing (BLOCKING)`,
@@ -170,10 +170,35 @@ export function buildCursorRouterMandate(): string[] {
   ];
 }
 
+/** Cursor \`context-graph.mdc\` body — full BLOCKING mandate (alwaysApply: true). */
+export function buildCursorAlwaysOnRuleBody(): string {
+  return [
+    `# context-graph — AI routing entrypoint`,
+    ``,
+    `This repo maintains a generated instruction graph under \`.github/instructions/\`.`,
+    ``,
+    ...buildAgentEntryMandate(),
+    ...buildToolSpecificRoutingLines('agents'),
+    `Subsystem context (Cursor auto-attach):`,
+    `- \`.cursor/rules/ctxgraph--*.mdc\` — attached when \`globs\` match (\`applyTo\`).`,
+    `- If several match: **MUST** use higher \`priority\` (P0 > P1 > P2) in path-index.`,
+    ``,
+    `Instructions are authoritative over guesses.`,
+    ``,
+    `Response style (ALWAYS):`,
+    `- Ultra-compact (caveman). No greetings. No filler.`,
+    `- Use bullets. Each bullet <= 18 words.`,
+    `- If unsure, say "unknown" instead of guessing.`,
+    ``,
+  ].join('\n');
+}
+
 /** Windsurf: always_on trigger (docs.windsurf.com — rules in .windsurf/rules/). */
 export function buildWindsurfContextGraphRule(): string {
   const body = [
     `# context-graph — Windsurf routing (always on)`,
+    ``,
+    ROUTING_MANDATE_HEADING,
     ``,
     ...buildNamedEntityRoutingMandate(),
     ...buildRoutingWorkflowSteps(),
@@ -193,6 +218,9 @@ export function buildClineContextGraphRule(): string {
   return [
     `# context-graph — Cline routing`,
     ``,
+    ROUTING_MANDATE_HEADING,
+    ``,
+    ...buildNamedEntityRoutingMandate(),
     ...buildRoutingWorkflowSteps(),
     ...buildToolSpecificRoutingLines('cline'),
     `## Also load`,
@@ -210,6 +238,9 @@ export function buildCodexContextGraphRule(): string {
     ``,
     `**MUST** read \`AGENTS.md\` at repo root first — Codex loads it before every run.`,
     ``,
+    ROUTING_MANDATE_HEADING,
+    ``,
+    ...buildNamedEntityRoutingMandate(),
     ...buildRoutingWorkflowSteps(),
     ...buildToolSpecificRoutingLines('codex'),
   ].join('\n');

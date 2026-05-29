@@ -1,0 +1,83 @@
+---
+description: "Mirror — `.cursor/rules/` (4 files, part 44/51)"
+applyTo: ".cursor/rules/**"
+priority: "P2"
+last_updated: "2026-05-29"
+---
+
+## When to Read
+- editing or refactoring `ctxgraph--src-project-graph.mdc`
+- editing or refactoring `ctxgraph--src-project-root.mdc`
+- editing or refactoring `ctxgraph--src-providers-anthropic.mdc`
+- editing or refactoring `ctxgraph--src-providers-index.mdc`
+
+## Overview
+- `.cursor/rules/ctxgraph--src-project-graph.mdc` (35 lines · 1 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--src-project-root.mdc` (62 lines · 7 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--src-providers-anthropic.mdc` (40 lines · 1 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--src-providers-index.mdc` (41 lines · 2 top-level symbols) — # When to Read
+
+## Graph
+```mermaid
+graph LR
+  Rules[Rules]
+  Rules --> node[""]
+  Rules --> ENV{{"env / config"}}
+```
+
+## Signatures
+
+```typescript
+// ── .cursor/rules/ctxgraph--src-project-graph.mdc ──
+// ── src/project-graph.ts ──
+/** True when a prior context-graph build left core files under `.github/instructions/`. */
+export function projectGraphExists(projectRoot: string): boolean { return GRAPH_MARKER_PATHS.some(rel => fs.existsSync(path.join(projectRoot, rel))); }
+
+// ── .cursor/rules/ctxgraph--src-project-root.mdc ──
+// ── src/project-root.ts ──
+/**
+ * Git work tree root, or null if `cwd` is not inside a Git repository.
+ */
+export function tryGitRepositoryRoot(cwd: string): string | null { try { const out = execFileSync('git', ['rev-parse', '--show-toplevel'], { cwd, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'], }).trim(); if (!out) return null; re…
+ * Resolves where `.github/instructions/` and `.context-graph.json` live.
+ *
+ * - **Implicit cwd** (no CLI `[dir]`, or `dir` is `.` / same as `process.cwd()`):
+ *   1. `CONTEXT_GRAPH_ROOT` if set and points to an existing directory
+ *   2. else Git repository root from cwd (`git rev-parse --show-toplevel`)
+ *   3. else `path.resolve(cwd)`
+ * - **Explicit `[dir]`** (subfolder path): that path only — no Git uplift (monorepo package roots).
+ */
+export function resolveProjectRoot(cliDirArg: string | undefined, cwd: string = process.cwd()): string { /* ~26 lines */ }
+export type MistakenBuildModeFlag = 'hybrid' | 'deterministic' | 'llm';
+export interface BuildDirNormalization { projectDir: string | undefined; mistakenModeFlag?: MistakenBuildModeFlag; }
+/**
+ * If `[dir]` is actually a build-mode token (`hybrid`, `no-llm`, …), treat as implicit repo root.
+ */
+export function normalizeBuildDirArg(cliDirArg: string | undefined): BuildDirNormalization { if (!cliDirArg) return { projectDir: undefined }; const key = cliDirArg.toLowerCase().replace(/_/g, '-'); if (!BUILD_MODE_DIR_ALIASES.has(key)) …
+export function suggestedBuildFlagForMistake(flag: MistakenBuildModeFlag): string { if (flag === 'deterministic') return '--no-llm'; return `--${flag}`; }
+/** Exit-friendly check before writing `.context-graph.json` / instructions. */
+export function assertProjectRootExists(projectRoot: string): void { let st: fs.Stats; try { st = fs.statSync(projectRoot); } catch { throw new Error( `Project directory does not exist: ${projectRoot}\n` + `Pass a real path: context-grap…
+
+// ── .cursor/rules/ctxgraph--src-providers-anthropic.mdc ──
+// ── src/providers/anthropic.ts ──
+export class AnthropicProvider implements LLMProvider { /* ~34 lines */ }
+
+// ── .cursor/rules/ctxgraph--src-providers-index.mdc ──
+// ── src/providers/index.ts ──
+export function createProvider(config: ProviderConfig): LLMProvider { switch (config.provider) { case 'openai': case 'openai-compat': case 'ollama': return new OpenAIProvider(config); case 'anthropic': return new AnthropicProvider(config…
+export type { LLMProvider, LLMMessage, LLMUsage, LLMResponse, ProviderConfig } from './types'
+
+```
+
+## Dependencies
+**External:**
+- ``
+
+## Error Handling
+- `Error`: "Project directory does not exist: ${projectRoot}\n` + `Pass a real path: context-grap…
+
+``" (`ctxgraph--src-project-root.mdc`)
+
+## Danger Zone 🔴
+- **[fs]** filesystem I/O
+- **[env]** reads `process.env.CONTEXT_GRAPH_ROOT`

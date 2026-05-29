@@ -2,7 +2,7 @@
 description: "Mirror — `src/cli/commands/hook-check.ts`"
 applyTo: "src/cli/commands/hook-check.ts"
 priority: "P1"
-last_updated: "2026-05-20"
+last_updated: "2026-05-29"
 ---
 
 ## When to Read

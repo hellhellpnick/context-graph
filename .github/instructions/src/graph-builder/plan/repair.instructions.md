@@ -2,14 +2,14 @@
 description: "Mirror — `src/graph-builder/plan/repair.ts`"
 applyTo: "src/graph-builder/plan/repair.ts"
 priority: "P1"
-last_updated: "2026-05-20"
+last_updated: "2026-05-29"
 ---
 
 ## When to Read
 - editing or refactoring `repair.ts`
 
 ## Overview
-- `src/graph-builder/plan/repair.ts` (286 lines · 8 top-level symbols) — Mirror — `src/graph-builder/plan/repair.ts`
+- `src/graph-builder/plan/repair.ts` (288 lines · 8 top-level symbols) — Mirror — `src/graph-builder/plan/repair.ts`
 
 ## Graph
 ```mermaid
@@ -29,7 +29,7 @@ graph LR
 
 ```typescript
 // ── src/graph-builder/plan/repair.ts ──
-export function shouldExcludeFromSubsystems(relPath: string): boolean { const name = path.posix.basename(relPath); return INSTRUCTION_EXCLUDE_RE.some(r => r.test(name) || r.test(relPath)); }
+export function shouldExcludeFromSubsystems(relPath: string): boolean { if (isInstructionExcludedPath(relPath)) return true; const name = path.posix.basename(relPath); return INSTRUCTION_EXCLUDE_RE.some(r => r.test(name) || r.test(relPat…
 /** Source-code paths the scanner read that merit their own instruction files. */
 export function collectScannedSourcePaths(scan: ScanResult): string[] { return scan.files .filter(f => f.tier !== 3 && f.content.length > 0 && !shouldExcludeFromSubsystems(f.path)) .map(f => f.path) .sort(); }
 /**
@@ -58,3 +58,4 @@ export function resolveRepairOptions(scan: ScanResult, config: Config): RepairBu
 - `src/graph-builder/plan/stack-profile`
 - `src/graph-builder/types`
 - `src/scanner`
+- `src/source-extract`

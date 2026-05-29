@@ -1,0 +1,104 @@
+---
+description: "Mirror — `.cursor/rules/ctxgraph--cursor-rules-bundle-p32.mdc`"
+applyTo: ".cursor/rules/ctxgraph--cursor-rules-bundle-p32.mdc"
+priority: "P2"
+last_updated: "2026-05-29"
+---
+
+## When to Read
+- editing or refactoring `ctxgraph--cursor-rules-bundle-p32.mdc`
+
+## Overview
+- `.cursor/rules/ctxgraph--cursor-rules-bundle-p32.mdc` (116 lines · 32 top-level symbols) — # When to Read
+
+## Graph
+```mermaid
+graph LR
+  ctxgraph__cursor_rules_bundle_p32[ctxgraph--cursor-rules-bundle-p32]
+```
+
+## Signatures
+
+```typescript
+// ── .cursor/rules/ctxgraph--cursor-rules-bundle-p32.mdc ──
+// ── .cursor/rules/ctxgraph--src-instruction-targets.mdc ──
+// ── src/instruction-targets.ts ──
+/**
+ * Which AI tool entrypoints context-graph emits (adapters + tool-specific files).
+ * Core graph (`.github/instructions/*.instructions.md`, index, path-index) is always built.
+ */
+export type InstructionTargetId = | 'copilot' | 'cursor' | 'claude' | 'agents' | 'gemini' | 'windsurf' | 'codex' | 'cline';
+export const INSTRUCTION_TARGET_IDS: InstructionTargetId[] = [ 'copilot', 'cursor', 'claude', 'agents', 'gemini', 'windsurf', 'codex', 'cline', ];
+export const INSTRUCTION_TARGET_LABELS: Record<InstructionTargetId, string> = { copilot: 'GitHub Copilot (.github/copilot-instructions.md, .copilotignore)', cursor: 'Cursor (.cursor/rules/context-graph.mdc + ctxgraph--*.mdc per file)', c…
+export interface DeterministicPreferences { instructionTargets: InstructionTargetId[]; installAgents: boolean; }
+export function isInstructionTargetId(v: string): v is InstructionTargetId { return TARGET_SET.has(v); }
+export function normalizeInstructionTargets(raw: unknown): InstructionTargetId[] | null { /* ~17 lines */ }
+export function parseInstructionTargetsEnv(envVal: string | undefined): InstructionTargetId[] | null { if (!envVal?.trim()) return null; if (envVal.trim().toLowerCase() === 'all') return [...INSTRUCTION_TARGET_IDS]; const parts = envVal.…
+export function parseInstallAgentsEnv(envVal: string | undefined): boolean | null { if (!envVal?.trim()) return null; const v = envVal.trim().toLowerCase(); if (v === '1' || v === 'true' || v === 'yes' || v === 'on') return true; if (v =…
+export function instructionTargetsFromConfigFile( fileConfig: { instructionTargets?: unknown } ): InstructionTargetId[] | null { return normalizeInstructionTargets(fileConfig.instructionTargets); }
+export function installAgentsFromConfigFile( fileConfig: { installAgents?: unknown } ): boolean | null { return typeof fileConfig.installAgents === 'boolean' ? fileConfig.installAgents : null; }
+export function hasConfiguredInstructionTargets( fileConfig: { instructionTargets?: unknown } ): boolean { return instructionTargetsFromConfigFile(fileConfig) !== null; }
+export function hasConfiguredInstallAgents(fileConfig: { installAgents?: unknown }): boolean { return typeof fileConfig.installAgents === 'boolean'; }
+export function isInstructionTargetEnabled( targets: InstructionTargetId[], id: InstructionTargetId ): boolean { return targets.includes(id); }
+/** Persist no-llm user choices into `.context-graph.json` (merge, keep provider/model). */
+export function persistDeterministicPreferences( projectRoot: string, prefs: DeterministicPreferences ): void { /* ~18 lines */ }
+/** @deprecated use persistDeterministicPreferences */
+export function saveInstructionTargetsToConfig( projectRoot: string, targets: InstructionTargetId[] ): void { persistDeterministicPreferences(projectRoot, { instructionTargets: targets, installAgents: false, }); }
+export function needsInstructionTargetSetup(fileConfig: ConfigFileSlice): boolean { if (parseInstructionTargetsEnv(process.env.CONTEXT_GRAPH_INSTRUCTION_TARGETS)) return false; return !hasConfiguredInstructionTargets(fileConfig); }
+export function needsInstallAgentsSetup(fileConfig: ConfigFileSlice): boolean { if (parseInstallAgentsEnv(process.env.CONTEXT_GRAPH_INSTALL_AGENTS) !== null) return false; return !hasConfiguredInstallAgents(fileConfig); }
+export function needsDeterministicPreferencesSetup(fileConfig: ConfigFileSlice): boolean { return needsInstructionTargetSetup(fileConfig) || needsInstallAgentsSetup(fileConfig); }
+/** Ask which AI adapters to generate (does not write config — caller persists). */
+export async function promptInstructionTargetsInteractive(opts?: { /* ~73 lines */ }
+/** Ask whether to fetch agency-agents into `.github/agents/` (does not write config). */
+export async function promptInstallAgentsInteractive(): Promise<boolean> { /* ~31 lines */ }
+export async function resolveInstructionTargets(opts: { /* ~17 lines */ }
+export function resolveInstallAgents(fileConfig: ConfigFileSlice): boolean { const fromEnv = parseInstallAgentsEnv(process.env.CONTEXT_GRAPH_INSTALL_AGENTS); if (fromEnv !== null) return fromEnv; const fromFile = installAgentsFromConfigF…
+/**
+ * no-llm first-time / incomplete config: prompt for targets + agents, persist once.
+ */
+export async function ensureDeterministicSetup(opts: { /* ~74 lines */ }
+// ── .cursor/rules/ctxgraph--src-project-graph.mdc ──
+// ── src/project-graph.ts ──
+/** True when a prior context-graph build left core files under `.github/instructions/`. */
+export function projectGraphExists(projectRoot: string): boolean { return GRAPH_MARKER_PATHS.some(rel => fs.existsSync(path.join(projectRoot, rel))); }
+// ── .cursor/rules/ctxgraph--src-project-root.mdc ──
+// ── src/project-root.ts ──
+/**
+ * Git work tree root, or null if `cwd` is not inside a Git repository.
+ */
+export function tryGitRepositoryRoot(cwd: string): string | null { try { const out = execFileSync('git', ['rev-parse', '--show-toplevel'], { cwd, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'], }).trim(); if (!out) return null; re…
+ * Resolves where `.github/instructions/` and `.context-graph.json` live.
+ *
+ * - **Implicit cwd** (no CLI `[dir]`, or `dir` is `.` / same as `process.cwd()`):
+ *   1. `CONTEXT_GRAPH_ROOT` if set and points to an existing directory
+ *   2. else Git repository root from cwd (`git rev-parse --show-toplevel`)
+ *   3. else `path.resolve(cwd)`
+ * - **Explicit `[dir]`** (subfolder path): that path only — no Git uplift (monorepo package roots).
+ */
+export function resolveProjectRoot(cliDirArg: string | undefined, cwd: string = process.cwd()): string { /* ~26 lines */ }
+export type MistakenBuildModeFlag = 'hybrid' | 'deterministic' | 'llm';
+export interface BuildDirNormalization { projectDir: string | undefined; mistakenModeFlag?: MistakenBuildModeFlag; }
+/**
+ * If `[dir]` is actually a build-mode token (`hybrid`, `no-llm`, …), treat as implicit repo root.
+ */
+export function normalizeBuildDirArg(cliDirArg: string | undefined): BuildDirNormalization { if (!cliDirArg) return { projectDir: undefined }; const key = cliDirArg.toLowerCase().replace(/_/g, '-'); if (!BUILD_MODE_DIR_ALIASES.has(key)) …
+export function suggestedBuildFlagForMistake(flag: MistakenBuildModeFlag): string { if (flag === 'deterministic') return '--no-llm'; return `--${flag}`; }
+/** Exit-friendly check before writing `.context-graph.json` / instructions. */
+export function assertProjectRootExists(projectRoot: string): void { let st: fs.Stats; try { st = fs.statSync(projectRoot); } catch { throw new Error( `Project directory does not exist: ${projectRoot}\n` + `Pass a real path: context-grap…
+// ── .cursor/rules/ctxgraph--src-providers-anthropic.mdc ──
+// ── src/providers/anthropic.ts ──
+export class AnthropicProvider implements LLMProvider { /* ~34 lines */ }
+
+```
+
+## Dependencies
+- No dependencies detected
+
+## Error Handling
+- `Error`: "Project directory does not exist: ${projectRoot}\n` + " (`ctxgraph--cursor-rules-bundle-p32.mdc`)
+
+## Danger Zone 🔴
+- **[env]** reads `process.env.CONTEXT_GRAPH_INSTRUCTION_TARGETS`
+- **[env]** reads `process.env.CONTEXT_GRAPH_INSTALL_AGENTS`
+- **[env]** reads `process.env.CONTEXT_GRAPH_ROOT`
+- **[fs]** filesystem I/O

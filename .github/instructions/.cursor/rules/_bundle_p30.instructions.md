@@ -1,0 +1,52 @@
+---
+description: "Mirror — `.cursor/rules/` (4 files, part 30/51)"
+applyTo: ".cursor/rules/**"
+priority: "P2"
+last_updated: "2026-05-29"
+---
+
+## When to Read
+- editing or refactoring `ctxgraph--python-context-graph-bundle.mdc`
+- editing or refactoring `ctxgraph--root-bundle.mdc`
+- editing or refactoring `ctxgraph--scripts-split-graph-builder.mdc`
+- editing or refactoring `ctxgraph--src-agents-catalog.mdc`
+
+## Overview
+- `.cursor/rules/ctxgraph--python-context-graph-bundle.mdc` (129 lines) — # When to Read
+- `.cursor/rules/ctxgraph--root-bundle.mdc` (61 lines) — # When to Read
+- `.cursor/rules/ctxgraph--scripts-split-graph-builder.mdc` (49 lines · 3 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--src-agents-catalog.mdc` (43 lines · 4 top-level symbols) — # When to Read
+
+## Graph
+```mermaid
+graph LR
+  Rules[Rules]
+  Rules --> node[""]
+```
+
+## Signatures
+
+```typescript
+// ── .cursor/rules/ctxgraph--src-agents-catalog.mdc ──
+/**
+ * Curated index of agency-agents (https://github.com/msitarzewski/agency-agents).
+ *
+ * Each entry describes:
+ *   - where the .md file lives in the upstream repo
+ *   - what project signals trigger a match
+ *   - a short description for the generated README
+ */
+export interface AgentEntry { /* ~16 lines */ }
+export interface AgentMatchRule { /** File extensions present in the project (e.g. ['.ts', '.tsx']) */ extensions?: string[]; /** File/dir names that indicate relevance (e.g. ['Dockerfile', 'docker-compose']) */ filePatterns?: RegExp[]; …
+export const AGENTS_CATALOG: AgentEntry[] = [ // ── Engineering ─────────────────────────────────────────────────────────── { /* prompt template (~295 lines) */ }
+/** Maximum agents to recommend by default */
+export const MAX_RECOMMENDED_AGENTS = 10;
+
+```
+
+## Dependencies
+**External:**
+- ``
+
+## Danger Zone 🔴
+- **[fs]** filesystem I/O

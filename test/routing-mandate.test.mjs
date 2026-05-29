@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {
   buildAgentEntryMandate,
   buildCopilotGraphMandate,
+  buildCursorAlwaysOnRuleBody,
   buildCursorRouterMandate,
   buildWindsurfContextGraphRule,
 } from '../dist/graph-builder/deterministic/routing-mandate.js';
@@ -27,5 +28,13 @@ describe('routing-mandate', () => {
     const md = buildWindsurfContextGraphRule();
     assert.match(md, /^---\ntrigger: always_on\n---/);
     assert.match(md, /BLOCKING/);
+  });
+
+  it('Cursor always-on rule includes full mandate (not router-only)', () => {
+    const body = buildCursorAlwaysOnRuleBody();
+    assert.match(body, /named file \/ component/i);
+    assert.match(body, /FORBIDDEN.*grep/i);
+    assert.match(body, /symbol-index/);
+    assert.doesNotMatch(body, /\bshould\b/i);
   });
 });

@@ -2,7 +2,7 @@
 description: "Mirror — `src/framework-extract.ts`"
 applyTo: "src/framework-extract.ts"
 priority: "P1"
-last_updated: "2026-05-20"
+last_updated: "2026-05-29"
 ---
 
 ## When to Read

@@ -2,14 +2,14 @@
 description: "Mirror — `src/source-extract/index.ts`"
 applyTo: "src/source-extract/index.ts"
 priority: "P0"
-last_updated: "2026-05-20"
+last_updated: "2026-05-29"
 ---
 
 ## When to Read
 - editing or refactoring `index.ts`
 
 ## Overview
-- `src/source-extract/index.ts` (40 lines · 13 top-level symbols) — Shared helpers for Vue / PHP / Python / Go — scanner + deterministic graph.
+- `src/source-extract/index.ts` (45 lines · 13 top-level symbols) — Shared helpers for Vue / PHP / Python / Go — scanner + deterministic graph.
 
 ## Graph
 ```mermaid
@@ -33,7 +33,7 @@ graph LR
  * Shared helpers for Vue / PHP / Python / Go — scanner + deterministic graph.
  * @module source-extract
  */
-export { isMessageOrPromptPath, isExecutableModulePath, isComposableLikePath } from './paths'
+export { isInstructionExcludedPath, isMessageOrPromptPath, isExecutableModulePath, isComposableLikePath, } from './paths'
 export { isPromptTemplateBody, compactTsExportLine } from './ts-prompt'
 export { extractScriptSkeleton } from './ts-skeleton'
 export { instructionSplitScore, INSTRUCTION_OWN_FILE_SCORE_THRESHOLD, } from './instruction-score'

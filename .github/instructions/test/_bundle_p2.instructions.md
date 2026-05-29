@@ -1,21 +1,21 @@
 ---
-description: "Mirror — `test/` (4 files, part 2/4)"
+description: "Mirror — `test/` (4 files, part 2/5)"
 applyTo: "test/**"
 priority: "P2"
-last_updated: "2026-05-20"
+last_updated: "2026-05-29"
 ---
 
 ## When to Read
 - editing or refactoring `instruction-targets.test.mjs`
 - editing or refactoring `java-kotlin-extract.test.mjs`
+- editing or refactoring `markup-exclude.test.mjs`
 - editing or refactoring `php-extract.test.mjs`
-- editing or refactoring `priority.test.mjs`
 
 ## Overview
-- `test/instruction-targets.test.mjs` (158 lines) — Mirror — `test/` (4 files, part 2/4)
-- `test/java-kotlin-extract.test.mjs` (55 lines) — Mirror — `test/` (4 files, part 2/4)
-- `test/php-extract.test.mjs` (128 lines) — Mirror — `test/` (4 files, part 2/4)
-- `test/priority.test.mjs` (60 lines) — Mirror — `test/` (4 files, part 2/4)
+- `test/instruction-targets.test.mjs` (158 lines) — Mirror — `test/` (4 files, part 2/5)
+- `test/java-kotlin-extract.test.mjs` (55 lines) — Mirror — `test/` (4 files, part 2/5)
+- `test/markup-exclude.test.mjs` (51 lines) — Mirror — `test/` (4 files, part 2/5)
+- `test/php-extract.test.mjs` (128 lines) — Mirror — `test/` (4 files, part 2/5)
 
 ## Graph
 ```mermaid
@@ -24,6 +24,7 @@ graph LR
   Test --> config[config]
   Test --> exports[exports]
   Test --> priority[priority]
+  Test --> repair[repair]
   Test --> instruction_targets[instruction-targets]
   Test --> project_graph[project-graph]
   Test --> index[index]
@@ -41,10 +42,6 @@ const KOTLIN = `package com.example.api import org.springframework.web.bind.anno
 // ── skeleton ──
 const SAMPLE = `<?php namespace App\\Http\\Controllers\\API; use App\\Enums\\Acl\\Permission; use App\\Http\\Controllers\\Controller; use App\\Repositories\\PlaylistRepository; class FetchInitialData…
 
-// ── test/priority.test.mjs ──
-// ── skeleton ──
-const fileCases = [ /* template ×13 */ ].join('\n');
-
 ```
 
 ## Dependencies
@@ -52,6 +49,7 @@ const fileCases = [ /* template ×13 */ ].join('\n');
 - `dist/config`
 - `dist/graph-builder/extract/exports`
 - `dist/graph-builder/plan/priority`
+- `dist/graph-builder/plan/repair`
 - `dist/instruction-targets`
 - `dist/project-graph`
 - `dist/source-extract/index`

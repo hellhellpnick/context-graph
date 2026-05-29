@@ -2,7 +2,7 @@
 description: "Mirror — `src/graph-builder/cost.ts`"
 applyTo: "src/graph-builder/cost.ts"
 priority: "P1"
-last_updated: "2026-05-20"
+last_updated: "2026-05-29"
 ---
 
 ## When to Read

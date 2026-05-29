@@ -1,0 +1,57 @@
+---
+description: "Mirror — `.cursor/rules/` (4 files, part 28/39)"
+applyTo: ".cursor/rules/**"
+priority: "P2"
+last_updated: "2026-05-29"
+---
+
+## When to Read
+- editing or refactoring `ctxgraph--src-graph-builder-llm-validate.mdc`
+- editing or refactoring `ctxgraph--src-graph-builder-messages-planning.mdc`
+- editing or refactoring `ctxgraph--src-graph-builder-messages-root.mdc`
+- editing or refactoring `ctxgraph--src-graph-builder-messages-subsystem.mdc`
+
+## Overview
+- `.cursor/rules/ctxgraph--src-graph-builder-llm-validate.mdc` (52 lines · 6 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--src-graph-builder-messages-planning.mdc` (37 lines · 1 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--src-graph-builder-messages-root.mdc` (42 lines · 1 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--src-graph-builder-messages-subsystem.mdc` (43 lines · 3 top-level symbols) — # When to Read
+
+## Graph
+```mermaid
+graph LR
+  Rules[Rules]
+```
+
+## Signatures
+
+```typescript
+// ── .cursor/rules/ctxgraph--src-graph-builder-llm-validate.mdc ──
+// ── src/graph-builder/llm/validate.ts ──
+export function mergeLlmProse(skeleton: string, llmContent: string): string { /* ~26 lines */ }
+export function insertAfterHeading(md: string, heading: string, insert: string): string { const re = new RegExp(`^## ${heading}\\b[^\\n]*\\n`, 'm'); const m = re.exec(md); if (!m) return md + '\n\n' + insert; const insertAt = m.index + m…
+export function subsystemOutputLooksOk(files: OutputFile[], instructionPath: string): boolean { const norm = instructionPath.replace(/\\/g, '/'); const base = path.posix.basename(norm); return files.some(f => { const fp = f.path.replace(…
+/** Sanitize mermaid code blocks: strip lines with common LLM syntax errors. */
+export function sanitizeMermaidBlocks(content: string): string { /* ~22 lines */ }
+export function llmContentMatchesRealExports( llmContent: string, scan: ScanResult, sourceFiles: string[] ): boolean { /* ~77 lines */ }
+/** Second-chance prompt when local models skip <<<EOF>>> or add prose. */
+export function buildSubsystemRepairMessage(today: string, instructionPath: string, planItem?: BuildPlanItem): string { /* prompt template (~33 lines) */ }
+
+// ── .cursor/rules/ctxgraph--src-graph-builder-messages-planning.mdc ──
+// ── src/graph-builder/messages/planning.ts ──
+export function buildPlanningPassMessage(scan: ScanResult): string { /* prompt template (~65 lines) */ }
+
+// ── .cursor/rules/ctxgraph--src-graph-builder-messages-root.mdc ──
+// ── src/graph-builder/messages/root.ts ──
+export function buildRootPassMessage( today: string, scanPrompt: ScanResult, plan: BuildPlan | undefined, scanFull: ScanResult, opts?: { /* prompt template (~116 lines) */ }
+
+// ── .cursor/rules/ctxgraph--src-graph-builder-messages-subsystem.mdc ──
+// ── src/graph-builder/messages/subsystem.ts ──
+export function buildFocusedContext(scan: ScanResult, sourceFiles: string[], subsystemName: string): string { /* ~21 lines */ }
+export function buildSubsystemPassMessage( today: string, subsystemPath: string, rootGraphContent: string, scanPrompt: ScanResult, scanFull: ScanResult, sourceFiles: string[], planItem?: BuildPlanI… { /* prompt template (~96 lines) */ }
+export function buildUserMessage(mode: BuildMode, scan: ScanResult, opts: BuildOptions): string { /* prompt template (~37 lines) */ }
+
+```
+
+## Dependencies
+- No dependencies detected

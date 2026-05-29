@@ -2,7 +2,7 @@
 description: "Mirror — `src/index.ts`"
 applyTo: "src/index.ts"
 priority: "P0"
-last_updated: "2026-05-20"
+last_updated: "2026-05-29"
 ---
 
 ## When to Read

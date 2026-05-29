@@ -5,12 +5,16 @@ alwaysApply: false
 ---
 
 ## When to Read
-- editing or refactoring `ctxgraph--test-bundle-p3.mdc`
-- editing or refactoring `ctxgraph--test-bundle.mdc`
+- editing or refactoring `ctxgraph--src-cli-commands-actualize.mdc`
+- editing or refactoring `ctxgraph--src-cli-commands-agents.mdc`
+- editing or refactoring `ctxgraph--src-cli-commands-build.mdc`
+- editing or refactoring `ctxgraph--src-cli-commands-hook-check.mdc`
 
 ## Overview
-- `.cursor/rules/ctxgraph--test-bundle-p3.mdc` (42 lines · 1 top-level symbols) — # When to Read
-- `.cursor/rules/ctxgraph--test-bundle.mdc` (71 lines · 2 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--src-cli-commands-actualize.mdc` (59 lines · 1 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--src-cli-commands-agents.mdc` (49 lines · 1 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--src-cli-commands-build.mdc` (64 lines · 1 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--src-cli-commands-hook-check.mdc` (56 lines · 1 top-level symbols) — # When to Read
 
 ## Graph
 ```mermaid
@@ -21,18 +25,30 @@ graph LR
 ## Signatures
 
 ```typescript
-// ── .cursor/rules/ctxgraph--test-bundle.mdc ──
-// ── test/extract.test.mjs ──
-/** Targets barrels only — not file purpose. */
-export function extractReExportTargets() {}`;
- * Framework-aware deterministic extraction (no LLM).
- */
-export function foo() {}`;
+// ── .cursor/rules/ctxgraph--src-cli-commands-actualize.mdc ──
+// ── src/cli/commands/actualize.ts ──
+export function registerActualizeCommand(program: Command): void { /* ~102 lines */ }
+
+// ── .cursor/rules/ctxgraph--src-cli-commands-agents.mdc ──
+// ── src/cli/commands/agents.ts ──
+export function registerAgentsCommand(program: Command): void { /* ~77 lines */ }
+
+// ── .cursor/rules/ctxgraph--src-cli-commands-build.mdc ──
+// ── src/cli/commands/build.ts ──
+export function registerBuildCommand(program: Command): void { /* ~279 lines */ }
+
+// ── .cursor/rules/ctxgraph--src-cli-commands-hook-check.mdc ──
+// ── src/cli/commands/hook-check.ts ──
+export function registerHookCheckCommand(program: Command): void { /* ~69 lines */ }
 
 ```
 
 ## Dependencies
 - No dependencies detected
+
+## Danger Zone 🔴
+- **[env]** reads `process.env.CONTEXT_GRAPH_PROVIDER`
+- **[env]** reads `process.env.CONTEXT_GRAPH_MODEL`
 
 <!-- context-graph: generated from `.github/instructions/.cursor/rules/_bundle_p20.instructions.md` -->
 _Regenerate: `context-graph build --no-llm` · Do not hand-edit this rule._

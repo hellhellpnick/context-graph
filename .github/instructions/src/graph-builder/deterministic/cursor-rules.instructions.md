@@ -2,7 +2,7 @@
 description: "Mirror — `src/graph-builder/deterministic/cursor-rules.ts`"
 applyTo: "src/graph-builder/deterministic/cursor-rules.ts"
 priority: "P1"
-last_updated: "2026-05-20"
+last_updated: "2026-05-29"
 ---
 
 ## When to Read

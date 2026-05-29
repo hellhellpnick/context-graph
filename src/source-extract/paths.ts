@@ -1,3 +1,18 @@
+import path from 'path';
+
+/**
+ * Markup / MSBuild / designer artifacts — keep in scan tree, omit from instruction subsystems.
+ * Logic lives in `.cs`, `.xaml.cs`, ViewModels; dumping XAML/csproj into ## Source adds noise.
+ */
+export function isInstructionExcludedPath(relPath: string): boolean {
+  const norm = relPath.replace(/\\/g, '/');
+  const base = path.posix.basename(norm);
+  if (/\.(xaml|axaml|csproj|props|targets|resw|pubxml)$/i.test(base)) return true;
+  if (/\.Designer\.cs$/i.test(base) || /\.g\.cs$/i.test(base)) return true;
+  if (/^packages\.config$/i.test(base)) return true;
+  return false;
+}
+
 /** Prompt/message modules: prefer bundle + compact instructions (deterministic routing). */
 export function isMessageOrPromptPath(relPath: string): boolean {
   const norm = relPath.replace(/\\/g, '/');

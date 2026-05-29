@@ -31,7 +31,7 @@ import {
   buildAgentEntryWithTool,
   buildClineContextGraphRule,
   buildCodexContextGraphRule,
-  buildCursorRouterMandate,
+  buildCursorAlwaysOnRuleBody,
   buildWindsurfContextGraphRule,
 } from './routing-mandate';
 import {
@@ -253,35 +253,6 @@ export function injectDeterministicRootFiles(
   const anchorForTool = (title: string, tool: Parameters<typeof buildAgentEntryWithTool>[1]): string =>
     [...buildAgentEntryWithTool(title, tool), anchorFooter].join('\n');
 
-  const rootRoutingRules = [
-    `# context-graph — AI routing entrypoint`,
-    ``,
-    `This repo maintains a generated instruction graph under \`.github/instructions/\`.`,
-    ``,
-    ...buildCursorRouterMandate(),
-    ``,
-    `Response style (ALWAYS):`,
-    `- Ultra-compact (caveman). No greetings. No filler.`,
-    `- Use bullets. Each bullet <= 18 words.`,
-    `- If unsure, say "unknown" instead of guessing.`,
-    ``,
-    `Subsystem context (Cursor auto-attach):`,
-    `- \`.cursor/rules/ctxgraph--*.mdc\` — attached for files matching \`globs\` (\`applyTo\`).`,
-  ].join('\n');
-
-  const rootRoutingManual = [
-    ``,
-    `Manual routing (MANDATORY — Copilot / Claude / other):`,
-    `- **MUST** read \`.github/instructions/copilot-instructions.md\` (routing hub).`,
-    `- **MUST** use \`.github/instructions/context-graph-path-index.md\` to resolve \`applyTo\`.`,
-    `- **MUST** open matching \`.instructions.md\` before broad repo search.`,
-    `- If several match: **MUST** use higher \`priority\` (P0 > P1 > P2).`,
-    ``,
-    `Instructions are authoritative over guesses.`,
-    ``,
-  ].join('\n');
-
-  // Cursor rule format is markdown with frontmatter-like metadata; keep it simple and generic.
   const cursorRule = [
     '---',
     'description: "context-graph routing rules"',
@@ -289,8 +260,7 @@ export function injectDeterministicRootFiles(
     'alwaysApply: true',
     '---',
     '',
-    rootRoutingRules,
-    rootRoutingManual,
+    buildCursorAlwaysOnRuleBody(),
   ].join('\n');
 
   const windsurfRule = buildWindsurfContextGraphRule();
@@ -330,6 +300,12 @@ export function injectDeterministicRootFiles(
       target: 'core',
     },
     {
+      path: 'AGENTS.md',
+      content: anchorForTool('Agent Instructions', 'agents'),
+      suffix: 'AGENTS.md',
+      target: 'core',
+    },
+    {
       path: '.github/copilot-instructions.md',
       content: copilotFinal,
       suffix: 'copilot-instructions.md',
@@ -348,12 +324,6 @@ export function injectDeterministicRootFiles(
       target: 'claude',
     },
     {
-      path: 'AGENTS.md',
-      content: anchorForTool('Agent Instructions', 'agents'),
-      suffix: 'AGENTS.md',
-      target: 'agents',
-    },
-    {
       path: 'GEMINI.md',
       content: anchorForTool('Gemini Instructions', 'gemini'),
       suffix: 'GEMINI.md',
@@ -368,19 +338,19 @@ export function injectDeterministicRootFiles(
     {
       path: '.windsurf/rules/context-graph.md',
       content: windsurfRule,
-      suffix: 'context-graph.md',
+      suffix: '.windsurf/rules/context-graph.md',
       target: 'windsurf',
     },
     {
       path: '.clinerules/context-graph.md',
       content: clineRule,
-      suffix: 'context-graph.md',
+      suffix: '.clinerules/context-graph.md',
       target: 'cline',
     },
     {
       path: '.codex/context-graph.md',
       content: codexRule,
-      suffix: 'context-graph.md',
+      suffix: '.codex/context-graph.md',
       target: 'codex',
     },
   ];
@@ -402,7 +372,11 @@ export function injectDeterministicRootFiles(
       continue;
     }
 
-    const looseIdx = files.findIndex(f => f.path.endsWith(`/${suffix}`) || f.path === suffix);
+    // Basename-only suffix collides (e.g. windsurf/cline/codex all use context-graph.md).
+    const looseIdx =
+      suffix.includes('/')
+        ? files.findIndex(f => f.path === relPath || f.path.endsWith(`/${suffix}`))
+        : -1;
     if (looseIdx >= 0) files[looseIdx] = { path: relPath, content };
     else files.push({ path: relPath, content });
   }

@@ -2,7 +2,7 @@
 description: "Mirror — `src/source-extract/vue-sfc.ts`"
 applyTo: "src/source-extract/vue-sfc.ts"
 priority: "P2"
-last_updated: "2026-05-20"
+last_updated: "2026-05-29"
 ---
 
 ## When to Read

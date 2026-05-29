@@ -1,0 +1,72 @@
+---
+description: "Ctxgraph Cursor Rules Ctxgraph Cursor Rules Bundle P22 — .cursor/rules/ctxgraph--cursor-rules-ctxgraph-cursor-rules-bund"
+globs: .cursor/rules/ctxgraph--cursor-rules-ctxgraph-cursor-rules-bundle-p22.mdc
+alwaysApply: false
+---
+
+## When to Read
+- editing or refactoring `ctxgraph--cursor-rules-ctxgraph-cursor-rules-bundle-p22.mdc`
+
+## Overview
+- `.cursor/rules/ctxgraph--cursor-rules-ctxgraph-cursor-rules-bundle-p22.mdc` (71 lines · 21 top-level symbols) — # When to Read
+
+## Graph
+```mermaid
+graph LR
+  ctxgraph__cursor_rules_ctxgraph_cursor_rules_bundle_p22[ctxgraph--cursor-rules-ctxgraph-cursor-rules-bundle-p22]
+  ctxgraph__cursor_rules_ctxgraph_cursor_rules_bundle_p22 --> node[""]
+```
+
+## Signatures
+
+```typescript
+// ── .cursor/rules/ctxgraph--cursor-rules-ctxgraph-cursor-rules-bundle-p22.mdc ──
+// ── .cursor/rules/ctxgraph--cursor-rules-bundle-p22.mdc ──
+// ── .cursor/rules/ctxgraph--src-graph-builder-resolve-symbol.mdc ──
+// ── src/graph-builder/resolve-symbol.ts ──
+export interface SymbolLookupRow { lookupKey: string; sourcePath: string; instructionFile: string; priority: string; }
+/** Build basename / stem → instruction rows (for Q&A without open file). */
+export function buildSymbolLookupRows(plan: BuildPlan): SymbolLookupRow[] { /* ~30 lines */ }
+export function buildSymbolIndexMd(today: string, plan: BuildPlan): string { /* prompt template (~25 lines) */ }
+export function loadSymbolLookupRows(projectRoot: string): SymbolLookupRow[] { const p = path.join(projectRoot, SYMBOL_INDEX_REL); if (!fs.existsSync(p)) return []; return parseSymbolIndexTable(fs.readFileSync(p, 'utf8')); }
+/** Case-insensitive match on lookup key, basename, or source path. */
+export function resolveSymbolQuery( projectRoot: string, query: string, rows?: SymbolLookupRow[] ): SymbolLookupRow[] { /* ~22 lines */ }
+export function formatResolveResult( projectRoot: string, query: string, matches: SymbolLookupRow[] ): string { /* prompt template (~32 lines) */ }
+// ── .cursor/rules/ctxgraph--src-graph-builder-types.mdc ──
+// ── src/graph-builder/types.ts ──
+export type BuildMode = 'BUILD' | 'ACTUALIZE' | 'REVIEW' | 'IMPACT';
+export interface BuildOptions { changedFiles?: string[]; targetFile?: string; existingGraphDir?: string; }
+export interface GraphResult { files: OutputFile[]; rawResponse: string; usage: LLMUsage; costUSD: number | null; }
+export interface MultiPassResult { files: OutputFile[]; usage: LLMUsage; costUSD: number | null; passes: number; /** Always present after Pass 0: parsed plan merged with scan coverage (no missing source files). */ plan: BuildPlan; }
+/** Options for `repairBuildPlan` gap-fill / deterministic subsystem layout. */
+export interface RepairBuildPlanOptions { subsystemGrouping?: SubsystemGrouping; maxFilesPerFolderSubsystem?: number; /** `mirror` (default): paths under `.github/instructions/` mirror the repo. `canonical`: legacy core/infra. */ subsyst…
+export interface DeterministicBuildOptions { /* ~14 lines */ }
+export interface BuildPlanItem { /** Relative path inside .github/instructions/, e.g. "core/scanner.instructions.md" */ file: string; area: string; priority: 'P0' | 'P1' | 'P2'; sourceFiles: string[]; /** Glob for frontmatter applyTo, e.…
+export interface BuildPlan { projectName: string; projectDescription: string; techStack: string[]; buildCommand?: string; testCommand?: string; subsystems: BuildPlanItem[]; }
+export interface BuildCallbacks { onPlanReady?: (plan: BuildPlan) => void; onPassComplete?: (pass: number, totalPasses: number, label: string, files: OutputFile[], cost: number | null) => void; }
+export interface HybridBuildOptions { /** * Max number of subsystems to enrich with LLM notes. Remaining subsystems are deterministic-only. * Keep this small for local models and fast runs. */ maxSubsystems?: number; /** "subsystem" = on…
+// ── .cursor/rules/ctxgraph--src-graph-builder.mdc ──
+// ── src/graph-builder.ts ──
+/**
+ * @deprecated Import from `./graph-builder/` modules or `./graph-builder/index` instead.
+ * Re-exports preserve backward compatibility for `import … from './graph-builder'`.
+ */
+export * from './graph-builder/index'
+// ── .cursor/rules/ctxgraph--src-hooks.mdc ──
+// ── src/hooks.ts ──
+export function installPrePushHook(projectRoot: string): 'installed' | 'updated' | 'skipped' { /* ~20 lines */ }
+export function saveLastBuildRef(projectRoot: string): void { const refFile = path.join(projectRoot, '.context-graph-last-build'); try { const sha = execSync('git rev-parse HEAD', { cwd: projectRoot, encoding: 'utf8', stdio: ['ignore', '…
+export function getChangedFilesSinceLastBuild(projectRoot: string): string[] { /* ~28 lines */ }
+export function filterSignificantFiles(files: string[]): string[] { return files.filter(f => { const tier = classifyFile(f); return tier === 0 || tier === 1 || tier === 2; }); }
+
+```
+
+## Dependencies
+**External:**
+- ``
+
+## Danger Zone 🔴
+- **[fs]** filesystem I/O
+
+<!-- context-graph: generated from `.github/instructions/.cursor/rules/ctxgraph--cursor-rules-ctxgraph-cursor-rules-bundle-p22.instructions.md` -->
+_Regenerate: `context-graph build --no-llm` · Do not hand-edit this rule._

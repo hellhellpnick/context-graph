@@ -1,0 +1,180 @@
+---
+description: "Mirror — `.cursor/rules/` (2 files, part 25/51)"
+applyTo: ".cursor/rules/**"
+priority: "P2"
+last_updated: "2026-05-29"
+---
+
+## When to Read
+- editing or refactoring `ctxgraph--cursor-rules-ctxgraph-cursor-rules-bundle-p3.mdc`
+- editing or refactoring `ctxgraph--cursor-rules-ctxgraph-cursor-rules-bundle-p7.mdc`
+
+## Overview
+- `.cursor/rules/ctxgraph--cursor-rules-ctxgraph-cursor-rules-bundle-p3.mdc` (139 lines · 52 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--cursor-rules-ctxgraph-cursor-rules-bundle-p7.mdc` (68 lines · 13 top-level symbols) — # When to Read
+
+## Graph
+```mermaid
+graph LR
+  Rules[Rules]
+  Rules --> node[""]
+```
+
+## Signatures
+
+```typescript
+// ── .cursor/rules/ctxgraph--cursor-rules-ctxgraph-cursor-rules-bundle-p3.mdc ──
+// ── .cursor/rules/ctxgraph--cursor-rules-bundle-p3.mdc ──
+// ── .cursor/rules/ctxgraph--cursor-rules-bundle-p17.mdc ──
+// ── .cursor/rules/ctxgraph--src-graph-builder-plan-layout.mdc ──
+// ── src/graph-builder/plan/layout.ts ──
+export function humanAreaName(segment: string): string { let name = segment .replace(/\.[^.]+$/, '') // strip extension .replace(/^__(.+)__$/, '$1') // __init__ → init .replace(/[-_]+/g, ' ') // delimiters → spaces .trim(); if (!name || …
+export function shortHash(s: string): string { return crypto.createHash('sha1').update(s, 'utf8').digest('hex').slice(0, 10); }
+/** Copilot prompts expect several concrete use cases; pad short auto-generated lists. */
+export function padUseCases(cases: string[]): string[] { const out = [...cases]; const pad = 'navigating this subsystem from the instruction index'; while (out.length < 4) out.push(pad); return out.slice(0, 6); }
+export function autoInstructionStem(dir: string, files: string[], partIndex: number): string { /* ~12 lines */ }
+export function mirrorInstructionSafeSegment(name: string): string { return name.replace(/[^a-zA-Z0-9._-]+/g, '_').replace(/^\.+/, '') || 'x'; }
+/** Instruction `.md` path under `.github/instructions/` mirroring source layout. */
+export function mirrorInstructionRelPath( dir: string, chunk: string[], partIndex: number, totalParts: number, usedInstructionRelPaths: Set<string> ): string { /* prompt template (~44 lines) */ }
+/** Stable instruction path for by-folder grouping (avoids collisions across dirs). */
+export function folderInstructionRelPath( dir: string, partIndex: number, totalParts: number, chunk: string[], usedInstructionRelPaths: Set<string> ): string { /* ~23 lines */ }
+export function partitionInstructionChunks( list: string[], scan: ScanResult, maxBundle: number ): string[][] { /* ~31 lines */ }
+// ── .cursor/rules/ctxgraph--src-graph-builder-plan-parse.mdc ──
+// ── src/graph-builder/plan/parse.ts ──
+export function parseBuildPlan(raw: string): BuildPlan | null { /* ~16 lines */ }
+// ── .cursor/rules/ctxgraph--src-graph-builder-plan-priority.mdc ──
+// ── src/graph-builder/plan/priority.ts ──
+export type InstructionPriority = 'P0' | 'P1' | 'P2';
+/** Higher urgency wins (P0 > P1 > P2). */
+export function maxPriority(a: InstructionPriority, b: InstructionPriority): InstructionPriority { return RANK[a] <= RANK[b] ? a : b; }
+/**
+ * Heuristic priority for a single source file (deterministic / metadata).
+ * Aligns with planning prompt: P0 entry & critical paths, P1 frequent, P2 leaf/rare.
+ */
+export function inferFilePriority( relPath: string, opts?: { /* ~102 lines */ }
+/** Subsystem priority = most urgent file in the chunk (mirror bundle or folder group). */
+export function inferSubsystemPriority(sourceFiles: string[], scan?: ScanResult): InstructionPriority { /* ~28 lines */ }
+// ── .cursor/rules/ctxgraph--src-graph-builder-plan-repair.mdc ──
+// ── src/graph-builder/plan/repair.ts ──
+export function shouldExcludeFromSubsystems(relPath: string): boolean { const name = path.posix.basename(relPath); return INSTRUCTION_EXCLUDE_RE.some(r => r.test(name) || r.test(relPath)); }
+/** Source-code paths the scanner read that merit their own instruction files. */
+export function collectScannedSourcePaths(scan: ScanResult): string[] { return scan.files .filter(f => f.tier !== 3 && f.content.length > 0 && !shouldExcludeFromSubsystems(f.path)) .map(f => f.path) .sort(); }
+/**
+ * After LLM plan + gap-fill, merge subsystems whose source files all live
+ * under the same canonical directory into a single instruction file.
+ */
+export function applyCanonicalGroupings(plan: BuildPlan, repairOpts?: RepairBuildPlanOptions): BuildPlan { /* ~36 lines */ }
+export function dedupeSubsystemSourceFiles(plan: BuildPlan): BuildPlan { const seen = new Set<string>(); const subsystems: BuildPlanItem[] = []; for (const s of plan.subsystems) { const sourceFiles = s.sourceFiles.filter(p => { if (seen.…
+export function groupPathsIntoAutoSubsystems( paths: string[], scan: ScanResult, usedInstructionRelPaths: Set<string>, repairOpts?: RepairBuildPlanOptions ): BuildPlanItem[] { /* prompt template (~106 lines) */ }
+/** Maps `Config` subsystem layout fields into `repairBuildPlan` options. */
+export function repairBuildPlan( scan: ScanResult, rawPlan: BuildPlan | null, repairOpts?: RepairBuildPlanOptions ): BuildPlan { /* ~54 lines */ }
+/** Maps `Config` subsystem layout fields into `repairBuildPlan` options. */
+export function repairOptionsFromConfig(config: Config): RepairBuildPlanOptions { return { subsystemGrouping: config.subsystemGrouping, maxFilesPerFolderSubsystem: config.maxFilesPerFolderSubsystem, subsystemLayout: config.subsystemLayou…
+/** Config + scan heuristics (Laravel → by-folder, fewer 1-file-per-controller graphs). */
+export function resolveRepairOptions(scan: ScanResult, config: Config): RepairBuildPlanOptions { const base = repairOptionsFromConfig(config); const profile = detectProjectStackProfile(scan); if ( shouldAutoFolderGrouping(scan, profile, …
+// ── .cursor/rules/ctxgraph--cursor-rules-bundle-p18.mdc ──
+// ── .cursor/rules/ctxgraph--src-graph-builder-plan-stack-profile.mdc ──
+// ── src/graph-builder/plan/stack-profile.ts ──
+export type ProjectStackProfile = { laravel: boolean; php: boolean; node: boolean; vue: boolean; nuxt: boolean; /** Repo-relative directory containing `nuxt.config.*` (e.g. `frontend/dev`). */ nuxtRoot?: string; };
+/** First `nuxt.config.*` path in scan order (stable). */
+export function findNuxtConfigPath(scan: ScanResult): string | undefined { for (const f of scan.files) { const p = f.path.replace(/\\/g, '/'); if (NUXT_CONFIG_RE.test(p)) return p; } return undefined; }
+export function countScannedVueFiles(scan: ScanResult): number { return scan.files.filter(f => f.path.endsWith('.vue') && f.tier !== 3).length; }
+export function detectProjectStackProfile(scan: ScanResult): ProjectStackProfile { /* ~24 lines */ }
+/** Auto `by-folder` for Laravel / large PHP trees / Nuxt & large Vue apps. */
+export function shouldAutoFolderGrouping( scan: ScanResult, profile: ProjectStackProfile, subsystemGrouping: 'default' | 'by-folder' ): boolean { /* ~16 lines */ }
+// ── .cursor/rules/ctxgraph--src-graph-builder-prompt.mdc ──
+// ── src/graph-builder/prompt.ts ──
+/** Node / Python / Rust / PHP env access heuristics for Danger Zone + mermaid. */
+export function fileReadsEnvironment(content: string): boolean { return /process\.env|os\.environ|os\.getenv\s*\(|std::env|getenv\s*\(|(?:^|[^\w$.])env\s*\(\s*['"][^'"]+['"]|(?:^|[^\w$])\$_ENV(?:\[|\b)|(?:^|[^\w$])\$_SERVER\s*\[/i.test( …
+export function styleDirective(config: Config, target: 'notes' | 'root' | 'subsystem'): string { /* prompt template (~17 lines) */ }
+export function loadSystemPrompt(): string { const candidates = [ path.join(__dirname, '../../prompts/graph-create-agent.md'), path.join(__dirname, '../../../graph-create-agent.md'), path.join(process.cwd(), 'graph-create-agent.md'), ]; …
+export function loadExistingGraph(graphDir: string): string { const rootFile = path.join(graphDir, 'copilot-instructions.md'); if (!fs.existsSync(rootFile)) return ''; return fs.readFileSync(rootFile, 'utf8'); }
+// ── .cursor/rules/ctxgraph--src-graph-builder-resolve-symbol.mdc ──
+// ── src/graph-builder/resolve-symbol.ts ──
+export interface SymbolLookupRow { lookupKey: string; sourcePath: string; instructionFile: string; priority: string; }
+/** Build basename / stem → instruction rows (for Q&A without open file). */
+export function buildSymbolLookupRows(plan: BuildPlan): SymbolLookupRow[] { /* ~30 lines */ }
+export function buildSymbolIndexMd(today: string, plan: BuildPlan): string { /* prompt template (~25 lines) */ }
+export function loadSymbolLookupRows(projectRoot: string): SymbolLookupRow[] { const p = path.join(projectRoot, SYMBOL_INDEX_REL); if (!fs.existsSync(p)) return []; return parseSymbolIndexTable(fs.readFileSync(p, 'utf8')); }
+/** Case-insensitive match on lookup key, basename, or source path. */
+export function resolveSymbolQuery( projectRoot: string, query: string, rows?: SymbolLookupRow[] ): SymbolLookupRow[] { /* ~22 lines */ }
+export function formatResolveResult( projectRoot: string, query: string, matches: SymbolLookupRow[] ): string { /* prompt template (~32 lines) */ }
+// ── .cursor/rules/ctxgraph--src-graph-builder-types.mdc ──
+// ── src/graph-builder/types.ts ──
+export type BuildMode = 'BUILD' | 'ACTUALIZE' | 'REVIEW' | 'IMPACT';
+export interface BuildOptions { changedFiles?: string[]; targetFile?: string; existingGraphDir?: string; }
+export interface GraphResult { files: OutputFile[]; rawResponse: string; usage: LLMUsage; costUSD: number | null; }
+export interface MultiPassResult { files: OutputFile[]; usage: LLMUsage; costUSD: number | null; passes: number; /** Always present after Pass 0: parsed plan merged with scan coverage (no missing source files). */ plan: BuildPlan; }
+/** Options for `repairBuildPlan` gap-fill / deterministic subsystem layout. */
+export interface RepairBuildPlanOptions { subsystemGrouping?: SubsystemGrouping; maxFilesPerFolderSubsystem?: number; /** `mirror` (default): paths under `.github/instructions/` mirror the repo. `canonical`: legacy core/infra. */ subsyst…
+export interface DeterministicBuildOptions { /* ~14 lines */ }
+export interface BuildPlanItem { /** Relative path inside .github/instructions/, e.g. "core/scanner.instructions.md" */ file: string; area: string; priority: 'P0' | 'P1' | 'P2'; sourceFiles: string[]; /** Glob for frontmatter applyTo, e.…
+export interface BuildPlan { projectName: string; projectDescription: string; techStack: string[]; buildCommand?: string; testCommand?: string; subsystems: BuildPlanItem[]; }
+export interface BuildCallbacks { onPlanReady?: (plan: BuildPlan) => void; onPassComplete?: (pass: number, totalPasses: number, label: string, files: OutputFile[], cost: number | null) => void; }
+export interface HybridBuildOptions { /** * Max number of subsystems to enrich with LLM notes. Remaining subsystems are deterministic-only. * Keep this small for local models and fast runs. */ maxSubsystems?: number; /** "subsystem" = on…
+// ── .cursor/rules/ctxgraph--cursor-rules-bundle-p19.mdc ──
+// ── .cursor/rules/ctxgraph--src-graph-builder.mdc ──
+// ── src/graph-builder.ts ──
+/**
+ * @deprecated Import from `./graph-builder/` modules or `./graph-builder/index` instead.
+ * Re-exports preserve backward compatibility for `import … from './graph-builder'`.
+ */
+export * from './graph-builder/index'
+// ── .cursor/rules/ctxgraph--src-hooks.mdc ──
+// ── src/hooks.ts ──
+export function installPrePushHook(projectRoot: string): 'installed' | 'updated' | 'skipped' { /* ~20 lines */ }
+export function saveLastBuildRef(projectRoot: string): void { const refFile = path.join(projectRoot, '.context-graph-last-build'); try { const sha = execSync('git rev-parse HEAD', { cwd: projectRoot, encoding: 'utf8', stdio: ['ignore', '…
+export function getChangedFilesSinceLastBuild(projectRoot: string): string[] { /* ~28 lines */ }
+export function filterSignificantFiles(files: string[]): string[] { return files.filter(f => { const tier = classifyFile(f); return tier === 0 || tier === 1 || tier === 2; }); }
+// ── .cursor/rules/ctxgraph--src-index.mdc ──
+// ── src/index.ts ──
+export { loadConfig, initConfig, in
+
+// ── .cursor/rules/ctxgraph--cursor-rules-ctxgraph-cursor-rules-bundle-p7.mdc ──
+/**
+ * Curated index of agency-agents (https://github.com/msitarzewski/agency-agents).
+ *
+ * Each entry describes:
+ *   - where the .md file lives in the upstream repo
+ *   - what project signals trigger a match
+ *   - a short description for the generated README
+ */
+export interface AgentEntry { /* ~16 lines */ }
+export interface AgentMatchRule { /** File extensions present in the project (e.g. ['.ts', '.tsx']) */ extensions?: string[]; /** File/dir names that indicate relevance (e.g. ['Dockerfile', 'docker-compose']) */ filePatterns?: RegExp[]; …
+export const AGENTS_CATALOG: AgentEntry[] = [ // ── Engineering ─────────────────────────────────────────────────────────── { /* prompt template (~295 lines) */ }
+/** Maximum agents to recommend by default */
+export const MAX_RECOMMENDED_AGENTS = 10;
+// ── .cursor/rules/ctxgraph--src-agents.mdc ──
+// ── src/agents.ts ──
+/**
+ * Rank all catalog agents against the scanned project and return the top N.
+ */
+export function matchAgents( scan: ScanResult, plan?: BuildPlan, maxAgents = MAX_RECOMMENDED_AGENTS, ): AgentEntry[] { const ctx = buildMatchContext(scan, plan); const scored = AGENTS_CATALOG .map(entry => ({ entry, score: scoreAgent(ent…
+export interface FetchedAgent { slug: string; name: string; description: string; usage: string; category: string; content: string; }
+/**
+ * Download agent .md files from the upstream repo.
+ * Failures are logged but don't break the build.
+ */
+export async function fetchAgents( entries: AgentEntry[], onProgress?: (done: number, total: number, name: string) => void, ): Promise<FetchedAgent[]> { /* ~30 lines */ }
+export interface AgentsWriteResult { created: string[]; updated: string[]; readmePath: string; }
+/**
+ * Write fetched agents to .github/agents/ and generate a README.
+ */
+export function writeAgents( agents: FetchedAgent[], projectRoot: string, ): AgentsWriteResult { /* ~27 lines */ }
+// ── .cursor/rules/ctxgraph--src-cli-agents-install.mdc ──
+// ── src/cli/agents-install.ts ──
+export async function installRecommendedAgents( scan: ScanResult, plan: BuildPlan | null | undefined, projectRoot: string, opts: { /* ~33 lines */ }
+// ── .cursor/rules/ctxgraph--src-cli-build-run.mdc ──
+// ── src/cli/build-run.ts ──
+export function resolveBuildStrategy( config: Config, opts: { /* ~22 lines */ }
+export interface RunGraphBuildOpts { strategy: BuildStrategy; effectiveHybridMax: number; quiet: boolean; jsonOutput: boolean; getSpinner: () => Ora | null; setSpinner: (spinner: Ora | null) => void; }
+export async function runGraphBuild( scan: ScanResult, config: Config, opts: RunGraphBuildOpts ): Promise<MultiPassResult> { /* ~84 lines */ }
+
+```
+
+## Dependencies
+**External:**
+- ``
+
+## Danger Zone 🔴
+- **[fs]** filesystem I/O

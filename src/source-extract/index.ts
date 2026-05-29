@@ -2,7 +2,12 @@
  * Shared helpers for Vue / PHP / Python / Go — scanner + deterministic graph.
  * @module source-extract
  */
-export { isMessageOrPromptPath, isExecutableModulePath, isComposableLikePath } from './paths';
+export {
+  isInstructionExcludedPath,
+  isMessageOrPromptPath,
+  isExecutableModulePath,
+  isComposableLikePath,
+} from './paths';
 export { isPromptTemplateBody, compactTsExportLine } from './ts-prompt';
 export { extractScriptSkeleton } from './ts-skeleton';
 export {

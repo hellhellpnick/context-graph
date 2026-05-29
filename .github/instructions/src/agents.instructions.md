@@ -2,14 +2,14 @@
 description: "Mirror — `src/agents.ts`"
 applyTo: "src/agents.ts"
 priority: "P1"
-last_updated: "2026-05-20"
+last_updated: "2026-05-29"
 ---
 
 ## When to Read
 - editing or refactoring `agents.ts`
 
 ## Overview
-- `src/agents.ts` (298 lines · 5 top-level symbols) — Mirror — `src/agents.ts`
+- `src/agents.ts` (308 lines · 5 top-level symbols) — Mirror — `src/agents.ts`
 
 ## Graph
 ```mermaid

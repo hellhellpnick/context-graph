@@ -1,112 +1,90 @@
 ---
-description: "Mirror — `.cursor/rules/` (4 files, part 14/20)"
+description: "Mirror — `.cursor/rules/` (3 files, part 14/51)"
 applyTo: ".cursor/rules/**"
 priority: "P2"
-last_updated: "2026-05-20"
+last_updated: "2026-05-29"
 ---
 
 ## When to Read
-- editing or refactoring `ctxgraph--src-graph-builder.mdc`
-- editing or refactoring `ctxgraph--src-hooks.mdc`
-- editing or refactoring `ctxgraph--src-index.mdc`
-- editing or refactoring `ctxgraph--src-instruction-targets.mdc`
+- editing or refactoring `ctxgraph--cursor-rules-bundle-p37.mdc`
+- editing or refactoring `ctxgraph--cursor-rules-bundle-p38.mdc`
+- editing or refactoring `ctxgraph--cursor-rules-bundle-p39.mdc`
 
 ## Overview
-- `.cursor/rules/ctxgraph--src-graph-builder.mdc` (38 lines · 1 top-level symbols) — # When to Read
-- `.cursor/rules/ctxgraph--src-hooks.mdc` (39 lines · 4 top-level symbols) — # When to Read
-- `.cursor/rules/ctxgraph--src-index.mdc` (65 lines · 18 top-level symbols) — # When to Read
-- `.cursor/rules/ctxgraph--src-instruction-targets.mdc` (69 lines · 23 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--cursor-rules-bundle-p37.mdc` (87 lines · 14 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--cursor-rules-bundle-p38.mdc` (53 lines) — # When to Read
+- `.cursor/rules/ctxgraph--cursor-rules-bundle-p39.mdc` (38 lines · 2 top-level symbols) — # When to Read
 
 ## Graph
 ```mermaid
 graph LR
   Rules[Rules]
-  Rules --> node[""]
-  Rules --> ENV{{"env / config"}}
 ```
 
 ## Signatures
 
 ```typescript
-// ── .cursor/rules/ctxgraph--src-graph-builder.mdc ──
-// ── src/graph-builder.ts ──
+// ── .cursor/rules/ctxgraph--cursor-rules-bundle-p37.mdc ──
+// ── .cursor/rules/ctxgraph--src-source-extract-ts-skeleton.mdc ──
+// ── src/source-extract/ts-skeleton.ts ──
 /**
- * @deprecated Import from `./graph-builder/` modules or `./graph-builder/index` instead.
- * Re-exports preserve backward compatibility for `import … from './graph-builder'`.
+ * Function / method / composable skeleton from `<script>` or `.ts` (no LLM).
+ * Expands `computed(() => { switch ... })` into readable structure.
  */
-export * from './graph-builder/index'
-
-// ── .cursor/rules/ctxgraph--src-hooks.mdc ──
-// ── src/hooks.ts ──
-export function installPrePushHook(projectRoot: string): 'installed' | 'updated' | 'skipped' { /* ~20 lines */ }
-export function saveLastBuildRef(projectRoot: string): void { const refFile = path.join(projectRoot, '.context-graph-last-build'); try { const sha = execSync('git rev-parse HEAD', { cwd: projectRoot, encoding: 'utf8', stdio: ['ignore', '…
-export function getChangedFilesSinceLastBuild(projectRoot: string): string[] { /* ~28 lines */ }
-export function filterSignificantFiles(files: string[]): string[] { return files.filter(f => { const tier = classifyFile(f); return tier === 0 || tier === 1 || tier === 2; }); }
-
-// ── .cursor/rules/ctxgraph--src-index.mdc ──
-// ── src/index.ts ──
-export { loadConfig, initConfig, initConfigInteractive, getModelMaxTokens, MODEL_MAX_OUTPUT_TOKENS, providerAllowsMissingApiKey, } from './config'
-export type { Config, ContextDepth, SubsystemGrouping, SubsystemLayout, InstructionTargetId } from './config'
-export { INSTRUCTION_TARGET_IDS, INSTRUCTION_TARGET_LABELS, hasConfiguredInstructionTargets, hasConfiguredInstallAgents, needsInstructionTargetSetup, needsInstallAgentsSetup, normalizeInstructionTargets, parseInstallAgentsEnv, resolveIns…
-export { scanProject, formatForLLM, classifyFile, scanForPromptDepth, GRAPH_CONTEXT_IGNORE_FILENAMES } from './scanner'
-export type { ScannedFile, ScanResult } from './scanner'
-export { resolveProjectRoot, tryGitRepositoryRoot, normalizeBuildDirArg, assertProjectRootExists, suggestedBuildFlagForMistake, } from './project-root'
-export type { BuildDirNormalization, MistakenBuildModeFlag } from './project-root'
-export { buildGraph, buildGraphMultiPass, buildGraphDeterministic, estimateCost, parseBuildPlan, repairBuildPlan, repairOptionsFromConfig, resolveRepairOptions, } from './graph-builder'
-export type { BuildMode, BuildOptions, GraphResult, MultiPassResult, BuildPlan, BuildPlanItem, BuildCallbacks, RepairBuildPlanOptions, DeterministicBuildOptions, HybridBuildOptions, } from './graph-builder'
-export { parseOutputFiles, writeOutputFiles } from './writer'
-export type { OutputFile, WriteResult } from './writer'
-export { installPrePushHook, saveLastBuildRef, getChangedFilesSinceLastBuild, filterSignificantFiles, } from './hooks'
-export { createProvider } from './providers'
-export type { LLMProvider, LLMMessage, LLMUsage, LLMResponse, ProviderConfig } from './providers'
-export { matchAgents, fetchAgents, writeAgents } from './agents'
-export type { FetchedAgent, AgentsWriteResult } from './agents'
-export { AGENTS_CATALOG, MAX_RECOMMENDED_AGENTS } from './agents-catalog'
-export type { AgentEntry, AgentMatchRule } from './agents-catalog'
-
-// ── .cursor/rules/ctxgraph--src-instruction-targets.mdc ──
-// ── src/instruction-targets.ts ──
+export function extractScriptSkeleton(script: string, virtualPath: string): string[] { /* prompt template (~178 lines) */ }
+// ── .cursor/rules/ctxgraph--src-source-extract-utils.mdc ──
+// ── src/source-extract/utils.ts ──
+/** Shared limits for deterministic extractors. */
+export const SKELETON_MAX_CHARS = 4200;
+export function truncateSkeleton(s: string, max = 280): string { const t = s.replace(/\s+/g, ' ').trim(); return t.length > max ? `${t.slice(0, max - 1)}…` : t; }
+// ── .cursor/rules/ctxgraph--src-source-extract-vue-sfc.mdc ──
+// ── src/source-extract/vue-sfc.ts ──
+export function extractVueScriptCombined(sfc: string): string { const re = /<script\b([^>]*)>([\s\S]*?)<\/script>/gi; const parts: string[] = []; let m: RegExpExecArray | null; while ((m = re.exec(sfc)) !== null) { const attrs = m[1] ?? …
 /**
- * Which AI tool entrypoints context-graph emits (adapters + tool-specific files).
- * Core graph (`.github/instructions/*.instructions.md`, index, path-index) is always built.
+ * For `.vue`, return extracted script + a virtual `.ts` path for the TS parser.
+ * Otherwise return the file as-is.
  */
-export type InstructionTargetId = | 'copilot' | 'cursor' | 'claude' | 'agents' | 'gemini' | 'windsurf' | 'codex' | 'cline';
-export const INSTRUCTION_TARGET_IDS: InstructionTargetId[] = [ 'copilot', 'cursor', 'claude', 'agents', 'gemini', 'windsurf', 'codex', 'cline', ];
-export const INSTRUCTION_TARGET_LABELS: Record<InstructionTargetId, string> = { copilot: 'GitHub Copilot (.github/copilot-instructions.md, .copilotignore)', cursor: 'Cursor (.cursor/rules/context-graph.mdc + ctxgraph--*.mdc per file)', c…
-export interface DeterministicPreferences { instructionTargets: InstructionTargetId[]; installAgents: boolean; }
-export function isInstructionTargetId(v: string): v is InstructionTargetId { return TARGET_SET.has(v); }
-export function normalizeInstructionTargets(raw: unknown): InstructionTargetId[] | null { /* ~17 lines */ }
-export function parseInstructionTargetsEnv(envVal: string | undefined): InstructionTargetId[] | null { if (!envVal?.trim()) return null; if (envVal.trim().toLowerCase() === 'all') return [...INSTRUCTION_TARGET_IDS]; const parts = envVal.…
-export function parseInstallAgentsEnv(envVal: string | undefined): boolean | null { if (!envVal?.trim()) return null; const v = envVal.trim().toLowerCase(); if (v === '1' || v === 'true' || v === 'yes' || v === 'on') return true; if (v =…
-export function instructionTargetsFromConfigFile( fileConfig: { instructionTargets?: unknown } ): InstructionTargetId[] | null { return normalizeInstructionTargets(fileConfig.instructionTargets); }
-export function installAgentsFromConfigFile( fileConfig: { installAgents?: unknown } ): boolean | null { return typeof fileConfig.installAgents === 'boolean' ? fileConfig.installAgents : null; }
-export function hasConfiguredInstructionTargets( fileConfig: { instructionTargets?: unknown } ): boolean { return instructionTargetsFromConfigFile(fileConfig) !== null; }
-export function hasConfiguredInstallAgents(fileConfig: { installAgents?: unknown }): boolean { return typeof fileConfig.installAgents === 'boolean'; }
-export function isInstructionTargetEnabled( targets: InstructionTargetId[], id: InstructionTargetId ): boolean { return targets.includes(id); }
-/** Persist no-llm user choices into `.context-graph.json` (merge, keep provider/model). */
-export function persistDeterministicPreferences( projectRoot: string, prefs: DeterministicPreferences ): void { /* ~18 lines */ }
-/** @deprecated use persistDeterministicPreferences */
-export function saveInstructionTargetsToConfig( projectRoot: string, targets: InstructionTargetId[] ): void { persistDeterministicPreferences(projectRoot, { instructionTargets: targets, installAgents: false, }); }
-export function needsInstructionTargetSetup(fileConfig: ConfigFileSlice): boolean { if (parseInstructionTargetsEnv(process.env.CONTEXT_GRAPH_INSTRUCTION_TARGETS)) return false; return !hasConfiguredInstructionTargets(fileConfig); }
-export function needsInstallAgentsSetup(fileConfig: ConfigFileSlice): boolean { if (parseInstallAgentsEnv(process.env.CONTEXT_GRAPH_INSTALL_AGENTS) !== null) return false; return !hasConfiguredInstallAgents(fileConfig); }
-export function needsDeterministicPreferencesSetup(fileConfig: ConfigFileSlice): boolean { return needsInstructionTargetSetup(fileConfig) || needsInstallAgentsSetup(fileConfig); }
-/** Ask which AI adapters to generate (does not write config — caller persists). */
-export async function promptInstructionTargetsInteractive(opts?: { /* ~73 lines */ }
-/** Ask whether to fetch agency-agents into `.github/agents/` (does not write config). */
-export async function promptInstallAgentsInteractive(): Promise<boolean> { /* ~31 lines */ }
-export async function resolveInstructionTargets(opts: { /* ~17 lines */ }
-export function resolveInstallAgents(fileConfig: ConfigFileSlice): boolean { const fromEnv = parseInstallAgentsEnv(process.env.CONTEXT_GRAPH_INSTALL_AGENTS); if (fromEnv !== null) return fromEnv; const fromFile = installAgentsFromConfigF…
+export function scriptOrSelfForAnalysis( relPath: string, content: string ): { body: string; virtualPath: string } { const norm = relPath.replace(/\\/g, '/'); if (/\.vue$/i.test(norm)) { const script = extractVueScriptCombined(content); …
+export function extractVuePropKeys(script: string): string[] { /* ~30 lines */ }
 /**
- * no-llm first-time / incomplete config: prompt for targets + agents, persist once.
+ * Vue `<script setup>` symbols: props, composables, top-level const/ref/computed.
+ * Used when there is no `export` (typical SFC).
  */
-export async function ensureDeterministicSetup(opts: { /* ~74 lines */ }
+export function extractVueSymbolLines(script: string): string[] { /* ~39 lines */ }
+/** One-line template summary for instruction graphs. */
+export function extractVueTemplateBrief(sfc: string): string | null { const m = sfc.match(/<template\b[^>]*>([\s\S]*?)<\/template>/i); if (!m) return null; const one = (m[1] ?? '') .replace(/<!--[\s\S]*?-->/g, '') .replace(/\s+/g, ' ') .…
+/**
+ * Compact routing block for `.vue` in deterministic instructions.
+ * No full script — names, props, runtime hooks only.
+ */
+export function buildVueRoutingSignatures(relPath: string, sfcContent: string): string[] { /* prompt template (~51 lines) */ }
+/** Tag/element branches from `return` inside `computed` (e.g. LinkTag resolver). */
+export function extractVueComputedBranches(script: string): string[] { /* ~17 lines */ }
+// ── .cursor/rules/ctxgraph--src-writer.mdc ──
+// ── src/writer.ts ──
+export interface OutputFile { path: string; content: string; }
+export interface WriteResult { created: string[]; updated: string[]; errors: { path: string; error: string }[]; }
+/**
+ * Parse LLM response with multiple fallback strategies for different output formats.
+ * Tries in order:
+ *   1. <<<FILE: path>>>...<<<EOF>>>
+ *   2. <!-- FILE: path -->```...```
+ *   3. ## FILE: path\n```...```
+ *   4. ```path/to/file.ext\n...```
+ */
+export function parseOutputFiles(response: string): OutputFile[] { /* prompt template (~17 lines) */ }
+export function writeOutputFiles(files: OutputFile[], projectRoot: string): WriteResult { /* ~33 lines */ }
+
+// ── .cursor/rules/ctxgraph--cursor-rules-bundle-p39.mdc ──
+// ── .cursor/rules/ctxgraph--test-bundle.mdc ──
+// ── test/extract.test.mjs ──
+/** Targets barrels only — not file purpose. */
+export function extractReExportTargets() {}`;
+ * Framework-aware deterministic extraction (no LLM).
+ */
+export function foo() {}`;
 
 ```
 
 ## Dependencies
-**External:**
-- ``
-
-## Danger Zone 🔴
-- **[env]** reads `process.env.CONTEXT_GRAPH_INSTRUCTION_TARGETS`
-- **[env]** reads `process.env.CONTEXT_GRAPH_INSTALL_AGENTS`
+- No dependencies detected

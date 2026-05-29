@@ -23,8 +23,10 @@ import {
 } from './layout';
 import { inferDefaultsFromScan } from './infer';
 import { inferSubsystemPriority } from './priority';
+import { isInstructionExcludedPath } from '../../source-extract';
 
 export function shouldExcludeFromSubsystems(relPath: string): boolean {
+  if (isInstructionExcludedPath(relPath)) return true;
   const name = path.posix.basename(relPath);
   return INSTRUCTION_EXCLUDE_RE.some(r => r.test(name) || r.test(relPath));
 }

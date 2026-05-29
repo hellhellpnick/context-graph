@@ -1,6 +1,6 @@
 # @hellpnick/context-graph — Project Context Graph
 
-_Generated: 2026-05-20 · Stack: Node.js, TypeScript · **slim root** · **deterministic baseline**_
+_Generated: 2026-05-29 · Stack: Node.js, TypeScript · **slim root** · **deterministic baseline**_
 
 ## How to use this graph
 
@@ -41,7 +41,7 @@ Deterministic baseline (no LLM).
 4. Read **Signatures**, **Dependencies**, **Graph** in that file; open repo source for bodies.
 5. **Cursor:** `.cursor/rules/ctxgraph--*.mdc` attaches when `globs` match — follow that rule first.
 
-**102** subsystem instruction file(s). Root = map + zones; detail = per-path `*.instructions.md`.
+**135** subsystem instruction file(s). Root = map + zones; detail = per-path `*.instructions.md`.
 **Priority:** if several files match, **MUST** use higher priority **P0 > P1 > P2** (column in path-index).
 
 ## AI tools — where routing is enforced
@@ -65,9 +65,9 @@ Sources: [GitHub Copilot custom instructions](https://docs.github.com/en/copilot
 
 ## Quick Navigation
 
-_Slim root (102 subsystems): use path-index for full `applyTo` routing — do not load every module from here._
+_Slim root (135 subsystems): use path-index for full `applyTo` routing — do not load every module from here._
 
-**Full routing table** → `.github/instructions/context-graph-path-index.md` (102 rows)
+**Full routing table** → `.github/instructions/context-graph-path-index.md` (135 rows)
 **Grouped index** → `.github/instructions/index.md`
 
 **How to route:** open the `*.instructions.md` whose `applyTo` matches the file you edit (see `.github/instructions/context-graph-path-index.md`).
@@ -114,23 +114,23 @@ _Slim root (102 subsystems): use path-index for full `applyTo` routing — do no
 - **Root** [P1] → `src/graph-builder/deterministic/root.instructions.md` — editing or refactoring `root.ts`
 - **Root Project** [P1] → `src/graph-builder/deterministic/root-project.instructions.md` — editing or refactoring `root-project.ts`
 
-_+62 more subsystem(s) — see `.github/instructions/context-graph-path-index.md` (sort by P0/P1/P2)._
+_+95 more subsystem(s) — see `.github/instructions/context-graph-path-index.md` (sort by P0/P1/P2)._
 
 ## Code zones
 
-**Directory groups** (from 102 instruction files):
+**Directory groups** (from 135 instruction files):
 - `src/source-extract/**` — 15 instruction file(s), 15 source(s), best **P0**
 - `src/**` — 13 instruction file(s), 13 source(s), best **P0**
 - `src/graph-builder/**` — 7 instruction file(s), 7 source(s), best **P0**
 - `src/cli/**` — 6 instruction file(s), 6 source(s), best **P0**
 - `src/providers/**` — 4 instruction file(s), 4 source(s), best **P0**
 - `src/cli/commands/**` — 8 instruction file(s), 8 source(s), best **P1**
-- `src/graph-builder/deterministic/**` — 7 instruction file(s), 7 source(s), best **P1**
+- `src/graph-builder/deterministic/**` — 8 instruction file(s), 8 source(s), best **P1**
 - `src/graph-builder/plan/**` — 6 instruction file(s), 6 source(s), best **P1**
 - `src/graph-builder/extract/**` — 4 instruction file(s), 4 source(s), best **P1**
 - `src/graph-builder/llm/**` — 2 instruction file(s), 2 source(s), best **P1**
 - `scripts/**` — 1 instruction file(s), 1 source(s), best **P1**
-- `.cursor/rules/**` — 20 instruction file(s), 78 source(s), best **P2**
+- `.cursor/rules/**` — 51 instruction file(s), 136 source(s), best **P2**
 - _… see `.github/instructions/context-graph-path-index.md` for full tree._
 
 ## Environment

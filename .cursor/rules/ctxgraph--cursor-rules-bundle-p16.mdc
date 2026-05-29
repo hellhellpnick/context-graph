@@ -5,30 +5,66 @@ alwaysApply: false
 ---
 
 ## When to Read
-- editing or refactoring `ctxgraph--src-providers-openai.mdc`
-- editing or refactoring `ctxgraph--src-providers-types.mdc`
-- editing or refactoring `ctxgraph--src-scanner.mdc`
-- editing or refactoring `ctxgraph--src-source-extract-go.mdc`
+- editing or refactoring `ctxgraph--cursor-rules-bundle-p5.mdc`
+- editing or refactoring `ctxgraph--cursor-rules-bundle-p6.mdc`
+- editing or refactoring `ctxgraph--cursor-rules-bundle-p7.mdc`
 
 ## Overview
-- `.cursor/rules/ctxgraph--src-providers-openai.mdc` (36 lines · 1 top-level symbols) — # When to Read
-- `.cursor/rules/ctxgraph--src-providers-types.mdc` (35 lines · 5 top-level symbols) — # When to Read
-- `.cursor/rules/ctxgraph--src-scanner.mdc` (53 lines · 7 top-level symbols) — # When to Read
-- `.cursor/rules/ctxgraph--src-source-extract-go.mdc` (33 lines · 2 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--cursor-rules-bundle-p5.mdc` (174 lines · 56 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--cursor-rules-bundle-p6.mdc` (138 lines · 54 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--cursor-rules-bundle-p7.mdc` (77 lines · 13 top-level symbols) — # When to Read
 
 ## Graph
 ```mermaid
 graph LR
   Rules[Rules]
+  Rules --> node[""]
 ```
 
 ## Signatures
 
 ```typescript
+// ── .cursor/rules/ctxgraph--cursor-rules-bundle-p5.mdc ──
+// ── .cursor/rules/ctxgraph--cursor-rules-bundle-p20.mdc ──
+// ── .cursor/rules/ctxgraph--src-project-graph.mdc ──
+// ── src/project-graph.ts ──
+/** True when a prior context-graph build left core files under `.github/instructions/`. */
+export function projectGraphExists(projectRoot: string): boolean { return GRAPH_MARKER_PATHS.some(rel => fs.existsSync(path.join(projectRoot, rel))); }
+// ── .cursor/rules/ctxgraph--src-project-root.mdc ──
+// ── src/project-root.ts ──
+/**
+ * Git work tree root, or null if `cwd` is not inside a Git repository.
+ */
+export function tryGitRepositoryRoot(cwd: string): string | null { try { const out = execFileSync('git', ['rev-parse', '--show-toplevel'], { cwd, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'], }).trim(); if (!out) return null; re…
+ * Resolves where `.github/instructions/` and `.context-graph.json` live.
+ *
+ * - **Implicit cwd** (no CLI `[dir]`, or `dir` is `.` / same as `process.cwd()`):
+ *   1. `CONTEXT_GRAPH_ROOT` if set and points to an existing directory
+ *   2. else Git repository root from cwd (`git rev-parse --show-toplevel`)
+ *   3. else `path.resolve(cwd)`
+ * - **Explicit `[dir]`** (subfolder path): that path only — no Git uplift (monorepo package roots).
+ */
+export function resolveProjectRoot(cliDirArg: string | undefined, cwd: string = process.cwd()): string { /* ~26 lines */ }
+export type MistakenBuildModeFlag = 'hybrid' | 'deterministic' | 'llm';
+export interface BuildDirNormalization { projectDir: string | undefined; mistakenModeFlag?: MistakenBuildModeFlag; }
+/**
+ * If `[dir]` is actually a build-mode token (`hybrid`, `no-llm`, …), treat as implicit repo root.
+ */
+export function normalizeBuildDirArg(cliDirArg: string | undefined): BuildDirNormalization { if (!cliDirArg) return { projectDir: undefined }; const key = cliDirArg.toLowerCase().replace(/_/g, '-'); if (!BUILD_MODE_DIR_ALIASES.has(key)) …
+export function suggestedBuildFlagForMistake(flag: MistakenBuildModeFlag): string { if (flag === 'deterministic') return '--no-llm'; return `--${flag}`; }
+/** Exit-friendly check before writing `.context-graph.json` / instructions. */
+export function assertProjectRootExists(projectRoot: string): void { let st: fs.Stats; try { st = fs.statSync(projectRoot); } catch { throw new Error( `Project directory does not exist: ${projectRoot}\n` + `Pass a real path: context-grap…
+// ── .cursor/rules/ctxgraph--src-providers-anthropic.mdc ──
+// ── src/providers/anthropic.ts ──
+export class AnthropicProvider implements LLMProvider { /* ~34 lines */ }
+// ── .cursor/rules/ctxgraph--src-providers-index.mdc ──
+// ── src/providers/index.ts ──
+export function createProvider(config: ProviderConfig): LLMProvider { switch (config.provider) { case 'openai': case 'openai-compat': case 'ollama': return new OpenAIProvider(config); case 'anthropic': return new AnthropicProvider(config…
+export type { LLMProvider, LLMMessage, LLMUsage, LLMResponse, ProviderConfig } from './types'
+// ── .cursor/rules/ctxgraph--cursor-rules-bundle-p21.mdc ──
 // ── .cursor/rules/ctxgraph--src-providers-openai.mdc ──
 // ── src/providers/openai.ts ──
 export class OpenAIProvider implements LLMProvider { /* ~44 lines */ }
-
 // ── .cursor/rules/ctxgraph--src-providers-types.mdc ──
 // ── src/providers/types.ts ──
 export interface LLMMessage { role: 'user' | 'assistant'; content: string; }
@@ -36,7 +72,6 @@ export interface LLMUsage { inputTokens: number; outputTokens: number; }
 export interface LLMResponse { content: string; usage: LLMUsage; }
 export interface LLMProvider { complete(systemPrompt: string, messages: LLMMessage[]): Promise<LLMResponse>; }
 export interface ProviderConfig { provider: 'openai' | 'anthropic' | 'openai-compat' | 'ollama'; model: string; apiKeyEnv: string; baseUrl?: string; maxTokens?: number; }
-
 // ── .cursor/rules/ctxgraph--src-scanner.mdc ──
 // ── src/scanner.ts ──
 /** Root files with gitignore-style rules, scanned after `.gitignore` / `.copilotignore`. */
@@ -51,17 +86,89 @@ export function formatForLLM(scan: ScanResult): string { /* prompt template (~52
  * Tier 0–2 only; Tier 3 unchanged. Does not replace full scan for `repairBuildPlan` / `buildMetadataJson`.
  */
 export function scanForPromptDepth(scan: ScanResult, depth: 'full' | 'slim'): ScanResult { /* ~20 lines */ }
-
+// ── .cursor/rules/ctxgraph--src-source-extract-csharp.mdc ──
+// ── src/source-extract/csharp.ts ──
+/** C# symbol and import extraction. */
+export function extractCSharpSymbolLines(cs: string): string[] { /* ~25 lines */ }
+/** `using Foo.Bar;`, `global using`, `using static`. */
+export function extractCSharpImports(cs: string): string[] { const out: string[] = []; for (const rawLine of cs.replace(/\r\n/g, '\n').split('\n')) { const t = rawLine.trim(); if (!t || t.startsWith('//')) continue; const m = t.match(/^(…
+// ── .cursor/rules/ctxgraph--cursor-rules-bundle-p22.mdc ──
 // ── .cursor/rules/ctxgraph--src-source-extract-go.mdc ──
 // ── src/source-extract/go.ts ──
 /** `import "path"`, `import alias "path"`, and `import ( ... )`. */
 export function extractGoImports(go: string): string[] { /* ~43 lines */ }
-export function extractGoSymbolLines(go: string): string[] { /* ~21 lines */ }
+export function extractGoSymbolLines(go: string): string[] { /* ~23 lines */ }
+// ── .cursor/rules/ctxgraph--src-source-extract-index.mdc ──
+// ── src/source-extract/index.ts ──
+/**
+ * Shared helpers for Vue / PHP / Python / Go — scanner + deterministic graph.
+ * @module source-extract
+ */
+export { isMessageOrPromptPath, isExecutableModulePath, isComposableLikePath } from './paths'
+export { isPromptTemplateBody, compactTsExportLine } from './ts-prompt'
+export { extractScriptSkeleton } from './ts-skeleton'
+export { instructionSplitScore, INSTRUCTION_OWN_FILE_SCORE_THRESHOLD, } from './instruction-score'
+export { extractVueScriptCombined, scriptOrSelfForAnalysis, extractVuePropKeys, extractVueSymbolLines, extractVueTemplateBrief, buildVueRoutingSignatures, extractVueComputedBranches, } from './vue-sfc'
+export { extractNuxtRuntimeBullets, extractDeterministicErrors, extractSideEffectBullets, } from './nuxt-runtime'
+export { extractPhpSymbolLines, extractPhpMethodParamNames, extractPhpJsonResponseKeys, buildPhpRoutingSignatures, buildPhpOneLineSummary, extractPhpUseStatements, } from './php'
+export { extractPythonSymbolLines, extractPythonImports } from './python'
+export { extractGoImports, extractGoSymbolLines } from './go'
+export { extractCSharpSymbolLines, extractCSharpImports } from './csharp'
+export { extractRustImports, extractRustSymbolLines } from './rust'
+export { extractJavaKotlinImports, extractJavaKotlinSymbolLines } from './java-kotlin'
+export { extractRubyImports, extractRubySymbolLines } from './ruby'
+// ── .cursor/rules/ctxgraph--src-source-extract-instruction-score.mdc ──
+// ── src/source-extract/instruction-score.ts ──
+/** Score for auto split: one instruction file per “heavy” module (no LLM). */
+export function instructionSplitScore(relPath: string, content: string, lines?: number): number { /* ~39 lines */ }
+export const INSTRUCTION_OWN_FILE_SCORE_THRESHOLD = 42;
+// ── .cursor/rules/ctxgraph--src-source-extract-java-kotlin.mdc ──
+// ── src/source-extract/java-kotlin.ts ──
+/** Java / Kotlin symbol and import extraction. */
+export function extractJavaKotlinImports(src: string): string[] { const out: string[] = []; for (const rawLine of src.replace(/\r\n/g, '\n').split('\n')) { const t = rawLine.trim(); if (!t || t.startsWith('//') || t.startsWith('/*')) con…
+export function extractJavaKotlinSymbolLines(src: string): string[] { /* ~29 lines */ }
+// ── .cursor/rules/ctxgraph--cursor-rules-bundle-p23.mdc ──
+// ── .cursor/rules/ctxgraph--src-source-extract-nuxt-runtime.mdc ──
+// ── src/source-extract/nuxt-runtime.ts ──
+/** Nuxt / Vue script runtime hints (no LLM). */
+export function extractNuxtRuntimeBullets(script: string): string[] { /* prompt template (~34 lines) */ }
+/** Errors / HTTP failures without LLM (Nuxt createError + classic throws). */
+export function extractDeterministicErrors(script: string, fileLabel?: string): string[] { /* prompt template (~30 lines) */ }
+/** Side effects for Danger Zone (browser, stores, network, events). */
+export function extractSideEffectBullets(script: string): string[] { /* prompt template (~48 lines) */ }
+// ── .cursor/rules/ctxgraph--src-source-extract-paths.mdc ──
+// ── src/source-extract/paths.ts ──
+/** Prompt/message modules: prefer bundle + compact instructions (deterministic routing). */
+export function isMessageOrPromptPath(relPath: string): boolean { const norm = relPath.replace(/\\/g, '/'); return ( /(?:^|\/)(?:messages|prompts?)\//i.test(norm) || /graph-create-agent/i.test(norm) || /\/(?:prompt|messages)\./i.test(nor…
+/** CLI / command registration — collapse as executable, not LLM prompt template. */
+export function isExecutableModulePath(relPath: string): boolean { const norm = relPath.replace(/\\/g, '/'); return ( /(?:^|\/)cli(?:\/|\.)/i.test(norm) || /(?:^|\/)commands?\//i.test(norm) || /(?:^|\/)hooks\.ts$/i.test(norm) ); }
+/** `dev/composables/foo.ts`, `src/composables/bar.js`, etc. */
+export function isComposableLikePath(relPath: string): boolean { return /(?:^|\/)composables\/[^/]+\.(?:[mc]?[jt]sx?|jsx?)$/i.test(relPath.replace(/\\/g, '/')); }
+// ── .cursor/rules/ctxgraph--src-source-extract-php.mdc ──
+// ── src/source-extract/php.ts ──
+/** PHP routing and symbol extraction. */
+export function extractPhpSymbolLines(php: string): string[] { /* ~30 lines */ }
+/** Balanced `(...)` after `function name` — supports multiline Laravel DI lists. */
+export function extractPhpMethodParamNames(php: string, methodName: string): string[] { /* ~29 lines */ }
+/** JSON / array keys from `return response()->json([...])` (routing hint, not full payload). */
+export function extractPhpJsonResponseKeys(php: string): string[] { /* ~29 lines */ }
+/**
+ * Compact routing block for `.php` in deterministic instructions.
+ * No full file — class, DI method summary, response keys, import count.
+ */
+export function buildPhpRoutingSignatures(relPath: string, php: string): string[] { /* prompt template (~63 lines) */ }
+/** One-line index row for capped PHP folder bundles. */
+export function buildPhpOneLineSummary(relPath: string, php: string): string { /* ~16 lines */ }
 
-```
+// ── .cursor/rules/ctxgraph--cursor-rules-bundle-p6.mdc ──
+// ── .cursor/rules/ctxgraph--cursor-rules-bundle-p19.mdc ──
+// ── .cursor/rules/ctxgraph--src-graph-builder-llm-notes.mdc ──
+// ── src/graph-builder/llm/notes.ts ──
+exp
 
-## Dependencies
-- No dependencies detected
+…
+
+_(truncated — full graph in matching `.github/instructions/*.instructions.md`)_
 
 <!-- context-graph: generated from `.github/instructions/.cursor/rules/_bundle_p16.instructions.md` -->
 _Regenerate: `context-graph build --no-llm` · Do not hand-edit this rule._

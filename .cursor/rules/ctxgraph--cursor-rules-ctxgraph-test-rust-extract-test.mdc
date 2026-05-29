@@ -1,0 +1,35 @@
+---
+description: "Ctxgraph Test Rust Extract Test — .cursor/rules/ctxgraph--test-rust-extract-test.mdc"
+globs: .cursor/rules/ctxgraph--test-rust-extract-test.mdc
+alwaysApply: false
+---
+
+## When to Read
+- editing or refactoring `ctxgraph--test-rust-extract-test.mdc`
+
+## Overview
+- `.cursor/rules/ctxgraph--test-rust-extract-test.mdc` (34 lines) — # When to Read
+
+## Graph
+```mermaid
+graph LR
+  ctxgraph__test_rust_extract_test[ctxgraph--test-rust-extract-test]
+```
+
+## Signatures
+
+```typescript
+(no exports — see ## Source for full script)
+```
+
+## Source
+
+### `.cursor/rules/ctxgraph--test-rust-extract-test.mdc`
+
+_Prompt/message module — see ## Signatures; open repo file to edit templates._
+
+## Dependencies
+- No dependencies detected
+
+<!-- context-graph: generated from `.github/instructions/.cursor/rules/ctxgraph--test-rust-extract-test.instructions.md` -->
+_Regenerate: `context-graph build --no-llm` · Do not hand-edit this rule._

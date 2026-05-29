@@ -25,6 +25,7 @@ import {
   extractVueSymbolLines,
   extractVueTemplateBrief,
   scriptOrSelfForAnalysis,
+  isInstructionExcludedPath,
 } from '../../source-extract';
 import {
   extractCSharpSymbolLines,
@@ -230,7 +231,7 @@ export function extractExports(scan: ScanResult, sourceFiles: string[]): string 
     if (fileExports.length === 0 && /\.cs$/i.test(f.path)) {
       const symbols = extractCSharpSymbolLines(body);
       const { bullets: runtime } = extractRuntimeSection(f.path, f.content);
-      fileExports.push('// C# module');
+      if (symbols.length === 0) fileExports.push('// C# module');
       if (runtime.length > 0) {
         fileExports.push('// runtime:');
         for (const r of runtime) fileExports.push(`// - ${r}`);
@@ -314,9 +315,18 @@ export function shouldIncludeDeterministicSource(
 ): boolean {
   if (sourceFiles.every(p => /\.vue$/i.test(p))) return false;
   if (sourceFiles.every(p => /\.php$/i.test(p))) return false;
+  if (sourceFiles.every(p => isInstructionExcludedPath(p))) return false;
+  if (sourceFiles.every(p => isInstructionExcludedPath(p) || isMessageOrPromptPath(p))) return false;
   if (!exportBlock.trim() || /no exports/i.test(exportBlock)) return true;
   if (exportBlock.length < 100) return true;
   if (/routing summary/i.test(exportBlock) && exportBlock.length >= 180) return false;
+  if (sourceFiles.some(p => /\.cs$/i.test(p))) {
+    const csSigLines = exportBlock.split('\n').filter(l => {
+      const t = l.trim();
+      return t.length > 0 && !t.startsWith('//');
+    }).length;
+    if (csSigLines >= 2) return false;
+  }
   if (sourceFiles.some(p => /\.(py|go|cs|rs|java|kt|rb)$/i.test(p)) && exportBlock.length < 180) return true;
   if (sourceFiles.every(p => isMessageOrPromptPath(p))) return false;
 
@@ -337,6 +347,15 @@ export function buildDeterministicSourceSection(scan: ScanResult, sourceFiles: s
     if (!scanned?.content) continue;
 
     lines.push(`### \`${sf}\``);
+
+    if (isInstructionExcludedPath(sf)) {
+      lines.push(
+        '',
+        '_Markup / project config — open repo file; UI logic is in code-behind (`.xaml.cs`) or ViewModels._',
+        ''
+      );
+      continue;
+    }
 
     if (/\.vue$/i.test(sf)) {
       lines.push('', '_Vue SFC: routing in ## Signatures — open component in repo for template/script._', '');

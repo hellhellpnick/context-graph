@@ -1,0 +1,87 @@
+---
+description: "Mirror — `.cursor/rules/` (4 files, part 37/51)"
+applyTo: ".cursor/rules/**"
+priority: "P2"
+last_updated: "2026-05-29"
+---
+
+## When to Read
+- editing or refactoring `ctxgraph--src-graph-builder-deterministic-root.mdc`
+- editing or refactoring `ctxgraph--src-graph-builder-deterministic-routing-entrypoints.mdc`
+- editing or refactoring `ctxgraph--src-graph-builder-deterministic-routing-mandate.mdc`
+- editing or refactoring `ctxgraph--src-graph-builder-deterministic-subsystem.mdc`
+
+## Overview
+- `.cursor/rules/ctxgraph--src-graph-builder-deterministic-root.mdc` (57 lines · 5 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--src-graph-builder-deterministic-routing-entrypoints.mdc` (47 lines · 7 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--src-graph-builder-deterministic-routing-mandate.mdc` (56 lines · 14 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--src-graph-builder-deterministic-subsystem.mdc` (47 lines · 1 top-level symbols) — # When to Read
+
+## Graph
+```mermaid
+graph LR
+  Rules[Rules]
+```
+
+## Signatures
+
+```typescript
+// ── .cursor/rules/ctxgraph--src-graph-builder-deterministic-root.mdc ──
+// ── src/graph-builder/deterministic/root.ts ──
+export type { CopilotRootOptions }
+export function buildDeterministicCopilotInstructions( today: string, scan: ScanResult, plan: BuildPlan, rootOpts?: CopilotRootOptions ): string { /* prompt template (~142 lines) */ }
+export function buildDeterministicChangelog(today: string, plan: BuildPlan): string { const lines = [ `# Context Graph — Changelog`, ``, `## ${today} — Initial Build`, ``, `Subsystems created:`, ...plan.subsystems.map(s => `- \`${s.file}…
+/** Standard scan-exclusion hints — never infer top-level dirs from nested lockfiles. */
+export function buildDeterministicCopilotIgnore(_scan?: ScanResult): string { return [ '# Managed by context-graph — scan exclusions (gitignore syntax; ** = any depth)', '# For project-specific paths use .graph-context-ignore (does not o…
+export function injectDeterministicRootFiles( today: string, scan: ScanResult, plan: BuildPlan, files: OutputFile[], llmCopilotContent?: string, rootOpts?: CopilotRootOptions, instructionTargets: I… { /* prompt template (~164 lines) */ }
+
+// ── .cursor/rules/ctxgraph--src-graph-builder-deterministic-routing-entrypoints.mdc ──
+// ── src/graph-builder/deterministic/routing-entrypoints.ts ──
+/** Minimum markers every full routing entry file must contain. */
+export const ROUTING_MANDATE_MARKERS = [ ROUTING_MANDATE_HEADING, 'symbol-index', 'FORBIDDEN', ] as const;
+/** Paths checked when the corresponding instruction target is enabled. */
+export const ROUTING_ENTRYPOINTS_BY_TARGET: Record<InstructionTargetId, readonly string[]> = { copilot: ['.github/copilot-instructions.md'], cursor: ['.cursor/rules/context-graph.mdc'], claude: ['CLAUDE.md'], agents: [], gemini: ['GEMINI…
+/** Always emitted with the instruction graph (any agent should read). */
+export const ROUTING_CORE_ENTRYPOINTS = [ '.github/instructions/copilot-instructions.md', 'AGENTS.md', ] as const;
+export interface RoutingEntrypointIssue { relPath: string; kind: 'missing' | 'weak'; detail?: string; }
+export function routingContentHasMandate(content: string): boolean { return ROUTING_MANDATE_MARKERS.every(m => content.includes(m)); }
+export function collectExpectedRoutingEntrypoints( instructionTargets: InstructionTargetId[] ): string[] { const out = new Set<string>(ROUTING_CORE_ENTRYPOINTS); const targets = instructionTargets.length > 0 ? instructionTargets : (Objec…
+export function auditRoutingEntrypoints( projectRoot: string, instructionTargets: InstructionTargetId[] ): RoutingEntrypointIssue[] { /* ~22 lines */ }
+
+// ── .cursor/rules/ctxgraph--src-graph-builder-deterministic-routing-mandate.mdc ──
+// ── src/graph-builder/deterministic/routing-mandate.ts ──
+/** Imperative routing copy (MUST / BLOCKING) — no "when", "should", "prefer". */
+export const ROUTING_MANDATE_HEADING = '## MANDATORY — read instructions first (BLOCKING)';
+/** When user names a component/file in chat (LinkTag, useSeo) — no file open. */
+export function buildNamedEntityRoutingMandate(): string[] { /* prompt template (~16 lines) */ }
+/** Shared 5-step BLOCKING workflow. */
+export function buildRoutingWorkflowSteps(examplePath?: string): string[] { /* prompt template (~18 lines) */ }
+/** After "## How to use this graph" in copilot-instructions.md */
+export function buildCopilotGraphMandate(examplePath: string): string[] { return [ ROUTING_MANDATE_HEADING, ``, ...buildNamedEntityRoutingMandate(), ...buildRoutingWorkflowSteps(examplePath), `**GitHub Copilot (VS Code / JetBrains / Copi…
+/** Top of CLAUDE.md / AGENTS.md / GEMINI.md — immediately after title. */
+export function buildAgentEntryMandate(): string[] { return [ ROUTING_MANDATE_HEADING, ``, ...buildNamedEntityRoutingMandate(), ...buildRoutingWorkflowSteps(), ]; }
+export type AgentEntryTool = | 'claude' | 'agents' | 'gemini' | 'codex' | 'windsurf' | 'cline' | 'copilot';
+/** Tool-specific lines after shared mandate (docs-backed, May 2026). */
+export function buildToolSpecificRoutingLines(tool: AgentEntryTool): string[] { /* prompt template (~71 lines) */ }
+export function buildAgentEntryWithTool(title: string, tool: AgentEntryTool): string[] { return [ `# ${title}`, ``, ...buildAgentEntryMandate(), ...buildToolSpecificRoutingLines(tool), ]; }
+/** Short router blurb (legacy / embedded refs). */
+export function buildCursorRouterMandate(): string[] { return [ `## MANDATORY routing (BLOCKING)`, ``, `**MUST** follow attached \`ctxgraph--*\` rule when \`globs\` match the file you edit.`, `If none attached: **MUST** complete path-ind…
+/** Cursor \`context-graph.mdc\` body — full BLOCKING mandate (alwaysApply: true). */
+export function buildCursorAlwaysOnRuleBody(): string { /* prompt template (~21 lines) */ }
+/** Windsurf: always_on trigger (docs.windsurf.com — rules in .windsurf/rules/). */
+export function buildWindsurfContextGraphRule(): string { const body = [ `# context-graph — Windsurf routing (always on)`, ``, ...buildNamedEntityRoutingMandate(), ...buildRoutingWorkflowSteps(), ...buildToolSpecificRoutingLines('windsur…
+/** Cline workspace rule (no standard always-on frontmatter). */
+export function buildClineContextGraphRule(): string { return [ `# context-graph — Cline routing`, ``, ...buildNamedEntityRoutingMandate(), ...buildRoutingWorkflowSteps(), ...buildToolSpecificRoutingLines('cline'), `## Also load`, ``, `-…
+/** Codex supplemental doc (AGENTS.md is primary). */
+export function buildCodexContextGraphRule(): string { return [ `# context-graph — Codex supplement`, ``, `**MUST** read \`AGENTS.md\` at repo root first — Codex loads it before every run.`, ``, ROUTING_MANDATE_HEADING, ``, ...buildNamed…
+/** Compact matrix for copilot-instructions / human reference. */
+export function buildAiToolRoutingReferenceSection(): string[] { /* prompt template (~22 lines) */ }
+
+// ── .cursor/rules/ctxgraph--src-graph-builder-deterministic-subsystem.mdc ──
+// ── src/graph-builder/deterministic/subsystem.ts ──
+export function buildDeterministicSubsystemFile( today: string, instructionPath: string, planItem: BuildPlanItem | undefined, scan: ScanResult, sourceFiles: string[] ): OutputFile { /* prompt template (~300 lines) */ }
+
+```
+
+## Dependencies
+- No dependencies detected

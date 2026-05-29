@@ -1,2008 +1,2862 @@
 {
-  "generated": "2026-05-20",
+  "generated": "2026-05-29",
   "files": {
     ".copilotignore": {
       "priority": "P1",
       "lines": 25,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".env.example": {
       "priority": "P1",
       "lines": 35,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "package.json": {
       "priority": "P1",
       "lines": 61,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "python/pyproject.toml": {
       "priority": "P1",
       "lines": 21,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/cli/index.ts": {
       "priority": "P0",
       "lines": 4,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/graph-builder/index.ts": {
       "priority": "P0",
       "lines": 70,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/index.ts": {
       "priority": "P0",
       "lines": 79,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/providers/index.ts": {
       "priority": "P0",
       "lines": 19,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/source-extract/index.ts": {
       "priority": "P0",
-      "lines": 40,
+      "lines": 45,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
+    },
+    ".clinerules/context-graph.md": {
+      "priority": "P2",
+      "lines": 36,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
     },
     ".codex/context-graph.md": {
       "priority": "P2",
-      "lines": 21,
+      "lines": 35,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".context-graph.json": {
       "priority": "P2",
       "lines": 15,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/.context-graph-manifest": {
+      "priority": "P2",
+      "lines": 126,
+      "complexity": "medium",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/context-graph.mdc": {
+      "priority": "P2",
+      "lines": 53,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--cursor-rules-bundle-p10.mdc": {
+      "priority": "P2",
+      "lines": 89,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--cursor-rules-bundle-p11.mdc": {
+      "priority": "P2",
+      "lines": 52,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--cursor-rules-bundle-p12.mdc": {
+      "priority": "P2",
+      "lines": 189,
+      "complexity": "medium",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--cursor-rules-bundle-p13.mdc": {
+      "priority": "P2",
+      "lines": 53,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--cursor-rules-bundle-p14.mdc": {
+      "priority": "P2",
+      "lines": 90,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--cursor-rules-bundle-p15.mdc": {
+      "priority": "P2",
+      "lines": 116,
+      "complexity": "medium",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--cursor-rules-bundle-p16.mdc": {
+      "priority": "P2",
+      "lines": 73,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--cursor-rules-bundle-p17.mdc": {
       "priority": "P2",
       "lines": 80,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
-    ".cursor/rules/context-graph.mdc": {
+    ".cursor/rules/ctxgraph--cursor-rules-bundle-p18.mdc": {
       "priority": "P2",
-      "lines": 32,
+      "lines": 189,
+      "complexity": "medium",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--cursor-rules-bundle-p19.mdc": {
+      "priority": "P2",
+      "lines": 77,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--cursor-rules-bundle-p2.mdc": {
+      "priority": "P2",
+      "lines": 101,
+      "complexity": "medium",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--cursor-rules-bundle-p20.mdc": {
+      "priority": "P2",
+      "lines": 54,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--cursor-rules-bundle-p21.mdc": {
+      "priority": "P2",
+      "lines": 50,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--cursor-rules-bundle-p22.mdc": {
+      "priority": "P2",
+      "lines": 55,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--cursor-rules-bundle-p23.mdc": {
+      "priority": "P2",
+      "lines": 139,
+      "complexity": "medium",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--cursor-rules-bundle-p24.mdc": {
+      "priority": "P2",
+      "lines": 71,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--cursor-rules-bundle-p25.mdc": {
+      "priority": "P2",
+      "lines": 96,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--cursor-rules-bundle-p26.mdc": {
+      "priority": "P2",
+      "lines": 70,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--cursor-rules-bundle-p27.mdc": {
+      "priority": "P2",
+      "lines": 102,
+      "complexity": "medium",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--cursor-rules-bundle-p28.mdc": {
+      "priority": "P2",
+      "lines": 59,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--cursor-rules-bundle-p29.mdc": {
+      "priority": "P2",
+      "lines": 78,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--cursor-rules-bundle-p3.mdc": {
+      "priority": "P2",
+      "lines": 140,
+      "complexity": "medium",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--cursor-rules-bundle-p30.mdc": {
+      "priority": "P2",
+      "lines": 85,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--cursor-rules-bundle-p31.mdc": {
+      "priority": "P2",
+      "lines": 86,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--cursor-rules-bundle-p32.mdc": {
+      "priority": "P2",
+      "lines": 116,
+      "complexity": "medium",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--cursor-rules-bundle-p33.mdc": {
+      "priority": "P2",
+      "lines": 68,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--cursor-rules-bundle-p34.mdc": {
+      "priority": "P2",
+      "lines": 74,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--cursor-rules-bundle-p35.mdc": {
+      "priority": "P2",
+      "lines": 87,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--cursor-rules-bundle-p36.mdc": {
+      "priority": "P2",
+      "lines": 60,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--cursor-rules-bundle-p37.mdc": {
+      "priority": "P2",
+      "lines": 87,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--cursor-rules-bundle-p38.mdc": {
+      "priority": "P2",
+      "lines": 53,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--cursor-rules-bundle-p39.mdc": {
+      "priority": "P2",
+      "lines": 38,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--cursor-rules-bundle-p4.mdc": {
+      "priority": "P2",
+      "lines": 111,
+      "complexity": "medium",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--cursor-rules-bundle-p5.mdc": {
+      "priority": "P2",
+      "lines": 174,
+      "complexity": "medium",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--cursor-rules-bundle-p6.mdc": {
+      "priority": "P2",
+      "lines": 138,
+      "complexity": "medium",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--cursor-rules-bundle-p7.mdc": {
+      "priority": "P2",
+      "lines": 77,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--cursor-rules-bundle-p8.mdc": {
+      "priority": "P2",
+      "lines": 177,
+      "complexity": "medium",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--cursor-rules-bundle-p9.mdc": {
+      "priority": "P2",
+      "lines": 175,
+      "complexity": "medium",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--cursor-rules-bundle.mdc": {
+      "priority": "P2",
+      "lines": 100,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--cursor-rules-ctxgraph-cursor-rules-bundle-p15.mdc": {
+      "priority": "P2",
+      "lines": 108,
+      "complexity": "medium",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--cursor-rules-ctxgraph-cursor-rules-bundle-p18.mdc": {
+      "priority": "P2",
+      "lines": 102,
+      "complexity": "medium",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--cursor-rules-ctxgraph-cursor-rules-bundle-p2.mdc": {
+      "priority": "P2",
+      "lines": 132,
+      "complexity": "medium",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--cursor-rules-ctxgraph-cursor-rules-bundle-p22.mdc": {
+      "priority": "P2",
+      "lines": 71,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--cursor-rules-ctxgraph-cursor-rules-bundle-p23.mdc": {
+      "priority": "P2",
+      "lines": 128,
+      "complexity": "medium",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--cursor-rules-ctxgraph-cursor-rules-bundle-p3.mdc": {
+      "priority": "P2",
+      "lines": 139,
+      "complexity": "medium",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--cursor-rules-ctxgraph-cursor-rules-bundle-p7.mdc": {
+      "priority": "P2",
+      "lines": 68,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--cursor-rules-ctxgraph-cursor-rules-bundle-p8.mdc": {
+      "priority": "P2",
+      "lines": 175,
+      "complexity": "medium",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--cursor-rules-ctxgraph-cursor-rules-bundle-p9.mdc": {
+      "priority": "P2",
+      "lines": 155,
+      "complexity": "medium",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--cursor-rules-ctxgraph-cursor-rules-bundle.mdc": {
+      "priority": "P2",
+      "lines": 159,
+      "complexity": "medium",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--cursor-rules-ctxgraph-cursor-rules-ctxgraph-cursor-rules-bundle-p2.mdc": {
+      "priority": "P2",
+      "lines": 133,
+      "complexity": "medium",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--python-context-graph-bundle.mdc": {
       "priority": "P2",
       "lines": 129,
       "complexity": "medium",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--root-bundle.mdc": {
       "priority": "P2",
       "lines": 61,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--scripts-split-graph-builder.mdc": {
       "priority": "P2",
       "lines": 49,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-agents-catalog.mdc": {
       "priority": "P2",
       "lines": 43,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-agents.mdc": {
       "priority": "P2",
       "lines": 54,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-cli-agents-install.mdc": {
       "priority": "P2",
       "lines": 43,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-cli-build-run.mdc": {
       "priority": "P2",
       "lines": 47,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-cli-commands-actualize.mdc": {
       "priority": "P2",
       "lines": 59,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-cli-commands-agents.mdc": {
       "priority": "P2",
       "lines": 49,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-cli-commands-build.mdc": {
       "priority": "P2",
       "lines": 64,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-cli-commands-hook-check.mdc": {
       "priority": "P2",
       "lines": 56,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-cli-commands-impact.mdc": {
       "priority": "P2",
       "lines": 52,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-cli-commands-resolve.mdc": {
       "priority": "P2",
       "lines": 48,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-cli-commands-review.mdc": {
       "priority": "P2",
       "lines": 52,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-cli-commands-validate.mdc": {
       "priority": "P2",
-      "lines": 49,
+      "lines": 53,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-cli-index.mdc": {
       "priority": "P2",
       "lines": 42,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-cli-io.mdc": {
       "priority": "P2",
       "lines": 38,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-cli-program.mdc": {
       "priority": "P2",
       "lines": 60,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-cli-version.mdc": {
       "priority": "P2",
       "lines": 33,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-cli.mdc": {
       "priority": "P2",
       "lines": 44,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-config.mdc": {
       "priority": "P2",
       "lines": 82,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-framework-extract.mdc": {
       "priority": "P2",
       "lines": 51,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-graph-builder-constants.mdc": {
       "priority": "P2",
       "lines": 67,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-graph-builder-cost.mdc": {
       "priority": "P2",
       "lines": 35,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-graph-builder-deterministic-cursor-rules.mdc": {
       "priority": "P2",
       "lines": 47,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-graph-builder-deterministic-metadata.mdc": {
       "priority": "P2",
       "lines": 42,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-graph-builder-deterministic-root-project.mdc": {
       "priority": "P2",
       "lines": 47,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-graph-builder-deterministic-root-slim.mdc": {
       "priority": "P2",
       "lines": 48,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-graph-builder-deterministic-root.mdc": {
       "priority": "P2",
       "lines": 57,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--src-graph-builder-deterministic-routing-entrypoints.mdc": {
+      "priority": "P2",
+      "lines": 47,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-graph-builder-deterministic-routing-mandate.mdc": {
       "priority": "P2",
-      "lines": 54,
+      "lines": 56,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-graph-builder-deterministic-subsystem.mdc": {
       "priority": "P2",
       "lines": 47,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-graph-builder-discovery.mdc": {
       "priority": "P2",
       "lines": 35,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-graph-builder-extract-deps-graph.mdc": {
       "priority": "P2",
       "lines": 48,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-graph-builder-extract-exports.mdc": {
       "priority": "P2",
       "lines": 56,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-graph-builder-extract-imports.mdc": {
       "priority": "P2",
       "lines": 41,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-graph-builder-extract-misc.mdc": {
       "priority": "P2",
       "lines": 42,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-graph-builder-index.mdc": {
       "priority": "P2",
       "lines": 84,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-graph-builder-llm-notes.mdc": {
       "priority": "P2",
       "lines": 50,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-graph-builder-llm-validate.mdc": {
       "priority": "P2",
       "lines": 52,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-graph-builder-messages-planning.mdc": {
       "priority": "P2",
       "lines": 37,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-graph-builder-messages-root.mdc": {
       "priority": "P2",
       "lines": 42,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-graph-builder-messages-subsystem.mdc": {
       "priority": "P2",
       "lines": 43,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-graph-builder-plan-infer.mdc": {
       "priority": "P2",
       "lines": 46,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-graph-builder-plan-layout.mdc": {
       "priority": "P2",
       "lines": 49,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-graph-builder-plan-parse.mdc": {
       "priority": "P2",
       "lines": 33,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-graph-builder-plan-priority.mdc": {
       "priority": "P2",
       "lines": 44,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-graph-builder-plan-repair.mdc": {
       "priority": "P2",
-      "lines": 62,
+      "lines": 63,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-graph-builder-plan-stack-profile.mdc": {
       "priority": "P2",
       "lines": 39,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-graph-builder-prompt.mdc": {
       "priority": "P2",
       "lines": 43,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-graph-builder-resolve-symbol.mdc": {
       "priority": "P2",
       "lines": 43,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-graph-builder-types.mdc": {
       "priority": "P2",
       "lines": 50,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-graph-builder.mdc": {
       "priority": "P2",
       "lines": 38,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-hooks.mdc": {
       "priority": "P2",
       "lines": 39,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-index.mdc": {
       "priority": "P2",
       "lines": 65,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-instruction-targets.mdc": {
       "priority": "P2",
       "lines": 69,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-project-graph.mdc": {
       "priority": "P2",
       "lines": 35,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-project-root.mdc": {
       "priority": "P2",
       "lines": 62,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-providers-anthropic.mdc": {
       "priority": "P2",
       "lines": 40,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-providers-index.mdc": {
       "priority": "P2",
       "lines": 41,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-providers-openai.mdc": {
       "priority": "P2",
       "lines": 36,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-providers-types.mdc": {
       "priority": "P2",
       "lines": 35,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-scanner.mdc": {
       "priority": "P2",
       "lines": 53,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--src-source-extract-csharp.mdc": {
+      "priority": "P2",
+      "lines": 33,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-source-extract-go.mdc": {
       "priority": "P2",
       "lines": 33,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-source-extract-index.mdc": {
       "priority": "P2",
-      "lines": 60,
+      "lines": 68,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-source-extract-instruction-score.mdc": {
       "priority": "P2",
       "lines": 39,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--src-source-extract-java-kotlin.mdc": {
+      "priority": "P2",
+      "lines": 33,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-source-extract-nuxt-runtime.mdc": {
       "priority": "P2",
       "lines": 44,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-source-extract-paths.mdc": {
       "priority": "P2",
-      "lines": 36,
+      "lines": 41,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-source-extract-php.mdc": {
       "priority": "P2",
       "lines": 45,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-source-extract-python.mdc": {
       "priority": "P2",
       "lines": 34,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--src-source-extract-ruby.mdc": {
+      "priority": "P2",
+      "lines": 33,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--src-source-extract-rust.mdc": {
+      "priority": "P2",
+      "lines": 33,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-source-extract-ts-prompt.mdc": {
       "priority": "P2",
       "lines": 45,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-source-extract-ts-skeleton.mdc": {
       "priority": "P2",
       "lines": 48,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-source-extract-utils.mdc": {
       "priority": "P2",
       "lines": 33,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-source-extract-vue-sfc.mdc": {
       "priority": "P2",
       "lines": 53,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--src-writer.mdc": {
       "priority": "P2",
       "lines": 45,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--test-bundle-p2.mdc": {
+      "priority": "P2",
+      "lines": 60,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--test-bundle-p3.mdc": {
       "priority": "P2",
       "lines": 70,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
-    ".cursor/rules/ctxgraph--test-bundle-p3.mdc": {
+    ".cursor/rules/ctxgraph--test-bundle-p4.mdc": {
       "priority": "P2",
-      "lines": 42,
+      "lines": 57,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--test-bundle-p5.mdc": {
+      "priority": "P2",
+      "lines": 40,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/ctxgraph--test-bundle.mdc": {
       "priority": "P2",
-      "lines": 71,
+      "lines": 69,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
+    },
+    ".cursor/rules/ctxgraph--test-rust-extract-test.mdc": {
+      "priority": "P2",
+      "lines": 34,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
     },
     ".cursor/rules/README.context-graph.md": {
       "priority": "P2",
       "lines": 16,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/agents/ai-engineer.md": {
       "priority": "P2",
       "lines": 146,
       "complexity": "medium",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/agents/code-reviewer.md": {
       "priority": "P2",
       "lines": 77,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/agents/codebase-onboarding-engineer.md": {
       "priority": "P2",
       "lines": 174,
       "complexity": "medium",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
+    },
+    ".github/agents/git-workflow-master.md": {
+      "priority": "P2",
+      "lines": 85,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
     },
     ".github/agents/product-manager.md": {
       "priority": "P1",
       "lines": 470,
       "complexity": "high",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/agents/README.md": {
       "priority": "P2",
-      "lines": 59,
+      "lines": 60,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/agents/senior-developer.md": {
       "priority": "P2",
       "lines": 177,
       "complexity": "medium",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/agents/software-architect.md": {
       "priority": "P2",
       "lines": 82,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/agents/technical-writer.md": {
       "priority": "P2",
       "lines": 394,
       "complexity": "high",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/copilot-instructions.md": {
       "priority": "P2",
       "lines": 178,
       "complexity": "medium",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
-    ".github/instructions/context-graph-path-index.md": {
+    ".github/instructions/.cursor/rules/_bundle_p10.instructions.md": {
+      "priority": "P2",
+      "lines": 88,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/.cursor/rules/_bundle_p11.instructions.md": {
+      "priority": "P2",
+      "lines": 51,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/.cursor/rules/_bundle_p12.instructions.md": {
+      "priority": "P2",
+      "lines": 319,
+      "complexity": "high",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/.cursor/rules/_bundle_p13.instructions.md": {
+      "priority": "P2",
+      "lines": 52,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/.cursor/rules/_bundle_p14.instructions.md": {
+      "priority": "P2",
+      "lines": 89,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/.cursor/rules/_bundle_p15.instructions.md": {
+      "priority": "P2",
+      "lines": 115,
+      "complexity": "medium",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/.cursor/rules/_bundle_p16.instructions.md": {
+      "priority": "P2",
+      "lines": 72,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/.cursor/rules/_bundle_p17.instructions.md": {
+      "priority": "P2",
+      "lines": 79,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/.cursor/rules/_bundle_p18.instructions.md": {
+      "priority": "P2",
+      "lines": 194,
+      "complexity": "medium",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/.cursor/rules/_bundle_p19.instructions.md": {
+      "priority": "P2",
+      "lines": 76,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/.cursor/rules/_bundle_p2.instructions.md": {
+      "priority": "P2",
+      "lines": 100,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/.cursor/rules/_bundle_p20.instructions.md": {
+      "priority": "P2",
+      "lines": 53,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/.cursor/rules/_bundle_p21.instructions.md": {
+      "priority": "P2",
+      "lines": 49,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/.cursor/rules/_bundle_p22.instructions.md": {
+      "priority": "P2",
+      "lines": 54,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/.cursor/rules/_bundle_p23.instructions.md": {
+      "priority": "P2",
+      "lines": 138,
+      "complexity": "medium",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/.cursor/rules/_bundle_p24.instructions.md": {
+      "priority": "P2",
+      "lines": 70,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/.cursor/rules/_bundle_p25.instructions.md": {
+      "priority": "P2",
+      "lines": 95,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/.cursor/rules/_bundle_p26.instructions.md": {
+      "priority": "P2",
+      "lines": 69,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/.cursor/rules/_bundle_p27.instructions.md": {
+      "priority": "P2",
+      "lines": 101,
+      "complexity": "medium",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/.cursor/rules/_bundle_p28.instructions.md": {
+      "priority": "P2",
+      "lines": 58,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/.cursor/rules/_bundle_p29.instructions.md": {
+      "priority": "P2",
+      "lines": 77,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/.cursor/rules/_bundle_p3.instructions.md": {
+      "priority": "P2",
+      "lines": 199,
+      "complexity": "medium",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/.cursor/rules/_bundle_p30.instructions.md": {
+      "priority": "P2",
+      "lines": 84,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/.cursor/rules/_bundle_p31.instructions.md": {
       "priority": "P2",
       "lines": 85,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/.cursor/rules/_bundle_p32.instructions.md": {
+      "priority": "P2",
+      "lines": 115,
+      "complexity": "medium",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/.cursor/rules/_bundle_p33.instructions.md": {
+      "priority": "P2",
+      "lines": 67,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/.cursor/rules/_bundle_p34.instructions.md": {
+      "priority": "P2",
+      "lines": 73,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/.cursor/rules/_bundle_p35.instructions.md": {
+      "priority": "P2",
+      "lines": 86,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/.cursor/rules/_bundle_p36.instructions.md": {
+      "priority": "P2",
+      "lines": 59,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/.cursor/rules/_bundle_p37.instructions.md": {
+      "priority": "P2",
+      "lines": 86,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/.cursor/rules/_bundle_p38.instructions.md": {
+      "priority": "P2",
+      "lines": 52,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/.cursor/rules/_bundle_p39.instructions.md": {
+      "priority": "P2",
+      "lines": 37,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/.cursor/rules/_bundle_p4.instructions.md": {
+      "priority": "P2",
+      "lines": 110,
+      "complexity": "medium",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/.cursor/rules/_bundle_p5.instructions.md": {
+      "priority": "P2",
+      "lines": 193,
+      "complexity": "medium",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/.cursor/rules/_bundle_p6.instructions.md": {
+      "priority": "P2",
+      "lines": 259,
+      "complexity": "medium",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/.cursor/rules/_bundle_p7.instructions.md": {
+      "priority": "P2",
+      "lines": 76,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/.cursor/rules/_bundle_p8.instructions.md": {
+      "priority": "P2",
+      "lines": 254,
+      "complexity": "medium",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/.cursor/rules/_bundle_p9.instructions.md": {
+      "priority": "P2",
+      "lines": 174,
+      "complexity": "medium",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/.cursor/rules/_bundle.instructions.md": {
+      "priority": "P2",
+      "lines": 99,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/.cursor/rules/ctxgraph--cursor-rules-bundle-p15.instructions.md": {
+      "priority": "P2",
+      "lines": 107,
+      "complexity": "medium",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/.cursor/rules/ctxgraph--cursor-rules-bundle-p18.instructions.md": {
+      "priority": "P2",
+      "lines": 101,
+      "complexity": "medium",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/.cursor/rules/ctxgraph--cursor-rules-bundle-p2.instructions.md": {
+      "priority": "P2",
+      "lines": 131,
+      "complexity": "medium",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/.cursor/rules/ctxgraph--cursor-rules-bundle-p22.instructions.md": {
+      "priority": "P2",
+      "lines": 70,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/.cursor/rules/ctxgraph--cursor-rules-bundle-p23.instructions.md": {
+      "priority": "P2",
+      "lines": 127,
+      "complexity": "medium",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/.cursor/rules/ctxgraph--cursor-rules-bundle-p3.instructions.md": {
+      "priority": "P2",
+      "lines": 138,
+      "complexity": "medium",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/.cursor/rules/ctxgraph--cursor-rules-bundle-p7.instructions.md": {
+      "priority": "P2",
+      "lines": 67,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/.cursor/rules/ctxgraph--cursor-rules-bundle-p8.instructions.md": {
+      "priority": "P2",
+      "lines": 174,
+      "complexity": "medium",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/.cursor/rules/ctxgraph--cursor-rules-bundle-p9.instructions.md": {
+      "priority": "P2",
+      "lines": 154,
+      "complexity": "medium",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/.cursor/rules/ctxgraph--cursor-rules-bundle.instructions.md": {
+      "priority": "P2",
+      "lines": 158,
+      "complexity": "medium",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/.cursor/rules/ctxgraph--cursor-rules-ctxgraph-cursor-rules-bundle-p2.instructions.md": {
+      "priority": "P2",
+      "lines": 132,
+      "complexity": "medium",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/context-graph-path-index.md": {
+      "priority": "P2",
+      "lines": 131,
+      "complexity": "medium",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/copilot-instructions.md": {
       "priority": "P2",
       "lines": 178,
       "complexity": "medium",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/graph-changelog.md": {
       "priority": "P2",
-      "lines": 85,
-      "complexity": "low",
+      "lines": 131,
+      "complexity": "medium",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/index.md": {
       "priority": "P2",
-      "lines": 109,
+      "lines": 159,
       "complexity": "medium",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/metadata.json": {
       "priority": "P1",
-      "lines": 740,
+      "lines": 2609,
       "complexity": "high",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/python/context_graph/_bundle.instructions.md": {
       "priority": "P2",
       "lines": 128,
       "complexity": "medium",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/root/_bundle.instructions.md": {
       "priority": "P2",
       "lines": 60,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/scripts/split-graph-builder.instructions.md": {
       "priority": "P2",
       "lines": 48,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/agents-catalog.instructions.md": {
       "priority": "P2",
       "lines": 42,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/agents.instructions.md": {
       "priority": "P2",
       "lines": 53,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/cli.instructions.md": {
       "priority": "P2",
       "lines": 43,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/cli/agents-install.instructions.md": {
       "priority": "P2",
       "lines": 42,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/cli/build-run.instructions.md": {
       "priority": "P2",
       "lines": 46,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/cli/commands/actualize.instructions.md": {
       "priority": "P2",
       "lines": 58,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/cli/commands/agents.instructions.md": {
       "priority": "P2",
       "lines": 48,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/cli/commands/build.instructions.md": {
       "priority": "P2",
       "lines": 63,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/cli/commands/hook-check.instructions.md": {
       "priority": "P2",
       "lines": 55,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/cli/commands/impact.instructions.md": {
       "priority": "P2",
       "lines": 51,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/cli/commands/resolve.instructions.md": {
       "priority": "P2",
       "lines": 47,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/cli/commands/review.instructions.md": {
       "priority": "P2",
       "lines": 51,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/cli/commands/validate.instructions.md": {
       "priority": "P2",
-      "lines": 48,
+      "lines": 52,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/cli/index.instructions.md": {
       "priority": "P2",
       "lines": 41,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/cli/io.instructions.md": {
       "priority": "P2",
       "lines": 37,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/cli/program.instructions.md": {
       "priority": "P2",
       "lines": 59,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/cli/version.instructions.md": {
       "priority": "P2",
       "lines": 32,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/config.instructions.md": {
       "priority": "P2",
       "lines": 81,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/framework-extract.instructions.md": {
       "priority": "P2",
       "lines": 50,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/graph-builder.instructions.md": {
       "priority": "P2",
       "lines": 37,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/graph-builder/constants.instructions.md": {
       "priority": "P2",
       "lines": 66,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/graph-builder/cost.instructions.md": {
       "priority": "P2",
       "lines": 34,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/graph-builder/deterministic/cursor-rules.instructions.md": {
       "priority": "P2",
       "lines": 46,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/graph-builder/deterministic/metadata.instructions.md": {
       "priority": "P2",
       "lines": 41,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/graph-builder/deterministic/root-project.instructions.md": {
       "priority": "P2",
       "lines": 46,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/graph-builder/deterministic/root-slim.instructions.md": {
       "priority": "P2",
       "lines": 47,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/graph-builder/deterministic/root.instructions.md": {
       "priority": "P2",
       "lines": 56,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/src/graph-builder/deterministic/routing-entrypoints.instructions.md": {
+      "priority": "P2",
+      "lines": 46,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/graph-builder/deterministic/routing-mandate.instructions.md": {
       "priority": "P2",
-      "lines": 53,
+      "lines": 55,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/graph-builder/deterministic/subsystem.instructions.md": {
       "priority": "P2",
       "lines": 46,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/graph-builder/discovery.instructions.md": {
       "priority": "P2",
       "lines": 34,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/graph-builder/extract/deps-graph.instructions.md": {
       "priority": "P2",
       "lines": 47,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/graph-builder/extract/exports.instructions.md": {
       "priority": "P2",
       "lines": 55,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/graph-builder/extract/imports.instructions.md": {
       "priority": "P2",
       "lines": 40,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/graph-builder/extract/misc.instructions.md": {
       "priority": "P2",
       "lines": 41,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/graph-builder/index.instructions.md": {
       "priority": "P2",
       "lines": 83,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/graph-builder/llm/notes.instructions.md": {
       "priority": "P2",
       "lines": 49,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/graph-builder/llm/validate.instructions.md": {
       "priority": "P2",
       "lines": 51,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/graph-builder/messages/planning.instructions.md": {
       "priority": "P2",
       "lines": 36,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/graph-builder/messages/root.instructions.md": {
       "priority": "P2",
       "lines": 41,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/graph-builder/messages/subsystem.instructions.md": {
       "priority": "P2",
       "lines": 42,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/graph-builder/plan/infer.instructions.md": {
       "priority": "P2",
       "lines": 45,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/graph-builder/plan/layout.instructions.md": {
       "priority": "P2",
       "lines": 48,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/graph-builder/plan/parse.instructions.md": {
       "priority": "P2",
       "lines": 32,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/graph-builder/plan/priority.instructions.md": {
       "priority": "P2",
       "lines": 43,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/graph-builder/plan/repair.instructions.md": {
       "priority": "P2",
-      "lines": 61,
+      "lines": 62,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/graph-builder/plan/stack-profile.instructions.md": {
       "priority": "P2",
       "lines": 38,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/graph-builder/prompt.instructions.md": {
       "priority": "P2",
       "lines": 42,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/graph-builder/resolve-symbol.instructions.md": {
       "priority": "P2",
       "lines": 42,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/graph-builder/types.instructions.md": {
       "priority": "P2",
       "lines": 49,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/hooks.instructions.md": {
       "priority": "P2",
       "lines": 38,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/index.instructions.md": {
       "priority": "P2",
       "lines": 64,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/instruction-targets.instructions.md": {
       "priority": "P2",
       "lines": 68,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/project-graph.instructions.md": {
       "priority": "P2",
       "lines": 34,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/project-root.instructions.md": {
       "priority": "P2",
       "lines": 61,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/providers/anthropic.instructions.md": {
       "priority": "P2",
       "lines": 39,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/providers/index.instructions.md": {
       "priority": "P2",
       "lines": 40,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/providers/openai.instructions.md": {
       "priority": "P2",
       "lines": 35,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/providers/types.instructions.md": {
       "priority": "P2",
       "lines": 34,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/scanner.instructions.md": {
       "priority": "P2",
       "lines": 52,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/src/source-extract/csharp.instructions.md": {
+      "priority": "P2",
+      "lines": 32,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/source-extract/go.instructions.md": {
       "priority": "P2",
       "lines": 32,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/source-extract/index.instructions.md": {
       "priority": "P2",
-      "lines": 59,
+      "lines": 67,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/source-extract/instruction-score.instructions.md": {
       "priority": "P2",
       "lines": 38,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/src/source-extract/java-kotlin.instructions.md": {
+      "priority": "P2",
+      "lines": 32,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/source-extract/nuxt-runtime.instructions.md": {
       "priority": "P2",
       "lines": 43,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/source-extract/paths.instructions.md": {
       "priority": "P2",
-      "lines": 35,
+      "lines": 40,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/source-extract/php.instructions.md": {
       "priority": "P2",
       "lines": 44,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/source-extract/python.instructions.md": {
       "priority": "P2",
       "lines": 33,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/src/source-extract/ruby.instructions.md": {
+      "priority": "P2",
+      "lines": 32,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/src/source-extract/rust.instructions.md": {
+      "priority": "P2",
+      "lines": 32,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/source-extract/ts-prompt.instructions.md": {
       "priority": "P2",
       "lines": 44,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/source-extract/ts-skeleton.instructions.md": {
       "priority": "P2",
       "lines": 47,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/source-extract/utils.instructions.md": {
       "priority": "P2",
       "lines": 32,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/source-extract/vue-sfc.instructions.md": {
       "priority": "P2",
       "lines": 52,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/src/writer.instructions.md": {
       "priority": "P2",
       "lines": 44,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/symbol-index.md": {
       "priority": "P2",
-      "lines": 179,
-      "complexity": "medium",
+      "lines": 441,
+      "complexity": "high",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/test/_bundle_p2.instructions.md": {
+      "priority": "P2",
+      "lines": 59,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/test/_bundle_p3.instructions.md": {
       "priority": "P2",
       "lines": 69,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
-    ".github/instructions/test/_bundle_p3.instructions.md": {
+    ".github/instructions/test/_bundle_p4.instructions.md": {
       "priority": "P2",
-      "lines": 41,
+      "lines": 56,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/test/_bundle_p5.instructions.md": {
+      "priority": "P2",
+      "lines": 39,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
     },
     ".github/instructions/test/_bundle.instructions.md": {
       "priority": "P2",
-      "lines": 70,
+      "lines": 68,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
+    },
+    ".github/instructions/test/rust-extract.test.instructions.md": {
+      "priority": "P2",
+      "lines": 33,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
     },
     ".gitignore": {
       "priority": "P2",
       "lines": 9,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     ".npmignore": {
       "priority": "P2",
       "lines": 16,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
+    },
+    ".windsurf/rules/context-graph.md": {
+      "priority": "P2",
+      "lines": 41,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
     },
     "AGENTS.md": {
       "priority": "P2",
       "lines": 47,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "CLAUDE.md": {
       "priority": "P2",
       "lines": 46,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "GEMINI.md": {
       "priority": "P2",
       "lines": 46,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "graph-create-agent.md": {
       "priority": "P2",
       "lines": 1207,
       "complexity": "high",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "LICENSE": {
       "priority": "P2",
       "lines": 22,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "python/context_graph/__init__.py": {
       "priority": "P2",
       "lines": 2,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "python/context_graph/cli.py": {
       "priority": "P2",
       "lines": 64,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "python/README.md": {
       "priority": "P2",
       "lines": 35,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "python/README.md.instructions.md": {
       "priority": "P2",
       "lines": 31,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "README.md": {
       "priority": "P2",
       "lines": 270,
       "complexity": "medium",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "README.ru.md": {
       "priority": "P2",
       "lines": 275,
       "complexity": "medium",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "scripts/split-graph-builder.mjs": {
       "priority": "P1",
       "lines": 373,
       "complexity": "high",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/agents-catalog.ts": {
       "priority": "P2",
       "lines": 350,
       "complexity": "high",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/agents.ts": {
       "priority": "P1",
-      "lines": 298,
-      "complexity": "medium",
+      "lines": 308,
+      "complexity": "high",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/cli.ts": {
       "priority": "P0",
       "lines": 6,
       "complexity": "low",
       "danger_zone": true,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/cli/agents-install.ts": {
       "priority": "P1",
       "lines": 40,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/cli/build-run.ts": {
       "priority": "P1",
       "lines": 132,
       "complexity": "medium",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/cli/commands/actualize.ts": {
       "priority": "P1",
       "lines": 116,
       "complexity": "medium",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/cli/commands/agents.ts": {
       "priority": "P1",
       "lines": 86,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/cli/commands/build.ts": {
       "priority": "P1",
       "lines": 309,
       "complexity": "high",
       "danger_zone": true,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/cli/commands/hook-check.ts": {
       "priority": "P1",
       "lines": 82,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/cli/commands/impact.ts": {
       "priority": "P1",
       "lines": 43,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/cli/commands/resolve.ts": {
       "priority": "P1",
       "lines": 46,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/cli/commands/review.ts": {
       "priority": "P1",
       "lines": 52,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/cli/commands/validate.ts": {
       "priority": "P1",
-      "lines": 52,
+      "lines": 75,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/cli/io.ts": {
       "priority": "P1",
       "lines": 63,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/cli/program.ts": {
       "priority": "P1",
       "lines": 27,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/cli/version.ts": {
       "priority": "P1",
       "lines": 3,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/config.ts": {
       "priority": "P0",
       "lines": 392,
       "complexity": "high",
       "danger_zone": true,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/framework-extract.ts": {
       "priority": "P1",
       "lines": 749,
       "complexity": "high",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/graph-builder.ts": {
       "priority": "P0",
       "lines": 6,
       "complexity": "low",
       "danger_zone": true,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/graph-builder/constants.ts": {
       "priority": "P1",
       "lines": 161,
       "complexity": "medium",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/graph-builder/cost.ts": {
       "priority": "P1",
       "lines": 14,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/graph-builder/deterministic/cursor-rules.ts": {
       "priority": "P1",
       "lines": 146,
       "complexity": "medium",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/graph-builder/deterministic/metadata.ts": {
       "priority": "P1",
       "lines": 136,
       "complexity": "medium",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/graph-builder/deterministic/root-project.ts": {
       "priority": "P1",
       "lines": 267,
       "complexity": "medium",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/graph-builder/deterministic/root-slim.ts": {
       "priority": "P1",
       "lines": 196,
       "complexity": "medium",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/graph-builder/deterministic/root.ts": {
       "priority": "P1",
-      "lines": 410,
+      "lines": 384,
       "complexity": "high",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
+    },
+    "src/graph-builder/deterministic/routing-entrypoints.ts": {
+      "priority": "P1",
+      "lines": 77,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
     },
     "src/graph-builder/deterministic/routing-mandate.ts": {
       "priority": "P1",
-      "lines": 241,
+      "lines": 272,
       "complexity": "medium",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/graph-builder/deterministic/subsystem.ts": {
       "priority": "P1",
       "lines": 337,
       "complexity": "high",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/graph-builder/discovery.ts": {
       "priority": "P1",
       "lines": 55,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/graph-builder/extract/deps-graph.ts": {
       "priority": "P1",
       "lines": 209,
       "complexity": "medium",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/graph-builder/extract/exports.ts": {
       "priority": "P1",
-      "lines": 436,
+      "lines": 455,
       "complexity": "high",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/graph-builder/extract/imports.ts": {
       "priority": "P1",
       "lines": 129,
       "complexity": "medium",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/graph-builder/extract/misc.ts": {
       "priority": "P1",
       "lines": 103,
       "complexity": "medium",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/graph-builder/llm/notes.ts": {
       "priority": "P1",
       "lines": 313,
       "complexity": "high",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/graph-builder/llm/validate.ts": {
       "priority": "P1",
       "lines": 203,
       "complexity": "medium",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/graph-builder/messages/planning.ts": {
       "priority": "P2",
       "lines": 70,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/graph-builder/messages/root.ts": {
       "priority": "P2",
       "lines": 130,
       "complexity": "medium",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/graph-builder/messages/subsystem.ts": {
       "priority": "P2",
       "lines": 164,
       "complexity": "medium",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/graph-builder/plan/infer.ts": {
       "priority": "P1",
       "lines": 233,
       "complexity": "medium",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/graph-builder/plan/layout.ts": {
       "priority": "P1",
       "lines": 159,
       "complexity": "medium",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/graph-builder/plan/parse.ts": {
       "priority": "P1",
       "lines": 19,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/graph-builder/plan/priority.ts": {
       "priority": "P1",
       "lines": 150,
       "complexity": "medium",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/graph-builder/plan/repair.ts": {
       "priority": "P1",
-      "lines": 286,
+      "lines": 288,
       "complexity": "medium",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/graph-builder/plan/stack-profile.ts": {
       "priority": "P1",
       "lines": 70,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/graph-builder/prompt.ts": {
       "priority": "P2",
       "lines": 47,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/graph-builder/resolve-symbol.ts": {
       "priority": "P1",
       "lines": 152,
       "complexity": "medium",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/graph-builder/types.ts": {
       "priority": "P1",
       "lines": 91,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/hooks.ts": {
       "priority": "P1",
       "lines": 103,
       "complexity": "medium",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/instruction-targets.ts": {
       "priority": "P2",
       "lines": 385,
       "complexity": "high",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/project-graph.ts": {
       "priority": "P2",
       "lines": 15,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/project-root.ts": {
       "priority": "P1",
       "lines": 108,
       "complexity": "medium",
       "danger_zone": true,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/providers/anthropic.ts": {
       "priority": "P1",
       "lines": 38,
       "complexity": "low",
       "danger_zone": true,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/providers/openai.ts": {
       "priority": "P1",
       "lines": 48,
       "complexity": "low",
       "danger_zone": true,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/providers/types.ts": {
       "priority": "P1",
       "lines": 27,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/scanner.ts": {
       "priority": "P0",
       "lines": 344,
       "complexity": "high",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/source-extract/csharp.ts": {
       "priority": "P2",
-      "lines": 40,
+      "lines": 71,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/source-extract/go.ts": {
       "priority": "P2",
       "lines": 76,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/source-extract/instruction-score.ts": {
       "priority": "P2",
       "lines": 47,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/source-extract/java-kotlin.ts": {
       "priority": "P2",
       "lines": 45,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/source-extract/nuxt-runtime.ts": {
       "priority": "P2",
       "lines": 119,
       "complexity": "medium",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/source-extract/paths.ts": {
       "priority": "P2",
-      "lines": 25,
+      "lines": 40,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/source-extract/php.ts": {
       "priority": "P2",
       "lines": 198,
       "complexity": "medium",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/source-extract/python.ts": {
       "priority": "P2",
       "lines": 56,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/source-extract/ruby.ts": {
       "priority": "P2",
       "lines": 34,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/source-extract/rust.ts": {
       "priority": "P2",
       "lines": 44,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/source-extract/ts-prompt.ts": {
       "priority": "P2",
       "lines": 49,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/source-extract/ts-skeleton.ts": {
       "priority": "P2",
       "lines": 236,
       "complexity": "medium",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/source-extract/utils.ts": {
       "priority": "P2",
       "lines": 8,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/source-extract/vue-sfc.ts": {
       "priority": "P2",
       "lines": 196,
       "complexity": "medium",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "src/writer.ts": {
       "priority": "P0",
       "lines": 191,
       "complexity": "medium",
       "danger_zone": true,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "test/copilotignore.test.mjs": {
       "priority": "P2",
       "lines": 38,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "test/csharp-extract.test.mjs": {
       "priority": "P2",
-      "lines": 41,
-      "complexity": "low",
+      "lines": 102,
+      "complexity": "medium",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "test/extract.test.mjs": {
       "priority": "P2",
       "lines": 87,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "test/go-extract.test.mjs": {
       "priority": "P2",
       "lines": 48,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "test/instruction-targets.test.mjs": {
       "priority": "P2",
       "lines": 158,
       "complexity": "medium",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "test/java-kotlin-extract.test.mjs": {
       "priority": "P2",
       "lines": 55,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
+    },
+    "test/markup-exclude.test.mjs": {
+      "priority": "P2",
+      "lines": 51,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
     },
     "test/php-extract.test.mjs": {
       "priority": "P2",
       "lines": 128,
       "complexity": "medium",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "test/priority.test.mjs": {
       "priority": "P2",
       "lines": 60,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "test/project-root.test.mjs": {
       "priority": "P2",
       "lines": 44,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "test/python-extract.test.mjs": {
       "priority": "P2",
       "lines": 38,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "test/repair-stack.test.mjs": {
       "priority": "P2",
       "lines": 213,
       "complexity": "medium",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "test/resolve-symbol.test.mjs": {
       "priority": "P2",
       "lines": 38,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "test/root-slim.test.mjs": {
       "priority": "P2",
       "lines": 94,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
+    },
+    "test/routing-entrypoints.test.mjs": {
+      "priority": "P2",
+      "lines": 59,
+      "complexity": "low",
+      "danger_zone": false,
+      "last_updated": "2026-05-29"
     },
     "test/routing-mandate.test.mjs": {
       "priority": "P2",
-      "lines": 32,
+      "lines": 41,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "test/ruby-extract.test.mjs": {
       "priority": "P2",
       "lines": 44,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "test/rust-extract.test.mjs": {
       "priority": "P2",
       "lines": 44,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "tsconfig.json": {
       "priority": "P2",
       "lines": 20,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     },
     "Untitled": {
       "priority": "P2",
       "lines": 2,
       "complexity": "low",
       "danger_zone": false,
-      "last_updated": "2026-05-20"
+      "last_updated": "2026-05-29"
     }
   },
   "hotspots": [
     "src/framework-extract.ts",
     "src/graph-builder/extract/exports.ts",
-    "src/graph-builder/deterministic/root.ts",
     "src/config.ts",
-    "src/instruction-targets.ts"
+    "src/instruction-targets.ts",
+    "src/graph-builder/deterministic/root.ts"
   ],
   "project": {
     "buildStrategy": "deterministic",

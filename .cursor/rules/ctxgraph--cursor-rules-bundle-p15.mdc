@@ -5,16 +5,16 @@ alwaysApply: false
 ---
 
 ## When to Read
-- editing or refactoring `ctxgraph--src-project-graph.mdc`
-- editing or refactoring `ctxgraph--src-project-root.mdc`
-- editing or refactoring `ctxgraph--src-providers-anthropic.mdc`
-- editing or refactoring `ctxgraph--src-providers-index.mdc`
+- editing or refactoring `ctxgraph--src-framework-extract.mdc`
+- editing or refactoring `ctxgraph--src-graph-builder-constants.mdc`
+- editing or refactoring `ctxgraph--src-graph-builder-cost.mdc`
+- editing or refactoring `ctxgraph--src-graph-builder-deterministic-cursor-rules.mdc`
 
 ## Overview
-- `.cursor/rules/ctxgraph--src-project-graph.mdc` (35 lines · 1 top-level symbols) — # When to Read
-- `.cursor/rules/ctxgraph--src-project-root.mdc` (62 lines · 7 top-level symbols) — # When to Read
-- `.cursor/rules/ctxgraph--src-providers-anthropic.mdc` (40 lines · 1 top-level symbols) — # When to Read
-- `.cursor/rules/ctxgraph--src-providers-index.mdc` (41 lines · 2 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--src-framework-extract.mdc` (51 lines · 10 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--src-graph-builder-constants.mdc` (67 lines · 19 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--src-graph-builder-cost.mdc` (35 lines · 1 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--src-graph-builder-deterministic-cursor-rules.mdc` (47 lines · 5 top-level symbols) — # When to Read
 
 ## Graph
 ```mermaid
@@ -27,44 +27,80 @@ graph LR
 ## Signatures
 
 ```typescript
-// ── .cursor/rules/ctxgraph--src-project-graph.mdc ──
-// ── src/project-graph.ts ──
-/** True when a prior context-graph build left core files under `.github/instructions/`. */
-export function projectGraphExists(projectRoot: string): boolean { return GRAPH_MARKER_PATHS.some(rel => fs.existsSync(path.join(projectRoot, rel))); }
+// ── .cursor/rules/ctxgraph--src-framework-extract.mdc ──
+// ── src/framework-extract.ts ──
+export { extractCSharpSymbolLines } from './source-extract'
+export type FrameworkId = | 'nuxt' | 'vue' | 'react' | 'next' | 'angular' | 'python' | 'php' | 'csharp' | 'rust' | 'java' | 'kotlin' | 'ruby';
+/** Detect stacks present in a file (path + content). */
+export function detectFrameworks(relPath: string, content: string): FrameworkId[] { /* ~44 lines */ }
+export function extractRuntimeSection( relPath: string, content: string ): { /* ~49 lines */ }
+export function extractDeterministicErrorsForFile( relPath: string, content: string, fileLabel?: string ): string[] { /* ~29 lines */ }
+export function extractSideEffectsForFile(relPath: string, content: string): string[] { /* ~26 lines */ }
+/** Extra split-score boosts per detected stack. */
+export function frameworkSplitScoreBoost(relPath: string, content: string): number { /* ~45 lines */ }
+/** Import buckets for Dependencies section. */
+export function classifyFrameworkImports(deps: string[]): { /* ~25 lines */ }
+/** Split score including all framework heuristics. */
+export function instructionSplitScoreFull(relPath: string, content: string, lines?: number): number { return instructionSplitScore(relPath, content, lines) + frameworkSplitScoreBoost(relPath, content); }
+export function needsOwnInstructionFile(relPath: string, content: string, lines?: number): boolean { const norm = relPath.replace(/\\/g, '/'); const top = norm.split('/')[0]; if (['src', 'lib', 'app', 'cmd', 'internal'].includes(top)) re…
 
-// ── .cursor/rules/ctxgraph--src-project-root.mdc ──
-// ── src/project-root.ts ──
+// ── .cursor/rules/ctxgraph--src-graph-builder-constants.mdc ──
+// ── src/graph-builder/constants.ts ──
+/** Shared constants for graph-builder. */
+export const OUTPUT_FORMAT_INSTRUCTION = ` --- ## MANDATORY OUTPUT FORMAT You MUST wrap every output file in these exact delimiters. No prose outside the blocks. <<<FILE: path/relative/to/project/r… { /* prompt template (~23 lines) */ }
+/** Per-file instruction split for TS/Go-style trees — not Laravel `app/` (use by-folder there). */
+export const SPLIT_DIRS = new Set(['src', 'lib', 'cmd', 'internal']);
+export const MAX_SOURCE_FILES_PER_AUTO_SUBSYSTEM_DEFAULT = 4;
+/** Default cap for `by-folder` grouping when config does not override. */
+export const MAX_FILES_PER_FOLDER_SUBSYSTEM_DEFAULT = 48;
+/** Auto slim `copilot-instructions.md` when plan has at least this many subsystems. */
+export const ROOT_SLIM_AUTO_SUBSYSTEM_THRESHOLD = 40;
+/** Auto slim when total mapped source files exceed this (e.g. Laravel `app/` one-file-per-subsystem). */
+export const ROOT_SLIM_AUTO_SOURCE_FILES_THRESHOLD = 80;
+/** Max tier-1 paths listed in root Data Flow (non-slim included). */
+export const ROOT_DATA_FLOW_ENTRY_CAP = 12;
+/** Max Quick Navigation entries in slim root (plus path-index pointer). */
+export const ROOT_SLIM_QUICK_NAV_CAP = 40;
+/** Max directory groups in slim Architecture Overview. */
+export const ROOT_SLIM_ARCH_GROUP_CAP = 28;
+/** Max mermaid nodes in slim root dependency graph. */
+export const ROOT_SLIM_DEP_GRAPH_MAX_NODES = 48;
+/** Max env/danger file bullets in slim root. */
+export const ROOT_SLIM_DANGER_CAP = 24;
+/** Max per-file PHP routing blocks in one folder bundle instruction. */
+export const PHP_BUNDLE_ROUTING_FILE_CAP = 36;
+/** Extra one-line PHP index rows after cap. */
+export const PHP_BUNDLE_INDEX_TAIL = 16;
 /**
- * Git work tree root, or null if `cwd` is not inside a Git repository.
+ * Files that should NOT get their own instruction subsystem.
+ * Documentation, non-code configs, lock-files, images, etc.
+ * They are still present in the scan (for metadata.json / tree) but excluded from subsystem passes.
  */
-export function tryGitRepositoryRoot(cwd: string): string | null { try { const out = execFileSync('git', ['rev-parse', '--show-toplevel'], { cwd, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'], }).trim(); if (!out) return null; re…
- * Resolves where `.github/instructions/` and `.context-graph.json` live.
- *
- * - **Implicit cwd** (no CLI `[dir]`, or `dir` is `.` / same as `process.cwd()`):
- *   1. `CONTEXT_GRAPH_ROOT` if set and points to an existing directory
- *   2. else Git repository root from cwd (`git rev-parse --show-toplevel`)
- *   3. else `path.resolve(cwd)`
- * - **Explicit `[dir]`** (subfolder path): that path only — no Git uplift (monorepo package roots).
- */
-export function resolveProjectRoot(cliDirArg: string | undefined, cwd: string = process.cwd()): string { /* ~26 lines */ }
-export type MistakenBuildModeFlag = 'hybrid' | 'deterministic' | 'llm';
-export interface BuildDirNormalization { projectDir: string | undefined; mistakenModeFlag?: MistakenBuildModeFlag; }
+export const INSTRUCTION_EXCLUDE_RE = [ /^README(\..+)?$/i, /^EXAMPLES(\..+)?$/i, /^CONTRIBUTING(\..+)?$/i, /^CHANGELOG(\..+)?$/i, /^LICENSE(\..+)?$/i, /^CODE_OF_CONDUCT(\..+)?$/i, /^\.gitignore$/,… { /* ~44 lines */ }
+export const DIR_TO_INSTRUCTION_PREFIX: Record<string, string> = { src: 'core', lib: 'core', app: 'core', internal: 'core', cmd: 'core', 'src/providers': 'infra', python: 'python', scripts: 'infra', '.github': 'infra', };
+export const MAX_MIRROR_INSTRUCTION_REL_LEN = 200;
+export const SOURCE_EXT_RE = /\.(ts|tsx|js|jsx|mjs|cjs|vue|py|go|rs|java|kt|cs|rb|php)$/i;
+/** Baseline .copilotignore patterns (gitignore syntax; ** matches any depth). */
+export const COPILOTIGNORE_BASELINE: readonly string[] = [ '**/node_modules/', '**/dist/', '**/build/', '**/coverage/', '**/.nyc_output/', '**/__pycache__/', '**/.venv/', '**/venv/', '**/.git/', '**/vendor/', '**/.next/', '**/.nuxt/', '*…
+export const PRICING: Record<string, { /* ~16 lines */ }
+
+// ── .cursor/rules/ctxgraph--src-graph-builder-cost.mdc ──
+// ── src/graph-builder/cost.ts ──
+export function estimateCost(model: string, usage: LLMUsage): number | null { const pricing = PRICING[model]; if (!pricing) { const key = Object.keys(PRICING).find(k => model.startsWith(k)); if (!key) return null; const p = PRICING[key];…
+
+// ── .cursor/rules/ctxgraph--src-graph-builder-deterministic-cursor-rules.mdc ──
+// ── src/graph-builder/deterministic/cursor-rules.ts ──
+/** Strip YAML frontmatter from subsystem instruction markdown. */
+export function stripInstructionFrontmatter(md: string): string { if (!md.startsWith('---')) return md.trim(); const end = md.indexOf('\n---', 3); if (end === -1) return md.trim(); const after = md.indexOf('\n', end + 4); return (after =…
+/** `applyTo` from plan → Cursor `globs` string (comma-separated). */
+export function applyToToCursorGlobs(applyTo: string): string { const parts = applyTo .split(',') .map(s => s.trim()) .filter(Boolean); if (parts.length === 0) return '**/*'; return parts .map(p => p.replace(/\\/g, '/')) .join(', '); }
+export function slugFromInstructionFile(instructionRel: string): string { const base = instructionRel.replace(/\.instructions\.md$/i, ''); const slug = base.replace(/[^a-zA-Z0-9]+/g, '-').replace(/^-+|-+$/g, ''); const name = `${RULE_PRE…
+export function buildCursorRuleMdc( planItem: BuildPlanItem, instructionRelPath: string, instructionBody: string ): string { /* prompt template (~24 lines) */ }
 /**
- * If `[dir]` is actually a build-mode token (`hybrid`, `no-llm`, …), treat as implicit repo root.
+ * Emit one \`.cursor/rules/ctxgraph--<slug>.mdc\` per subsystem so Cursor auto-loads
+ * instructions without asking the model to open files manually.
  */
-export function normalizeBuildDirArg(cliDirArg: string | undefined): BuildDirNormalization { if (!cliDirArg) return { projectDir: undefined }; const key = cliDirArg.toLowerCase().replace(/_/g, '-'); if (!BUILD_MODE_DIR_ALIASES.has(key)) …
-export function suggestedBuildFlagForMistake(flag: MistakenBuildModeFlag): string { if (flag === 'deterministic') return '--no-llm'; return `--${flag}`; }
-/** Exit-friendly check before writing `.context-graph.json` / instructions. */
-export function assertProjectRootExists(projectRoot: string): void { let st: fs.Stats; try { st = fs.statSync(projectRoot); } catch { throw new Error( `Project directory does not exist: ${projectRoot}\n` + `Pass a real path: context-grap…
-
-// ── .cursor/rules/ctxgraph--src-providers-anthropic.mdc ──
-// ── src/providers/anthropic.ts ──
-export class AnthropicProvider implements LLMProvider { /* ~34 lines */ }
-
-// ── .cursor/rules/ctxgraph--src-providers-index.mdc ──
-// ── src/providers/index.ts ──
-export function createProvider(config: ProviderConfig): LLMProvider { switch (config.provider) { case 'openai': case 'openai-compat': case 'ollama': return new OpenAIProvider(config); case 'anthropic': return new AnthropicProvider(config…
-export type { LLMProvider, LLMMessage, LLMUsage, LLMResponse, ProviderConfig } from './types'
+export function appendCursorRuleFiles( plan: BuildPlan, files: OutputFile[], instructionTargets: InstructionTargetId[] = [] ): void { /* prompt template (~48 lines) */ }
 
 ```
 
@@ -72,14 +108,9 @@ export type { LLMProvider, LLMMessage, LLMUsage, LLMResponse, ProviderConfig } f
 **External:**
 - ``
 
-## Error Handling
-- `Error`: "Project directory does not exist: ${projectRoot}\n` + `Pass a real path: context-grap…
-
-``" (`ctxgraph--src-project-root.mdc`)
-
 ## Danger Zone 🔴
-- **[fs]** filesystem I/O
-- **[env]** reads `process.env.CONTEXT_GRAPH_ROOT`
+- **[env]** getenv('${m[1]}')
+- **[env]** env('${m[1]}')
 
 <!-- context-graph: generated from `.github/instructions/.cursor/rules/_bundle_p15.instructions.md` -->
 _Regenerate: `context-graph build --no-llm` · Do not hand-edit this rule._

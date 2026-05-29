@@ -2,6 +2,8 @@ import fs from 'fs';
 import path from 'path';
 import chalk from 'chalk';
 import type { Command } from 'commander';
+import { loadConfig } from '../../config';
+import { auditRoutingEntrypoints } from '../../graph-builder/deterministic/routing-entrypoints';
 import { resolveProjectRoot } from '../../project-root';
 import { getChangedFilesSinceLastBuild, filterSignificantFiles } from '../../hooks';
 import { logResolvedProjectRoot } from '../io';
@@ -38,6 +40,27 @@ export function registerValidateCommand(program: Command): void {
           for (const f of significant.slice(0, 10)) console.error(chalk.dim(`  ${f}`));
           if (significant.length > 10) console.error(chalk.dim(`  ... and ${significant.length - 10} more`));
           console.error(chalk.dim('  Run: npm run graph:actualize  (or: npx context-graph actualize)'));
+        }
+        process.exit(1);
+      }
+
+      const config = loadConfig(projectRoot);
+      const routingIssues = auditRoutingEntrypoints(projectRoot, config.instructionTargets);
+      if (routingIssues.length > 0) {
+        if (opts.json) {
+          console.log(JSON.stringify({ status: 'routing', issues: routingIssues }));
+        } else {
+          console.error(chalk.red(`✗ Agent routing entrypoints incomplete (${routingIssues.length}):`));
+          for (const issue of routingIssues.slice(0, 12)) {
+            const msg =
+              issue.kind === 'missing'
+                ? `${issue.relPath} — missing (run context-graph build --no-llm)`
+                : `${issue.relPath} — ${issue.detail}`;
+            console.error(chalk.dim(`  ${msg}`));
+          }
+          if (routingIssues.length > 12) {
+            console.error(chalk.dim(`  ... and ${routingIssues.length - 12} more`));
+          }
         }
         process.exit(1);
       }

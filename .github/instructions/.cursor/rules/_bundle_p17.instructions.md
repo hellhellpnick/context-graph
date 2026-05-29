@@ -1,81 +1,78 @@
 ---
-description: "Mirror — `.cursor/rules/` (4 files, part 17/20)"
+description: "Mirror — `.cursor/rules/` (4 files, part 17/30)"
 applyTo: ".cursor/rules/**"
 priority: "P2"
-last_updated: "2026-05-20"
+last_updated: "2026-05-29"
 ---
 
 ## When to Read
-- editing or refactoring `ctxgraph--src-source-extract-index.mdc`
-- editing or refactoring `ctxgraph--src-source-extract-instruction-score.mdc`
-- editing or refactoring `ctxgraph--src-source-extract-nuxt-runtime.mdc`
-- editing or refactoring `ctxgraph--src-source-extract-paths.mdc`
+- editing or refactoring `ctxgraph--src-graph-builder-deterministic-routing-mandate.mdc`
+- editing or refactoring `ctxgraph--src-graph-builder-deterministic-subsystem.mdc`
+- editing or refactoring `ctxgraph--src-graph-builder-discovery.mdc`
+- editing or refactoring `ctxgraph--src-graph-builder-extract-deps-graph.mdc`
 
 ## Overview
-- `.cursor/rules/ctxgraph--src-source-extract-index.mdc` (60 lines · 9 top-level symbols) — # When to Read
-- `.cursor/rules/ctxgraph--src-source-extract-instruction-score.mdc` (39 lines · 2 top-level symbols) — # When to Read
-- `.cursor/rules/ctxgraph--src-source-extract-nuxt-runtime.mdc` (44 lines · 3 top-level symbols) — # When to Read
-- `.cursor/rules/ctxgraph--src-source-extract-paths.mdc` (36 lines · 3 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--src-graph-builder-deterministic-routing-mandate.mdc` (54 lines · 13 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--src-graph-builder-deterministic-subsystem.mdc` (47 lines · 1 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--src-graph-builder-discovery.mdc` (35 lines · 2 top-level symbols) — # When to Read
+- `.cursor/rules/ctxgraph--src-graph-builder-extract-deps-graph.mdc` (48 lines · 6 top-level symbols) — # When to Read
 
 ## Graph
 ```mermaid
 graph LR
   Rules[Rules]
-  Rules --> node[""]
-  Rules --> ENV{{"env / config"}}
 ```
 
 ## Signatures
 
 ```typescript
-// ── .cursor/rules/ctxgraph--src-source-extract-index.mdc ──
-// ── src/source-extract/index.ts ──
-/**
- * Shared helpers for Vue / PHP / Python / Go — scanner + deterministic graph.
- * @module source-extract
- */
-export { isMessageOrPromptPath, isExecutableModulePath, isComposableLikePath } from './paths'
-export { isPromptTemplateBody, compactTsExportLine } from './ts-prompt'
-export { extractScriptSkeleton } from './ts-skeleton'
-export { instructionSplitScore, INSTRUCTION_OWN_FILE_SCORE_THRESHOLD, } from './instruction-score'
-export { extractVueScriptCombined, scriptOrSelfForAnalysis, extractVuePropKeys, extractVueSymbolLines, extractVueTemplateBrief, buildVueRoutingSignatures, extractVueComputedBranches, } from './vue-sfc'
-export { extractNuxtRuntimeBullets, extractDeterministicErrors, extractSideEffectBullets, } from './nuxt-runtime'
-export { extractPhpSymbolLines, extractPhpMethodParamNames, extractPhpJsonResponseKeys, buildPhpRoutingSignatures, buildPhpOneLineSummary, extractPhpUseStatements, } from './php'
-export { extractPythonSymbolLines, extractPythonImports } from './python'
-export { extractGoImports, extractGoSymbolLines } from './go'
+// ── .cursor/rules/ctxgraph--src-graph-builder-deterministic-routing-mandate.mdc ──
+// ── src/graph-builder/deterministic/routing-mandate.ts ──
+/** Imperative routing copy (MUST / BLOCKING) — no "when", "should", "prefer". */
+export const ROUTING_MANDATE_HEADING = '## MANDATORY — read instructions first (BLOCKING)';
+/** When user names a component/file in chat (LinkTag, useSeo) — no file open. */
+export function buildNamedEntityRoutingMandate(): string[] { /* prompt template (~16 lines) */ }
+/** Shared 5-step BLOCKING workflow. */
+export function buildRoutingWorkflowSteps(examplePath?: string): string[] { /* prompt template (~18 lines) */ }
+/** After "## How to use this graph" in copilot-instructions.md */
+export function buildCopilotGraphMandate(examplePath: string): string[] { return [ ROUTING_MANDATE_HEADING, ``, ...buildNamedEntityRoutingMandate(), ...buildRoutingWorkflowSteps(examplePath), `**GitHub Copilot (VS Code / JetBrains / Copi…
+/** Top of CLAUDE.md / AGENTS.md / GEMINI.md — immediately after title. */
+export function buildAgentEntryMandate(): string[] { return [ ROUTING_MANDATE_HEADING, ``, ...buildNamedEntityRoutingMandate(), ...buildRoutingWorkflowSteps(), ]; }
+export type AgentEntryTool = | 'claude' | 'agents' | 'gemini' | 'codex' | 'windsurf' | 'cline' | 'copilot';
+/** Tool-specific lines after shared mandate (docs-backed, May 2026). */
+export function buildToolSpecificRoutingLines(tool: AgentEntryTool): string[] { /* prompt template (~71 lines) */ }
+export function buildAgentEntryWithTool(title: string, tool: AgentEntryTool): string[] { return [ `# ${title}`, ``, ...buildAgentEntryMandate(), ...buildToolSpecificRoutingLines(tool), ]; }
+/** Cursor always-on router rule body (no frontmatter). */
+export function buildCursorRouterMandate(): string[] { return [ `## MANDATORY routing (BLOCKING)`, ``, `**MUST** follow attached \`ctxgraph--*\` rule when \`globs\` match the file you edit.`, `If none attached: **MUST** complete path-ind…
+/** Windsurf: always_on trigger (docs.windsurf.com — rules in .windsurf/rules/). */
+export function buildWindsurfContextGraphRule(): string { const body = [ `# context-graph — Windsurf routing (always on)`, ``, ...buildNamedEntityRoutingMandate(), ...buildRoutingWorkflowSteps(), ...buildToolSpecificRoutingLines('windsur…
+/** Cline workspace rule (no standard always-on frontmatter). */
+export function buildClineContextGraphRule(): string { return [ `# context-graph — Cline routing`, ``, ...buildRoutingWorkflowSteps(), ...buildToolSpecificRoutingLines('cline'), `## Also load`, ``, `- \`.github/instructions/copilot-instr…
+/** Codex supplemental doc (AGENTS.md is primary). */
+export function buildCodexContextGraphRule(): string { return [ `# context-graph — Codex supplement`, ``, `**MUST** read \`AGENTS.md\` at repo root first — Codex loads it before every run.`, ``, ...buildRoutingWorkflowSteps(), ...buildTo…
+/** Compact matrix for copilot-instructions / human reference. */
+export function buildAiToolRoutingReferenceSection(): string[] { /* prompt template (~22 lines) */ }
 
-// ── .cursor/rules/ctxgraph--src-source-extract-instruction-score.mdc ──
-// ── src/source-extract/instruction-score.ts ──
-/** Score for auto split: one instruction file per “heavy” module (no LLM). */
-export function instructionSplitScore(relPath: string, content: string, lines?: number): number { /* ~39 lines */ }
-export const INSTRUCTION_OWN_FILE_SCORE_THRESHOLD = 42;
+// ── .cursor/rules/ctxgraph--src-graph-builder-deterministic-subsystem.mdc ──
+// ── src/graph-builder/deterministic/subsystem.ts ──
+export function buildDeterministicSubsystemFile( today: string, instructionPath: string, planItem: BuildPlanItem | undefined, scan: ScanResult, sourceFiles: string[] ): OutputFile { /* prompt template (~300 lines) */ }
 
-// ── .cursor/rules/ctxgraph--src-source-extract-nuxt-runtime.mdc ──
-// ── src/source-extract/nuxt-runtime.ts ──
-/** Nuxt / Vue script runtime hints (no LLM). */
-export function extractNuxtRuntimeBullets(script: string): string[] { /* prompt template (~34 lines) */ }
-/** Errors / HTTP failures without LLM (Nuxt createError + classic throws). */
-export function extractDeterministicErrors(script: string, fileLabel?: string): string[] { /* prompt template (~30 lines) */ }
-/** Side effects for Danger Zone (browser, stores, network, events). */
-export function extractSideEffectBullets(script: string): string[] { /* prompt template (~48 lines) */ }
+// ── .cursor/rules/ctxgraph--src-graph-builder-discovery.mdc ──
+// ── src/graph-builder/discovery.ts ──
+export function parseSubsystemMappings(generatedFiles: OutputFile[]): SubsystemMapping[] { /* ~28 lines */ }
+/** Fallback: extract subsystem paths from markdown links (old format) */
+export function findMissingSubsystemPaths(generatedFiles: OutputFile[]): string[] { /* ~16 lines */ }
 
-// ── .cursor/rules/ctxgraph--src-source-extract-paths.mdc ──
-// ── src/source-extract/paths.ts ──
-/** Prompt/message modules: prefer bundle + compact instructions (deterministic routing). */
-export function isMessageOrPromptPath(relPath: string): boolean { const norm = relPath.replace(/\\/g, '/'); return ( /(?:^|\/)(?:messages|prompts?)\//i.test(norm) || /graph-create-agent/i.test(norm) || /\/(?:prompt|messages)\./i.test(nor…
-/** CLI / command registration — collapse as executable, not LLM prompt template. */
-export function isExecutableModulePath(relPath: string): boolean { const norm = relPath.replace(/\\/g, '/'); return ( /(?:^|\/)cli(?:\/|\.)/i.test(norm) || /(?:^|\/)commands?\//i.test(norm) || /(?:^|\/)hooks\.ts$/i.test(norm) ); }
-/** `dev/composables/foo.ts`, `src/composables/bar.js`, etc. */
-export function isComposableLikePath(relPath: string): boolean { return /(?:^|\/)composables\/[^/]+\.(?:[mc]?[jt]sx?|jsx?)$/i.test(relPath.replace(/\\/g, '/')); }
+// ── .cursor/rules/ctxgraph--src-graph-builder-extract-deps-graph.mdc ──
+// ── src/graph-builder/extract/deps-graph.ts ──
+export const TS_JS_EXTS = ['.ts', '.tsx', '.js', '.jsx', '.mjs', '.cjs', '.vue', '.go', '.py'];
+export function isTsJsLikePath(p: string): boolean { return /\.(ts|tsx|js|jsx|mjs|cjs|vue)$/i.test(p); }
+export function stripKnownExt(p: string): string { return p.replace(/\.(ts|tsx|js|jsx|mjs|cjs|vue|go|py)$/i, ''); }
+export function extractImportSpecifiersFromTsAst(filePath: string, content: string): string[] { /* ~29 lines */ }
+export function resolveInternalImport( fromFile: string, spec: string, existingPaths: Set<string> ): string | null { /* ~30 lines */ }
+export function buildDeterministicDependencyGraph( scan: ScanResult, opts?: { /* prompt template (~129 lines) */ }
 
 ```
 
 ## Dependencies
-**External:**
-- ``
-
-## Danger Zone 🔴
-- **[env]** getenv('${m[1]}')
-- **[env]** env('${m[1]}')
-- **[events]** `useNuxtApp()` — global `$event` / `$listen` bus
-- **[config]** runtime config / `import.meta.env`
+- No dependencies detected

@@ -2,14 +2,14 @@
 description: "Mirror — `src/source-extract/paths.ts`"
 applyTo: "src/source-extract/paths.ts"
 priority: "P2"
-last_updated: "2026-05-20"
+last_updated: "2026-05-29"
 ---
 
 ## When to Read
 - editing or refactoring `paths.ts`
 
 ## Overview
-- `src/source-extract/paths.ts` (25 lines · 3 top-level symbols) — Prompt/message modules: prefer bundle + compact instructions (deterministic routing).
+- `src/source-extract/paths.ts` (40 lines · 4 top-level symbols) — Mirror — `src/source-extract/paths.ts`
 
 ## Graph
 ```mermaid
@@ -21,6 +21,11 @@ graph LR
 
 ```typescript
 // ── src/source-extract/paths.ts ──
+/**
+ * Markup / MSBuild / designer artifacts — keep in scan tree, omit from instruction subsystems.
+ * Logic lives in `.cs`, `.xaml.cs`, ViewModels; dumping XAML/csproj into ## Source adds noise.
+ */
+export function isInstructionExcludedPath(relPath: string): boolean { const norm = relPath.replace(/\\/g, '/'); const base = path.posix.basename(norm); if (/\.(xaml|axaml|csproj|props|targets|resw|pubxml)$/i.test(base)) return true; if (…
 /** Prompt/message modules: prefer bundle + compact instructions (deterministic routing). */
 export function isMessageOrPromptPath(relPath: string): boolean { const norm = relPath.replace(/\\/g, '/'); return ( /(?:^|\/)(?:messages|prompts?)\//i.test(norm) || /graph-create-agent/i.test(norm) || /\/(?:prompt|messages)\./i.test(nor…
 /** CLI / command registration — collapse as executable, not LLM prompt template. */
